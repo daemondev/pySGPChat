@@ -1,3 +1,24 @@
+var ChatMessage = React.createClass({
+    render: function (){
+        return(
+            <div>
+                <p>paragraph-mode {this.props.message}</p>
+            </div>
+        );
+    }
+});
+
+var MessageList = React.createClass({
+    render: function(){
+        var messages = this.props.messages.map(function(message){
+            return <ChatMessage message={message} />;
+        });
+        return (
+            <div>{messages}</div>
+        );
+    }
+});
+
 var ChatContainer = React.createClass({
     getInitialState: function(){
         return {
@@ -17,25 +38,32 @@ var ChatContainer = React.createClass({
     },
     on: function(event, data){
         if (event == "new chat"){
-            var chatList = document.getElementById("txtChatHistory");
+            var chatList = document.getElementById("ulChatList");
             var messageBox = document.getElementById("txtMessage");
             messageBox.value = "";
-            chatList.innerHTML = "<li class='collection-item'>" + data.name + " - " + data.message + "</li><hr />" + chatList.innerHTML;
+            chatList.innerHTML = chatList.innerHTML +  "<li class='collection-item'>" + data.name + " - " + data.message + "</li>";
         }
     },
     emit: function (message, data ){
         var json = JSON.stringify({0:message, 1: data})
         this.state.ws.send(json);
     },
+    onOpen: function(){
+        //alert("opening");
+    },
     componentWillMount: function(){
-        var ws = new WebSocket("wss" + this.state.separator + document.domain + this.state.port + this.state.namespace);
+        var ws = new WebSocket("ws" + this.state.separator + document.domain + this.state.port + this.state.namespace);
         ws.onmessage = this.onMessage;
+        ws.onopen = this.onOpen;
         this.setState({ws:ws});
     },
     componentDidMount: function(){
         var user = document.getElementById("lbl_linea").innerHTML;
+        var profile = document.getElementById("lblPerfil").innerHTML;
+
         var state = Object.assign({}, this.state);
         state.myProps["user"] = user;
+        state.myProps["profile"] = profile;
         this.setState(state);
     },
     sendMessage: function(event){
@@ -52,12 +80,12 @@ var ChatContainer = React.createClass({
             <div id="divChatContainner" className="chatContainner">
 
                 <div className="chatHistory">
-                    <ul id="txtChatHistory">
+                    <ul id="ulChatList">
+                        <ChatMessage message={"test"} />
                     </ul>
                 </div>
                 <div className="chatMessage">
-                    <input type="text" id="txtMessage" placeholder="Enter message" onKeyPress={ this.sendMessage } />
-                    <input type="button" value="SEND" id="btnSendMessage" onClick={ this.sendMessage } />
+                    <input type="text" id="txtMessage" placeholder="Ingresar mensaje, presionar ENTER" onKeyPress={ this.sendMessage } />
                 </div>
             </div>
         )

@@ -20,9 +20,9 @@ import argparse
 r.set_loop_type("tornado")
 
 @gen.coroutine
-def create_chat(data):
-    print(">>> begin create_chat")
-    data = json.loads(data)
+def websocketManager(request):
+    print(">>> begin create_chat websocketManager")
+    data = json.loads(request)
 
     action = data['0']
     conn = yield r.connect(host="localhost", port=28015, db='pyBOT')
@@ -64,14 +64,36 @@ class My404Handler(tornado.web.RequestHandler):
         raise Exception('Error!') #"""
     #pass
 
+allCNX = set()
+
 class WebSocketHandler(tornado.websocket.WebSocketHandler):
     def open(self):
+        #print("connected" , self)
+        headers = self.request.headers;
+        #print("HEADERS: ",headers)
+        #for p in headers:
+            #print(p)
+
+        """ in_UsuarioID vc_Nombre vc_Apellidos vc_Usuario in_PerfilID vc_Perfil """
+
+        cookie = ""
+        for c in headers.get("Cookie","").split("; "):
+            if not c.strip().startswith("ASP.NET"):
+                cookie = c.strip()
+
+        cookie = cookie[cookie.find("=")+1:]
+        cookieDict = {x.split('=')[0]:x.split('=')[1] for x in cookie.split("&")}
         connections.add(self)
+        session = {"cnx":self,"userID":cookieDict["in_UsuarioID"]}
+        #allCNX.add(session)
+        #print('cookieDict["in_UsuarioID"] = [$s]' % cookieDict["in_UsuarioID"])
+        #print(cookieDict)
         pass
 
-    def on_message(self, message):
-        print(message)
-        create_chat(message)
+    def on_message(self, request):
+        print(request)
+        #create_chat(request)
+        websocketManager(request)
 
     def on_close(self):
         connections.remove(self)
@@ -139,18 +161,18 @@ def get(self):
 
 class Application(tornado.web.Application):
     def __init__(self):
-
+        """
         import tornado.autoreload
         tornado.autoreload.start()
         for dir, _, files in os.walk('static'):
             print(files)
-            [tornado.autoreload.watch(dir + '/' + f) for f in files if not f.startswith('.')]
+            [tornado.autoreload.watch(dir + '/' + f) for f in files if not f.startswith('.')] #"""
 
         current_dir = os.path.dirname(os.path.abspath(__file__))
         static_folder = os.path.join(current_dir, "static")
 
         settings = {
-            "cookie_secret": "__myKEY:_MDY_BPO_pyCHAT_APP__",
+            "cookie_secret": "__myKEY:_MDY_BPO_pySGPChat_APP__",
             "login_url": "/login",
             "xsrf_cookies": True,
             "static_path": os.path.join(os.path.dirname(__file__), "static"),
@@ -182,7 +204,7 @@ config = dict(
 @gen.coroutine
 def init_db():
     conn = yield r.connect(host=config["DB_HOST"], port=config["DB_PORT"])
-    print("CONECTED TO [%s]" % config["DB_HOST"])
+    print("CONNECTED TO [%s]" % config["DB_HOST"])
     try:
         yield r.db_create(config["DB_NAME"]).run(conn)
         print("%s - DB [%s] CREATED" % (config["DB_HOST"], config["DB_NAME"]))
@@ -190,8 +212,7 @@ def init_db():
             yield r.db(config["DB_NAME"]).table_create(table).run(conn)
             print("%s - %s - TABLE [%s] CREATED" % (config["DB_HOST"], config["DB_NAME"], table))
             yield r.db(config["DB_NAME"]).table(table).index_create("ins").run(conn)
-            print("%s - %s - %s - INDEX [%s] CREATED" % (config["DB_HOST"], config["DB_NAME"], table, "ins"))
-            print("")
+            print("%s - %s - %s - INDEX [%s] CREATED\n" % (config["DB_HOST"], config["DB_NAME"], table, "ins"))
         print("\nDATABASE CONFIG SUCCESS\n")
     except RqlRuntimeError as e:
         print(str(e))
@@ -199,7 +220,7 @@ def init_db():
         conn.close()
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="pyBOT WebPanel")
+    parser = argparse.ArgumentParser(description="pySGPChat Configurator")
     parser.add_argument("--setup", dest="run_setup", action="store_true")
     args = parser.parse_args()
     if args.run_setup:
@@ -218,4 +239,3 @@ if __name__ == '__main__':
 
         tornado.ioloop.IOLoop.current().add_callback(watch_chats)
         tornado.ioloop.IOLoop.instance().start() #"""
-

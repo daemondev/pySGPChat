@@ -1,2 +1,3 @@
 https://www.html5rocks.com/es/tutorials/file/dndfiles/
 https://pdfobject.com/static.html
+http://www.javascripture.com/FileReader

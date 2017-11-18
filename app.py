@@ -19,24 +19,6 @@ import argparse
 
 r.set_loop_type("tornado")
 
-@gen.coroutine
-def websocketManager(request):
-    print(">>> begin create_chat websocketManager")
-    data = json.loads(request)
-
-    action = data['0']
-    conn = yield r.connect(host="localhost", port=28015, db='pyBOT')
-
-    if action == "new message":
-        data = data["1"]
-        data['ins'] = datetime.now(r.make_timezone('00:00'))
-        if data.get('name') and data.get('message'):
-            new_chat = yield r.table("botChat").insert([ data ]).run(conn)
-        print(">>> end create_chat")
-
-connections = set()
-
-
 class BaseHandler(tornado.web.RequestHandler):
     def write_error(self, status_code, **kwargs):
         if status_code in [403, 404, 500, 503]:
@@ -64,36 +46,46 @@ class My404Handler(tornado.web.RequestHandler):
         raise Exception('Error!') #"""
     #pass
 
-allCNX = set()
+@gen.coroutine
+def websocketManager(self, request):
+    data = json.loads(request)
+
+    action = data['0']
+    conn = yield r.connect(host="localhost", port=28015, db='pyBOT')
+
+    if action == "new message":
+        data = data["1"]
+        data['ins'] = datetime.now(r.make_timezone('00:00'))
+        if data.get('name') and data.get('message'):
+            new_chat = yield r.table("botChat").insert([ data ]).run(conn)
+        print(">>> end create_chat")
+
+connections = set()
 
 class WebSocketHandler(tornado.websocket.WebSocketHandler):
     def open(self):
-        #print("connected" , self)
-        headers = self.request.headers;
-        #print("HEADERS: ",headers)
-        #for p in headers:
-            #print(p)
-
         """ in_UsuarioID vc_Nombre vc_Apellidos vc_Usuario in_PerfilID vc_Perfil """
 
         cookie = ""
-        for c in headers.get("Cookie","").split("; "):
+        for c in self.request.headers.get("Cookie","").split("; "):
             if not c.strip().startswith("ASP.NET"):
                 cookie = c.strip()
 
         cookie = cookie[cookie.find("=")+1:]
-        cookieDict = {x.split('=')[0]:x.split('=')[1] for x in cookie.split("&")}
+
+        self.session = {x.split('=')[0]:x.split('=')[1] for x in cookie.split("&")}
+
+        if self.session["in_PerfilID"] == "1":
+            tmp = {"name":'admin', "message":"ONLY FOR ADMINS"}
+            payload = {"event":"only for admins","data": tmp}
+            self.write_message(payload)
+
         connections.add(self)
-        session = {"cnx":self,"userID":cookieDict["in_UsuarioID"]}
-        #allCNX.add(session)
-        #print('cookieDict["in_UsuarioID"] = [$s]' % cookieDict["in_UsuarioID"])
-        #print(cookieDict)
         pass
 
     def on_message(self, request):
         print(request)
-        #create_chat(request)
-        websocketManager(request)
+        websocketManager(self, request)
 
     def on_close(self):
         connections.remove(self)

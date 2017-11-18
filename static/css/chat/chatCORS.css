@@ -1,17 +1,23 @@
+.chatPanel{
+    position:relative;
+}
 .chatWrapper{
+/*.chatMain{*/
     position: fixed;
     bottom:10px;
     right:10px;
     z-index: 9999999 !important;
     /*background-color: green;*/
     background-color: #D43F3A;
-    width: 270px;
-    height: 380px;
+    /*width: 270px;*/
+    /*height: 380px;*/
     padding: 1px;
+    /*display:inline-block;*/
 }
 
 .chatContainner{
     position:relative;
+    /*display:inline-block;*/
     width:100%;
     height:100%;
 }
@@ -42,10 +48,21 @@
 #txtMessage{
     width:100%;
     height: 26px;
-    float:left;
+    position:absolute;
+    bottom:0;
+    right:0;
+    /*float:left;*/
     /*font-size:12px;*/
 }
-
-#btnSendMessage{
-   width:65px;
+.chatPanel > div{
+    display:inline-block;
+}
+.adminPanel{
+    background-color: blue;
+    /*position:fixed;*/
+    right:0;
+    /*top:0;*/
+    width: 200px;
+    /*height:100%;*/
+    z-index:9999999 !important;
 }

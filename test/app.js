@@ -8,25 +8,74 @@ filesGLOBAL = eval('(' + myCategoriesString + ')');                         //##
 var file = {};
 var fileContainner = {"cat1":[], "cat2":[]};                                //### create when render
 var selectedFiles = {"cat1":[], "cat2":[]};                                 //### create when render
+
+var pdfInBase64 = "";
+
+function watcherPDFString(){
+    setTimeout(function(){
+        if(pdfInBase64 == ""){
+            console.log("waiting...");
+            watcherPDFString();
+        }
+    }, 200);
+}
+
+function previewFile(self){
+    var thePDF = document.getElementById("thePDF");
+    var cat = self.className;
+    //thePDF.src = "data:application/pdf;base64," + pdfInBase64;
+
+    //thePDF.src = pdfInBase64;
+    //alert(fileContainner[cat][0]['name']);
+    //convertToBase64(fileContainner[cat][0]['file']);
+
+    setTimeout(function(){
+        console.log("setTimeout()");
+        if(pdfInBase64 == ""){
+            watcherPDFString();
+        }else{
+            console.log("with value: " + pdfInBase64);
+        }
+    }, 300);
+
+    thePDF.src = pdfInBase64;
+}
+function convertToBase64( file) {
+    var base64;
+    var fileToLoad = file;
+    var fileReader = new FileReader();
+    pdfInBase64 = "";
+    fileReader.onload = function(fileLoadedEvent) {
+        base64 = fileLoadedEvent.target.result;
+        //base64 = fileReader.result;
+        pdfInBase64 = base64;
+
+        console.log("ONLOAD: [" + pdfInBase64 + "]");
+       //return base64;
+    };
+    fileReader.readAsDataURL(fileToLoad);
+    //return pdfInBase64;
+}
+
 function fileSetter(param, e) {
-    alert("DESTINY: " + e.target.destiny);
     if (checkfile(e.target)) {
         var tmpfileToProcess = e.target.files;
 
         for (var i = 0; i < tmpfileToProcess.length; i++) {
-
             if(selectedFiles[param].indexOf(tmpfileToProcess[i].name) >= 0){
                 console.log(i + ".- CATEGORY: ["+  param +"] - Selected File is SELECTED: " + tmpfileToProcess[i].name);
                 console.log("");
                 continue;
             }
+            convertToBase64(tmpfileToProcess[i]);
+            ///*
             file = {};
             file['file'] = tmpfileToProcess[i];
             file['name'] = tmpfileToProcess[i].name;
             file['size'] = tmpfileToProcess[i].size;
             file['date'] = new Date(tmpfileToProcess[i].lastModified).toLocaleFormat("%d-%m-%Y %H:%M:%S");
-            //fileContainner[param].push(file);
-            //fileContainner.push(file);
+            //file['inBase64'] = convertToBase64(tmpfileToProcess[i]);
+
             fileContainner[param].push(file);
             selectedFiles[param].push(tmpfileToProcess[i].name);
         }
@@ -34,8 +83,11 @@ function fileSetter(param, e) {
     //document.getElementById('trick').innerHTML = "";
 }
 
+
+
+
 function checkfile(sender) {
-    var validExts = new Array(".txt", ".csv", ".png", ".jpg");
+    var validExts = new Array(".txt", ".csv", ".png", ".jpg", ".pdf");
     var fileExt = sender.value;
     fileExt = fileExt.substring(fileExt.lastIndexOf('.'));
     if (validExts.indexOf(fileExt.toLowerCase()) < 0) {
@@ -45,6 +97,8 @@ function checkfile(sender) {
     }
     else return true;
 }
+
+
 
 function inputBtn(param) {
     cat = "";
@@ -57,7 +111,7 @@ function inputBtn(param) {
 
     var input = document.createElement('input');
     input.type = "file";
-    input.accept = ".txt, .csv, .png, .jpg";
+    input.accept = ".txt, .csv, .png, .jpg, .pdf";
     input.multiple = true;
     document.getElementById('trick').appendChild(input);
     setTimeout(function () {

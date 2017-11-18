@@ -12,14 +12,20 @@
         </tr>
         <tr>
             <td> <input type="button" class="cat1" name="btnCat1" value="FIND" onclick="inputBtn(this);">  </td><td> <input type="button" name="btn_debug" id="btn_debug" value="TEST" onclick="showOrSaveFiles('cat1');"></td>
+            <td> <input type="button" class="cat1" name="btn_preview" id="btn_preview1" value="PREVIEW" onclick="previewFile(this);" > </td>
         </tr>
         <tr>
             <td> CATEGORY 2 </td>
         </tr>
         <tr>
             <td> <input type="button" class="cat2" name="btnCat2" value="FIND" onclick="inputBtn(this);">  </td> <td> <input type="button" name="btn_debug" id="btn_debug" value="TEST" onclick="showOrSaveFiles('cat2');"></td>
+            <td> <input type="button" class="cat2" name="btn_preview" id="btn_preview2" value="PREVIEW" onclick="previewFile(this);" > </td>
         </tr>
     </table>
+    <div id="div_preview">
+        <embed id="thePDF"  class="cat1" src="" width="800" height="675" type='application/pdf'>
+        <embed id="thePDF2"  class="cat2" src="" width="500" height="375" type='application/pdf'>
+    </div>
 </body>
 </html>
 <div id="trick" style="display:none;"></div>

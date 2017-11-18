@@ -1,58 +1,59 @@
-var ChatMessage = React.createClass({
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+var ChatMessage = React.createClass({displayName: "ChatMessage",
     render: function (){
         return(
-            <div>
-                <p>paragraph-mode {this.props.message}</p>
-            </div>
+            React.createElement("div", null, 
+                React.createElement("p", null, "paragraph-mode ", this.props.message)
+            )
         );
     }
 });
 
-var MessageList = React.createClass({
+var MessageList = React.createClass({displayName: "MessageList",
     render: function(){
         var messages = this.props.messages.map(function(message){
-            return <ChatMessage message={message} />;
+            return React.createElement(ChatMessage, {message: message});
         });
         return (
-            <div>{messages}</div>
+            React.createElement("div", null, messages)
         );
     }
 });
 
-var User = React.createClass({
+var User = React.createClass({displayName: "User",
     render: function(){
         return (
-            <div className="user">
-                <div>
-                    <span>
-                        {this.props.user}
-                    </span>
-                </div>
-            </div>
+            React.createElement("div", {className: "user"}, 
+                React.createElement("div", null, 
+                    React.createElement("span", null, 
+                        this.props.user
+                    )
+                )
+            )
         );
     }
 });
 
-var UserList = React.createClass({
+var UserList = React.createClass({displayName: "UserList",
     render: function(){
         var users = this.props.users.map(function(user){
-            return <User user={user} />;
+            return React.createElement(User, {user: user});
         });
         return (
-            <div> {users} </div>
+            React.createElement("div", null, " ", users, " ")
         );
     }
 });
 
-var AdminPanel = React.createClass({
+var AdminPanel = React.createClass({displayName: "AdminPanel",
     render: function(){
         return (
-            <div>
-                <div className="adminPanel">
-                    <h1>in Admin Panel</h1>
-                    <UserList users={this.props.users} />
-                </div>
-            </div>
+            React.createElement("div", null, 
+                React.createElement("div", {className: "adminPanel"}, 
+                    React.createElement("h1", null, "in Admin Panel"), 
+                    React.createElement(UserList, {users: this.props.users})
+                )
+            )
         );
     }
 });
@@ -96,7 +97,7 @@ function GetGridUsuario(pgnum) {
     }); //Fin Ajax
 };
 
-var ChatContainer = React.createClass({
+var ChatContainer = React.createClass({displayName: "ChatContainer",
     getInitialState: function(){
         return {
             myProps: {}
@@ -123,7 +124,7 @@ var ChatContainer = React.createClass({
 
             var users = ["a","b","c"];
             ReactDOM.render(
-                <AdminPanel users={users} />,
+                React.createElement(AdminPanel, {users: users}),
                 document.getElementById("divAdminPanel")
             );
         }
@@ -161,27 +162,28 @@ var ChatContainer = React.createClass({
     },
     render: function(){
         return (
-            <div className="chatPanel">
-                <div>
-                    <div id="divChatContainner" className="chatContainner">
-                        <div className="chatHistory">
-                            <ul id="ulChatList">
-                                <ChatMessage message={"test"} />
-                            </ul>
-                        </div>
-                        <div className="chatMessage">
-                            <input type="text" id="txtMessage" placeholder="Ingresar mensaje, presionar ENTER" onKeyPress={ this.sendMessage } />
-                        </div>
-                    </div>
-                    <div id="divAdminPanel">
-                    </div>
-                </div>
-            </div>
+            React.createElement("div", {className: "chatPanel"}, 
+                React.createElement("div", null, 
+                    React.createElement("div", {id: "divChatContainner", className: "chatContainner"}, 
+                        React.createElement("div", {className: "chatHistory"}, 
+                            React.createElement("ul", {id: "ulChatList"}, 
+                                React.createElement(ChatMessage, {message: "test"})
+                            )
+                        ), 
+                        React.createElement("div", {className: "chatMessage"}, 
+                            React.createElement("input", {type: "text", id: "txtMessage", placeholder: "Ingresar mensaje, presionar ENTER", onKeyPress:  this.sendMessage})
+                        )
+                    ), 
+                    React.createElement("div", {id: "divAdminPanel"}
+                    )
+                )
+            )
         )
     }
 });
 
 ReactDOM.render(
-    <ChatContainer />,
+    React.createElement(ChatContainer, null),
     document.getElementById('divChatWrapper')
 );
+},{}]},{},[1]);

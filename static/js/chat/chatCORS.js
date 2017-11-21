@@ -1,15 +1,16 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 var ChatMessage = React.createClass({displayName: "ChatMessage",
     render: function (){
+        var message = this.props.message;
         return(
             React.createElement("div", null, 
-                React.createElement("p", null, "paragraph-mode ", this.props.message)
+                React.createElement("p", null, "HORA: ",  message.ins, " - Mensaje: ",  message.message)
             )
         );
     }
 });
 
-var MessageList = React.createClass({displayName: "MessageList",
+var ChatList = React.createClass({displayName: "ChatList",
     render: function(){
         var messages = this.props.messages.map(function(message){
             return React.createElement(ChatMessage, {message: message});
@@ -76,6 +77,7 @@ var ChatContainer = React.createClass({displayName: "ChatContainer",
             , namespace : "/websocket"
             , toggleHide: true
             , step:1
+            , messages:[]
         };
     },
     onMessage: function(e){
@@ -95,6 +97,8 @@ var ChatContainer = React.createClass({displayName: "ChatContainer",
                 React.createElement(AdminPanel, {users: users}),
                 document.getElementById("divAdminPanel")
             );
+        }else if(event == "populate chat-list"){
+            this.setState({messages:data});
         }
     },
     emit: function (message, data ){
@@ -109,8 +113,7 @@ var ChatContainer = React.createClass({displayName: "ChatContainer",
         ws.onmessage = this.onMessage;
         ws.onopen = this.onOpen;
         this.setState({ws:ws});
-        this.setState({step:this.state.step++});
-        console.log("step: " + this.state.step);
+
     },
     componentDidMount: function(){
         var user = document.getElementById("lbl_linea").innerHTML;
@@ -126,7 +129,7 @@ var ChatContainer = React.createClass({displayName: "ChatContainer",
             var name = this.state.myProps["user"];
             var message = event.target.value;
 
-            var obj = {"name":name, "message": message};
+            var obj = {"name":name, "message": message, "userIDDST":1};
             this.emit("new message", obj);
         }
     },
@@ -135,6 +138,9 @@ var ChatContainer = React.createClass({displayName: "ChatContainer",
         console.log("clicked: " + this.state.toggleHide);
         //event.target.parentNode.style.display = 'none';
         //alert(event.target.parentNode.nodeName);
+    },
+    getMessages: function(){
+
     },
     render: function(){
         return (
@@ -145,7 +151,8 @@ var ChatContainer = React.createClass({displayName: "ChatContainer",
                             React.createElement("span", null, "×")
                         ), 
                         React.createElement("div", {className: "chatContainner"}, 
-                            React.createElement("div", {className: "chatHistory"}
+                            React.createElement("div", {className: "chatHistory", id: "divChatHistory"}, 
+                                React.createElement(ChatList, {messages:  this.state.messages})
                             ), 
                             React.createElement("div", {className: "chatMessage"}, 
                                 React.createElement("input", {type: "text", id: "txtMessage", placeholder: "Ingresar mensaje, presionar ENTER", onKeyPress:  this.sendMessage})

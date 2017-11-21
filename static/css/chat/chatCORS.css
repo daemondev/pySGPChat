@@ -24,7 +24,7 @@
 }
 
 .chatMain{
-    /*position:relative;*/
+    position:relative;
     background-color: yellow;
     display:block;
     height:250px;
@@ -61,20 +61,24 @@
 }
 
 .adminPanel{
+    /*
+    position: absolute;
+    top:0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100; /**/
+}
+/*
+.adminPanel{
     background-color: blue;
-    /*width: 100px;*/
-    /*height:259%;*/
-    /*height:360%;*/
     height:263%;
     position: relative;
-    /*width: 18vw; /*work*/
     width: 16vw;
-    /*top: calc(-50vw + 19%);*/
     top: calc(-33vw + 21%);
     right:-8px;
-    /*height: 50px;*/
 
-}
+} /**/
 
 .chatContainner{
     /*width: 251px;*/
@@ -83,8 +87,9 @@
 
 .chatHistory{
     display:block;
-    height: 100%;
+    height: 198px;
     width: 100%;
+    overflow:auto;
 }
 .chatMessage{
     display:block;

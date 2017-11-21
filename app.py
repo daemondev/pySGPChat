@@ -126,10 +126,20 @@ def websocketManager(self, request):
 
     if action == "new message":
         data = data["1"]
+
+        cur = cnx.cursor()
+        #sql = """ insert into tChat(userIDSRC, userIDDST, message) values () """ % (self.session["in_UsuarioID"], data["userIDDST"], data["message"])
+        sql = """ insert into tChat(userIDSRC, userIDDST, message) values (%s, %s, '%s') """ % (self.session["in_UsuarioID"], data["userIDDST"], data["message"])
+        print("sql: [%s]" % sql)
+        cur.execute(sql)
+        cnx.commit()
+
         data['ins'] = datetime.now(r.make_timezone('00:00'))
         if data.get('name') and data.get('message'):
             new_chat = yield r.table("botChat").insert([ data ]).run(conn)
         print(">>> end create_chat")
+
+
 
 connections = set()
 
@@ -169,7 +179,19 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         except Exception as e:
             print(str(e))
 
+        cur = cnx.cursor()
+        cur.execute("select id, userIDSRC as [src], userIDDST as [dst], [message] as [message], convert(varchar(10),ins, 108) as [ins] from tChat where userIDSRC = %s" % self.session["in_UsuarioID"])
+        rows = cur.fetchall()
+        messagesList = []
+        for m in rows:
+            messagesList.append(m)
+        print(messagesList)
+        payload = {"event":"populate chat-list", "data": messagesList}
+        self.write_message(payload)
         connections.add(self)
+
+
+
         pass
 
     def on_message(self, request):

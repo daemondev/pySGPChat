@@ -1,14 +1,15 @@
 var ChatMessage = React.createClass({
     render: function (){
+        var message = this.props.message;
         return(
             <div>
-                <p>paragraph-mode {this.props.message}</p>
+                <p>HORA: { message.ins } - Mensaje: { message.message }</p>
             </div>
         );
     }
 });
 
-var MessageList = React.createClass({
+var ChatList = React.createClass({
     render: function(){
         var messages = this.props.messages.map(function(message){
             return <ChatMessage message={message} />;
@@ -75,6 +76,7 @@ var ChatContainer = React.createClass({
             , namespace : "/websocket"
             , toggleHide: true
             , step:1
+            , messages:[]
         };
     },
     onMessage: function(e){
@@ -94,6 +96,8 @@ var ChatContainer = React.createClass({
                 <AdminPanel users={users} />,
                 document.getElementById("divAdminPanel")
             );
+        }else if(event == "populate chat-list"){
+            this.setState({messages:data});
         }
     },
     emit: function (message, data ){
@@ -108,8 +112,7 @@ var ChatContainer = React.createClass({
         ws.onmessage = this.onMessage;
         ws.onopen = this.onOpen;
         this.setState({ws:ws});
-        this.setState({step:this.state.step++});
-        console.log("step: " + this.state.step);
+
     },
     componentDidMount: function(){
         var user = document.getElementById("lbl_linea").innerHTML;
@@ -125,7 +128,7 @@ var ChatContainer = React.createClass({
             var name = this.state.myProps["user"];
             var message = event.target.value;
 
-            var obj = {"name":name, "message": message};
+            var obj = {"name":name, "message": message, "userIDDST":1};
             this.emit("new message", obj);
         }
     },
@@ -134,6 +137,9 @@ var ChatContainer = React.createClass({
         console.log("clicked: " + this.state.toggleHide);
         //event.target.parentNode.style.display = 'none';
         //alert(event.target.parentNode.nodeName);
+    },
+    getMessages: function(){
+
     },
     render: function(){
         return (
@@ -144,7 +150,8 @@ var ChatContainer = React.createClass({
                             <span>&times;</span>
                         </div>
                         <div className="chatContainner">
-                            <div className="chatHistory">
+                            <div className="chatHistory" id="divChatHistory">
+                                <ChatList messages={ this.state.messages } />
                             </div>
                             <div className="chatMessage">
                                 <input type="text" id="txtMessage" placeholder="Ingresar mensaje, presionar ENTER" onKeyPress={ this.sendMessage } />

@@ -20,12 +20,17 @@ var MessageList = React.createClass({
 });
 
 var User = React.createClass({
+    getInitialState: function(){
+        return {user:{}};
+    },
     render: function(){
+        this.setState({user:this.props.user});
+        var user = this.state.user;
         return (
             <div className="user">
                 <div>
                     <span>
-                        {this.props.user}
+                        {user.in_UsuarioID} - {user.vc_Nombre} - {user.vc_ApePaterno} - {user.vc_ApeMaterno}
                     </span>
                 </div>
             </div>
@@ -48,7 +53,7 @@ var AdminPanel = React.createClass({
     render: function(){
         return (
             <div>
-                <div className="adminPanel">
+                <div className="innerAdminPanel">
                     <h1>in Admin Panel</h1>
                     <UserList users={this.props.users} />
                 </div>
@@ -56,45 +61,6 @@ var AdminPanel = React.createClass({
         );
     }
 });
-
-var url = "Frm_usuarios.aspx/";
-function GetGridUsuario(pgnum) {
-    var objData = {};
-    objData["in_opc"] = 2;
-    objData["tamPagina"] = 20;
-    objData["nroPagina"] = pgnum;
-    objData["in_UsuarioID"] = 0;
-    objData["vc_DNI"] = "%";
-    objData["vc_Nombre"] = "";
-    objData["vc_ApePaterno"] = "";
-    objData["vc_ApeMaterno"] = "";
-    objData["vc_Usuario"] = "";
-    objData["vc_Clave"] = "";
-    objData["in_PerfilID"] = 0;
-    objData["in_SedeID"] = 0;
-    objData["in_CampaniaID"] = 0;
-
-    $.ajax({
-        async: false,
-        type: "POST",
-        url: url + "mantUsuarios",
-        data: JSON.stringify(objData),
-        dataType: "json",
-        contentType: "application/json; charset=utf-8",
-        success: function (response) {
-            var data = (typeof response.d) == "string" ? eval("(" + response.d + ")") : response.d;
-            var pageCount = 0;
-            var StrPager; var strRows;
-            $('#tb_usuarios tr:not(:first)').remove();
-            if (data.length > 0) {
-                for (var i = 0; i <= data.length; i++) {
-                    user = data[i].vc_ApePaterno
-                }
-
-            }
-        }//Fin Success
-    }); //Fin Ajax
-};
 
 var ChatContainer = React.createClass({
     getInitialState: function(){
@@ -107,6 +73,8 @@ var ChatContainer = React.createClass({
             , port : ""
             , protocol : "ws" + "://"
             , namespace : "/websocket"
+            , toggleHide: true
+            , step:1
         };
     },
     onMessage: function(e){
@@ -121,7 +89,7 @@ var ChatContainer = React.createClass({
             chatList.innerHTML = chatList.innerHTML +  "<li class='chat'>" + data.name + " - " + data.message + "</li>";
         }else if (event == "only for admins"){
 
-            var users = ["a","b","c"];
+            var users = data;
             ReactDOM.render(
                 <AdminPanel users={users} />,
                 document.getElementById("divAdminPanel")
@@ -140,6 +108,8 @@ var ChatContainer = React.createClass({
         ws.onmessage = this.onMessage;
         ws.onopen = this.onOpen;
         this.setState({ws:ws});
+        this.setState({step:this.state.step++});
+        console.log("step: " + this.state.step);
     },
     componentDidMount: function(){
         var user = document.getElementById("lbl_linea").innerHTML;
@@ -159,22 +129,30 @@ var ChatContainer = React.createClass({
             this.emit("new message", obj);
         }
     },
+    hideCurrentChat: function(event){
+        this.setState({toggleHide:!this.state.toggleHide});
+        console.log("clicked: " + this.state.toggleHide);
+        //event.target.parentNode.style.display = 'none';
+        //alert(event.target.parentNode.nodeName);
+    },
     render: function(){
         return (
-            <div className="chatPanel">
-                <div>
-                    <div id="divChatContainner" className="chatContainner">
-                        <div className="chatHistory">
-                            <ul id="ulChatList">
-                                <ChatMessage message={"test"} />
-                            </ul>
+            <div className="chatMain">
+                <div className="chatPanel">
+                    <div className="chatViewer" style={this.state.toggleHide ? {}:{display:'none'}} >
+                        <div className="closeChat" onClick={this.hideCurrentChat}>
+                            <span>&times;</span>
                         </div>
-                        <div className="chatMessage">
-                            <input type="text" id="txtMessage" placeholder="Ingresar mensaje, presionar ENTER" onKeyPress={ this.sendMessage } />
+                        <div className="chatContainner">
+                            <div className="chatHistory">
+                            </div>
+                            <div className="chatMessage">
+                                <input type="text" id="txtMessage" placeholder="Ingresar mensaje, presionar ENTER" onKeyPress={ this.sendMessage } />
+                            </div>
                         </div>
                     </div>
-                    <div id="divAdminPanel">
-                    </div>
+                </div>
+                <div id="divAdminPanel" className="adminPanel">
                 </div>
             </div>
         )

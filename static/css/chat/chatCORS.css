@@ -1,68 +1,108 @@
-.chatPanel{
-    position:relative;
+.chatWrapper *:after, .chatWrapper *:before {
+    content: '';
+    content: none;
+}
+.chatWrapper *{
+    margin:0;
+    padding:0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
 }
 .chatWrapper{
-/*.chatMain{*/
     position: fixed;
-    bottom:10px;
-    right:10px;
-    z-index: 9999999 !important;
-    /*background-color: green;*/
-    background-color: #D43F3A;
+    bottom:1px;
+    right:0;
+    /*z-index: 9999999 !important;*/
+    /*background-color: #D43F3A;*/
+    background-color: red;
     /*width: 270px;*/
     /*height: 380px;*/
     padding: 1px;
     /*display:inline-block;*/
 }
 
-.chatContainner{
-    position:relative;
-    /*display:inline-block;*/
-    width:100%;
+.chatMain{
+    /*position:relative;*/
+    background-color: yellow;
+    display:block;
+    height:250px;
+    width:450px;
+    padding: 2px;
+ }
+
+.chatViewer div{
+    /*display:table-cell !important;*/
+}
+.chatViewer{
+    position: relative;
     height:100%;
+    width: 100%;
+    margin:auto;
+    padding:auto;
+    background-color: cyan;
+}
+
+.chatPanel, .adminPanel{
+    display:inline-block !important;
+    vertical-align:top;
+    height:100%;
+    /*width: 50%;*/
+    /*position: absolute;*/
+    /*position: relative;*/
+}
+
+.chatPanel{
+    background-color: green;
+    width: 227px;
+    /*width: 250px;*/
+    /*height: 340px;*/
+}
+
+.adminPanel{
+    background-color: blue;
+    /*width: 100px;*/
+    /*height:259%;*/
+    /*height:360%;*/
+    height:263%;
+    position: relative;
+    /*width: 18vw; /*work*/
+    width: 16vw;
+    /*top: calc(-50vw + 19%);*/
+    top: calc(-33vw + 21%);
+    right:-8px;
+    /*height: 50px;*/
+
+}
+
+.chatContainner{
+    /*width: 251px;*/
+    /*height: 200px;*/
 }
 
 .chatHistory{
-    /*background-color:#E2FEF0;*/
-    background-color: rgba(6,188,97,0.1);
-    width:100%;
-    height:100%;
+    display:block;
+    height: 100%;
+    width: 100%;
 }
-
-#ulChatList{
-    width:100%;
-    height:100%;
-}
-
 .chatMessage{
+    display:block;
     position:absolute;
     width:100%;
     height:28px;
-    text-align:center;
     vertical-align: middle;
-    right:0;
+    background-color: purple;
+    padding:1px;
     bottom:0;
-    background-color: red;
-    padding: 1px 1px 1px 1px;
+    right:0;
 }
 #txtMessage{
     width:100%;
     height: 26px;
-    position:absolute;
-    bottom:0;
-    right:0;
-    /*float:left;*/
-    /*font-size:12px;*/
 }
-.chatPanel > div{
-    display:inline-block;
-}
-.adminPanel{
-    background-color: blue;
-    /*position:fixed;*/
-    right:0;
-    /*top:0;*/
-    width: 200px;
-    /*height:100%;*/
-    z-index:9999999 !important;
+.closeChat{
+    text-align:right;
+    background-color: red;
+    cursor:pointer;
 }

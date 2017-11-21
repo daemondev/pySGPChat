@@ -1,3 +1,6 @@
+#https://www.lfd.uci.edu/%7Egohlke/pythonlibs/#pymssql
+#https://github.com/cybergrind/pymssql/releases/tag/2.2.0.dev0
+#https://github.com/ramiro/freetds/releases
 import tornado.web
 import tornado.websocket
 import tornado.httpserver
@@ -11,13 +14,81 @@ import os
 ### For RethinkDB
 import rethinkdb as r
 from rethinkdb import RqlRuntimeError, RqlDriverError
+r.set_loop_type("tornado")
 
 #-------------------------------------------------- BEGIN [DEV MODE] - (19-10-2017 - 11:00:51) {{
 #import tornado.wsgi
 import argparse
 #-------------------------------------------------- END   [DEV MODE] - (19-10-2017 - 11:00:51) }}
 
-r.set_loop_type("tornado")
+#-------------------------------------------------- BEGIN [support for MSSQL] - (20-11-2017 - 10:41:12) {{
+import pymssql
+#-------------------------------------------------- END   [support for MSSQL] - (20-11-2017 - 10:41:12) }}
+
+from datetime import datetime
+
+class User(dict):
+    def __init__(self):
+        #dict.__init__(self)
+        in_UsuarioID = 0
+        vc_DNI = ""
+        vc_Nombre = ""
+        vc_ApePaterno = ""
+        vc_ApeMaterno = ""
+        vc_Usuario = ""
+        vc_Clave = ""
+        in_PerfilID = 0
+        in_SedeID = 0
+        in_CampaniaID = 0
+        dt_FecRegistro = ""
+        in_UsuRegistroID = 0
+        in_Estado = 0
+        vc_Correo = ""
+        vc_ClaveCorreo = ""
+        EstadoConexion = False
+
+    #def __repr__(self):
+        #return json.dumps(self.__dict__)
+
+
+cnx = pymssql.connect("localhost","sa","123456","BD_DESCARTE_AT_18102017", as_dict=True)
+
+users = []
+
+@gen.coroutine
+def getUsers():
+    cur = cnx.cursor()
+    cur.execute("select * from TB_USUARIO")
+    rows = cur.fetchall()
+
+    for u in rows:
+        user = User()
+        user.in_UsuarioID = u["in_UsuarioID"]
+        user.vc_DNI = u["vc_DNI"]
+        user.vc_Nombre = u["vc_Nombre"]
+        user.vc_ApePaterno = u["vc_ApePaterno"]
+        user.vc_ApeMaterno = u["vc_ApeMaterno"]
+        user.vc_Usuario = u["vc_Usuario"]
+        user.vc_Clave = u["vc_Clave"]
+        user.in_PerfilID = u["in_PerfilID"]
+        user.in_SedeID = u["in_SedeID"]
+        user.in_CampaniaID = u["in_CampaniaID"]
+        user.dt_FecRegistro = u["dt_FecRegistro"].isoformat()
+        user.in_UsuRegistroID = u["in_UsuRegistroID"]
+        user.in_Estado = u["in_Estado"]
+        user.vc_Correo = u["vc_Correo"]
+        user.vc_ClaveCorreo = u["vc_ClaveCorreo"]
+        user.EstadoConexion = u["EstadoConexion"]
+        users.append(user)
+
+getUsers()
+
+@gen.engine
+def func(*args, **kwargs):
+    for _ in range(5):
+        yield gen.Task(async_function_call, arg1, arg2)
+
+    return
 
 class BaseHandler(tornado.web.RequestHandler):
     def write_error(self, status_code, **kwargs):
@@ -62,23 +133,41 @@ def websocketManager(self, request):
 
 connections = set()
 
+class Serializer(object):
+    @staticmethod
+    def serialize(object):
+        return json.dumps(object, default=lambda o: o.__dict__.values()[0])
+
+def serialize(obj):
+    if isinstance(obj, date):
+        serial = obj.isoformat()
+        return serial
+
+    if isinstance(obj, time):
+        serial = obj.isoformat()
+        return serial
+
+    return obj.__dict__
+
 class WebSocketHandler(tornado.websocket.WebSocketHandler):
     def open(self):
         """ in_UsuarioID vc_Nombre vc_Apellidos vc_Usuario in_PerfilID vc_Perfil """
 
         cookie = ""
-        for c in self.request.headers.get("Cookie","").split("; "):
-            if not c.strip().startswith("ASP.NET"):
-                cookie = c.strip()
+        try:
+            for c in self.request.headers.get("Cookie","").split("; "):
+                if not c.strip().startswith("ASP.NET"):
+                    cookie = c.strip()
 
-        cookie = cookie[cookie.find("=")+1:]
+            cookie = cookie[cookie.find("=")+1:]
 
-        self.session = {x.split('=')[0]:x.split('=')[1] for x in cookie.split("&")}
+            self.session = {x.split('=')[0]:x.split('=')[1] for x in cookie.split("&")}
 
-        if self.session["in_PerfilID"] == "1":
-            tmp = {"name":'admin', "message":"ONLY FOR ADMINS"}
-            payload = {"event":"only for admins","data": tmp}
-            self.write_message(payload)
+            if self.session["in_PerfilID"] == "1":
+                payload = {"event":"only for admins","data": [ u.__dict__ for u in users ]}
+                self.write_message(payload)
+        except Exception as e:
+            print(str(e))
 
         connections.add(self)
         pass
@@ -108,10 +197,15 @@ def watch_chats():
         print("\nconexiones WS: %d\n" % len(connections))
         for c in connections:
             change['new_val']['ins'] = str(change['new_val']['ins'])
-            payload = {"event":"new chat","data": change["new_val"]}
+            payload = {"event":"new chat","data": [ u.__dict__ for u in users ]}
             c.write_message(payload)
         print(change)
         print("watching db CHANGES ############")
+
+def obj_dict(obj):
+    return obj.__dict__
+
+#json_string = json.dumps(userList, default=obj_dict)
 
 class SendJavascript(tornado.web.RequestHandler):
     @gen.coroutine

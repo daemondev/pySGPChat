@@ -1,3 +1,64 @@
 https://www.html5rocks.com/es/tutorials/file/dndfiles/
 https://pdfobject.com/static.html
 http://www.javascripture.com/FileReader
+
+http://pymssql.org/en/stable/pymssql_examples.html
+import gevent.socket
+import pymssql
+
+
+with pymssql.connect(server, user, password, "tempdb") as conn:
+    with conn.cursor(as_dict=True) as cursor:
+        cursor.execute("""
+        CREATE PROCEDURE FindPerson
+            @name VARCHAR(100)
+        AS BEGIN
+            SELECT * FROM persons WHERE name = @name
+        END
+        """)
+        cursor.callproc('FindPerson', ('Jane Doe',))
+        for row in cursor:
+            print("ID=%d, Name=%s" % (row['id'], row['name']))
+
+def wait_callback(read_fileno):
+    gevent.socket.wait_read(read_fileno)
+
+pymssql.set_wait_callback(wait_callback)
+
+https://code.google.com/archive/p/pymssql/wikis/PymssqlModuleReference.wiki
+
+
+
+
+
+#-------------------------------------------------- BEGIN [div parent] - (20-11-2017 - 18:15:59) {{
+body,
+html,
+.parent {
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    padding: 0;
+    margin: 0;
+}
+.parent {
+    width: 50%;
+    max-width: 800px;
+    background: grey;
+    margin: 0 auto;
+    position: relative;
+}
+.child-element {
+    position: relative;
+    width: 100vw;
+    left: calc(-50vw + 50%);
+    height: 50px;
+    background: blue;
+}
+
+<div class='parent'>
+    parent element
+    <div class='child-element'>child-element</div>
+</div>
+https://css-tricks.com/full-width-containers-limited-width-parents/
+#-------------------------------------------------- END   [div parent] - (20-11-2017 - 18:15:59) }}

@@ -21,12 +21,17 @@ var MessageList = React.createClass({displayName: "MessageList",
 });
 
 var User = React.createClass({displayName: "User",
+    getInitialState: function(){
+        return {user:{}};
+    },
     render: function(){
+        this.setState({user:this.props.user});
+        var user = this.state.user;
         return (
             React.createElement("div", {className: "user"}, 
                 React.createElement("div", null, 
                     React.createElement("span", null, 
-                        this.props.user
+                        user.in_UsuarioID, " - ", user.vc_Nombre, " - ", user.vc_ApePaterno, " - ", user.vc_ApeMaterno
                     )
                 )
             )
@@ -49,7 +54,7 @@ var AdminPanel = React.createClass({displayName: "AdminPanel",
     render: function(){
         return (
             React.createElement("div", null, 
-                React.createElement("div", {className: "adminPanel"}, 
+                React.createElement("div", {className: "innerAdminPanel"}, 
                     React.createElement("h1", null, "in Admin Panel"), 
                     React.createElement(UserList, {users: this.props.users})
                 )
@@ -57,45 +62,6 @@ var AdminPanel = React.createClass({displayName: "AdminPanel",
         );
     }
 });
-
-var url = "Frm_usuarios.aspx/";
-function GetGridUsuario(pgnum) {
-    var objData = {};
-    objData["in_opc"] = 2;
-    objData["tamPagina"] = 20;
-    objData["nroPagina"] = pgnum;
-    objData["in_UsuarioID"] = 0;
-    objData["vc_DNI"] = "%";
-    objData["vc_Nombre"] = "";
-    objData["vc_ApePaterno"] = "";
-    objData["vc_ApeMaterno"] = "";
-    objData["vc_Usuario"] = "";
-    objData["vc_Clave"] = "";
-    objData["in_PerfilID"] = 0;
-    objData["in_SedeID"] = 0;
-    objData["in_CampaniaID"] = 0;
-
-    $.ajax({
-        async: false,
-        type: "POST",
-        url: url + "mantUsuarios",
-        data: JSON.stringify(objData),
-        dataType: "json",
-        contentType: "application/json; charset=utf-8",
-        success: function (response) {
-            var data = (typeof response.d) == "string" ? eval("(" + response.d + ")") : response.d;
-            var pageCount = 0;
-            var StrPager; var strRows;
-            $('#tb_usuarios tr:not(:first)').remove();
-            if (data.length > 0) {
-                for (var i = 0; i <= data.length; i++) {
-                    user = data[i].vc_ApePaterno
-                }
-
-            }
-        }//Fin Success
-    }); //Fin Ajax
-};
 
 var ChatContainer = React.createClass({displayName: "ChatContainer",
     getInitialState: function(){
@@ -108,6 +74,8 @@ var ChatContainer = React.createClass({displayName: "ChatContainer",
             , port : ""
             , protocol : "ws" + "://"
             , namespace : "/websocket"
+            , toggleHide: true
+            , step:1
         };
     },
     onMessage: function(e){
@@ -122,7 +90,7 @@ var ChatContainer = React.createClass({displayName: "ChatContainer",
             chatList.innerHTML = chatList.innerHTML +  "<li class='chat'>" + data.name + " - " + data.message + "</li>";
         }else if (event == "only for admins"){
 
-            var users = ["a","b","c"];
+            var users = data;
             ReactDOM.render(
                 React.createElement(AdminPanel, {users: users}),
                 document.getElementById("divAdminPanel")
@@ -141,6 +109,8 @@ var ChatContainer = React.createClass({displayName: "ChatContainer",
         ws.onmessage = this.onMessage;
         ws.onopen = this.onOpen;
         this.setState({ws:ws});
+        this.setState({step:this.state.step++});
+        console.log("step: " + this.state.step);
     },
     componentDidMount: function(){
         var user = document.getElementById("lbl_linea").innerHTML;
@@ -160,22 +130,30 @@ var ChatContainer = React.createClass({displayName: "ChatContainer",
             this.emit("new message", obj);
         }
     },
+    hideCurrentChat: function(event){
+        this.setState({toggleHide:!this.state.toggleHide});
+        console.log("clicked: " + this.state.toggleHide);
+        //event.target.parentNode.style.display = 'none';
+        //alert(event.target.parentNode.nodeName);
+    },
     render: function(){
         return (
-            React.createElement("div", {className: "chatPanel"}, 
-                React.createElement("div", null, 
-                    React.createElement("div", {id: "divChatContainner", className: "chatContainner"}, 
-                        React.createElement("div", {className: "chatHistory"}, 
-                            React.createElement("ul", {id: "ulChatList"}, 
-                                React.createElement(ChatMessage, {message: "test"})
-                            )
+            React.createElement("div", {className: "chatMain"}, 
+                React.createElement("div", {className: "chatPanel"}, 
+                    React.createElement("div", {className: "chatViewer", style: this.state.toggleHide ? {}:{display:'none'}}, 
+                        React.createElement("div", {className: "closeChat", onClick: this.hideCurrentChat}, 
+                            React.createElement("span", null, "×")
                         ), 
-                        React.createElement("div", {className: "chatMessage"}, 
-                            React.createElement("input", {type: "text", id: "txtMessage", placeholder: "Ingresar mensaje, presionar ENTER", onKeyPress:  this.sendMessage})
+                        React.createElement("div", {className: "chatContainner"}, 
+                            React.createElement("div", {className: "chatHistory"}
+                            ), 
+                            React.createElement("div", {className: "chatMessage"}, 
+                                React.createElement("input", {type: "text", id: "txtMessage", placeholder: "Ingresar mensaje, presionar ENTER", onKeyPress:  this.sendMessage})
+                            )
                         )
-                    ), 
-                    React.createElement("div", {id: "divAdminPanel"}
                     )
+                ), 
+                React.createElement("div", {id: "divAdminPanel", className: "adminPanel"}
                 )
             )
         )

@@ -24,8 +24,13 @@ var User = React.createClass({
     getInitialState: function(){
         return {user:{}};
     },
+    componentWillMount: function(){
+        this.setState({ user: this.props.user });
+    },
+    setIDchat: function (){
+
+    },
     render: function(){
-        this.setState({user:this.props.user});
         var user = this.state.user;
         return (
             <div className="user">
@@ -40,8 +45,14 @@ var User = React.createClass({
 });
 
 var UserList = React.createClass({
+    getInitialState: function(){
+        return { users: [] };
+    },
+    componentWillMount: function(){
+        this. setState({users: this.props.users});
+    },
     render: function(){
-        var users = this.props.users.map(function(user){
+        var users = this.state.users.map(function(user){
             return <User user={user} />;
         });
         return (
@@ -51,12 +62,16 @@ var UserList = React.createClass({
 });
 
 var AdminPanel = React.createClass({
+    getInitialState: function(){
+        return { users:[] };
+    },
     render: function(){
+        var users = this.props.users;
         return (
             <div>
                 <div className="innerAdminPanel">
                     <h1>in Admin Panel</h1>
-                    <UserList users={this.props.users} />
+                    <UserList users={users} />
                 </div>
             </div>
         );
@@ -77,6 +92,8 @@ var ChatContainer = React.createClass({
             , toggleHide: true
             , step:1
             , messages:[]
+            , haveAdminPanel: false
+            , users: []
         };
     },
     onMessage: function(e){
@@ -90,12 +107,9 @@ var ChatContainer = React.createClass({
             messageBox.value = "";
             chatList.innerHTML = chatList.innerHTML +  "<li class='chat'>" + data.name + " - " + data.message + "</li>";
         }else if (event == "only for admins"){
-
-            var users = data;
-            ReactDOM.render(
-                <AdminPanel users={users} />,
-                document.getElementById("divAdminPanel")
-            );
+            if(!this.state.haveAdminPanel){
+                this.setState({haveAdminPanel:true, users: data});
+            }
         }else if(event == "populate chat-list"){
             this.setState({messages:data});
         }
@@ -159,8 +173,12 @@ var ChatContainer = React.createClass({
                         </div>
                     </div>
                 </div>
+                { this.state.haveAdminPanel ?
                 <div id="divAdminPanel" className="adminPanel">
+                    <UserList users={this.state.users} />
                 </div>
+                : '' }
+
             </div>
         )
     }

@@ -54,6 +54,8 @@ class User(dict):
 cnx = pymssql.connect("localhost","sa","123456","BD_DESCARTE_AT_18102017", as_dict=True)
 
 users = []
+supervisors = []
+allPerss = []
 
 @gen.coroutine
 def getUsers():
@@ -79,7 +81,11 @@ def getUsers():
         user.vc_Correo = u["vc_Correo"]
         user.vc_ClaveCorreo = u["vc_ClaveCorreo"]
         user.EstadoConexion = u["EstadoConexion"]
-        users.append(user)
+        allPerss.append(user)
+        if u["in_PerfilID"] == 1:
+            supervisors.append(user)
+        else:
+            users.append(user)
 
 getUsers()
 
@@ -173,9 +179,15 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
 
             self.session = {x.split('=')[0]:x.split('=')[1] for x in cookie.split("&")}
 
+            auxUsers = []
             if self.session["in_PerfilID"] == "1":
-                payload = {"event":"only for admins","data": [ u.__dict__ for u in users ]}
-                self.write_message(payload)
+                auxUsers = [ u.__dict__ for u in allPerss if u.in_UsuarioID != int(self.session["in_UsuarioID"])]
+            elif self.session["in_PerfilID"] == "2":
+                auxUsers = [ u.__dict__ for u in supervisors ]
+
+            payload = {"event":"only for admins","data": auxUsers}
+
+            self.write_message(payload)
         except Exception as e:
             print(str(e))
 
@@ -185,7 +197,7 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         messagesList = []
         for m in rows:
             messagesList.append(m)
-        print(messagesList)
+        #print(messagesList)
         payload = {"event":"populate chat-list", "data": messagesList}
         self.write_message(payload)
         connections.add(self)

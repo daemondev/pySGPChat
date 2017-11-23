@@ -31,13 +31,16 @@ var User = React.createClass({displayName: "User",
     setIDchat: function (){
 
     },
+    openChatViewer: function(event){
+        alert(this.state.user.in_UsuarioID);
+    },
     render: function(){
         var user = this.state.user;
         return (
-            React.createElement("div", {className: "user"}, 
+            React.createElement("div", {className: "user", ref: "user", id: user.in_UsuarioID}, 
                 React.createElement("div", null, 
-                    React.createElement("span", null, 
-                        user.in_UsuarioID, " - ", user.vc_Nombre, " - ", user.vc_ApePaterno, " - ", user.vc_ApeMaterno
+                    React.createElement("span", {onClick: this.openChatViewer}, 
+                        user.vc_Nombre, " - ", user.vc_ApePaterno, " - ", user.vc_ApeMaterno
                     )
                 )
             )
@@ -60,6 +63,71 @@ var UserList = React.createClass({displayName: "UserList",
             React.createElement("div", null, " ", users, " ")
         );
     }
+});
+
+var ChatViewer = React.createClass({displayName: "ChatViewer",
+    getInitialState: function(){
+        return {
+              id: null
+            , toggleHide:true
+            , messages: []
+        };
+    },
+    hideCurrentChat: function(event){
+        this.setState({toggleHide:!this.state.toggleHide});
+        console.log("clicked: " + this.state.toggleHide);
+        //event.target.parentNode.style.display = 'none';
+        //alert(event.target.parentNode.nodeName);
+    },
+    componentWillMount: function(){
+        this.setState({ id: this.props.id });
+    },
+    sendMessage: function(event){
+        if(event.key == "Enter"){
+            var message = event.target.value;
+            this.props.onClick(message);
+        }
+    },
+    render: function (){
+        return(
+                    React.createElement("div", {className: "chatViewer", style: this.state.toggleHide ? {}:{display:'none'}}, 
+                        React.createElement("div", {className: "closeChat", onClick: this.hideCurrentChat}, 
+                            React.createElement("span", null, "×")
+                        ), 
+                        React.createElement("div", {className: "chatContainner"}, 
+                            React.createElement("div", {className: "chatHistory", id: "divChatHistory"}, 
+                                React.createElement(ChatList, {messages:  this.state.messages})
+                            ), 
+                            React.createElement("div", {className: "chatMessage"}, 
+                                React.createElement("input", {type: "text", id: "txtMessage", placeholder: "Ingresar mensaje, presionar ENTER", onKeyPress:  this.sendMessage})
+                            )
+                        )
+                    )
+        );
+    }
+});
+
+var MyComponent = React.createClass({displayName: "MyComponent",
+  handleClick: function() {
+    // Explicitly focus the text input using the raw DOM API.
+    if (this.myTextInput !== null) {
+      this.myTextInput.focus();
+    }
+  },
+  render: function() {
+    // The ref attribute is a callback that saves a reference to the
+    // component to this.myTextInput when the component is mounted.
+    return (
+      React.createElement("div", null, 
+        React.createElement("input", {type: "text", ref: (ref) => this.myTextInput = ref}), 
+        React.createElement("input", {
+          type: "button", 
+          value: "Focus the text input", 
+          onClick: this.handleClick}
+        )
+      )
+    );
+  }
 });
 
 var AdminPanel = React.createClass({displayName: "AdminPanel",
@@ -127,7 +195,6 @@ var ChatContainer = React.createClass({displayName: "ChatContainer",
         ws.onmessage = this.onMessage;
         ws.onopen = this.onOpen;
         this.setState({ws:ws});
-
     },
     componentDidMount: function(){
         var user = document.getElementById("lbl_linea").innerHTML;
@@ -138,44 +205,27 @@ var ChatContainer = React.createClass({displayName: "ChatContainer",
         state.myProps["profile"] = profile;
         this.setState(state);
     },
-    sendMessage: function(event){
-        if(event.key == "Enter"){
-            var name = this.state.myProps["user"];
-            var message = event.target.value;
-
-            var obj = {"name":name, "message": message, "userIDDST":1};
-            this.emit("new message", obj);
-        }
-    },
-    hideCurrentChat: function(event){
-        this.setState({toggleHide:!this.state.toggleHide});
-        console.log("clicked: " + this.state.toggleHide);
-        //event.target.parentNode.style.display = 'none';
-        //alert(event.target.parentNode.nodeName);
-    },
     getMessages: function(){
+
+    },
+    sendMessage: function(message){
+        //var u = ReactDOM.findDOMNode(this.refs);
+        var u = this.chatViewer.props.data;
+        alert(u);
+        alert(message);
+        var name = this.state.myProps["user"];
+        var obj = {"name":name, "message": message, "userIDDST":1};
+        this.emit("new message", obj);
 
     },
     render: function(){
         return (
             React.createElement("div", {className: "chatMain"}, 
-                React.createElement("div", {className: "chatPanel"}, 
-                    React.createElement("div", {className: "chatViewer", style: this.state.toggleHide ? {}:{display:'none'}}, 
-                        React.createElement("div", {className: "closeChat", onClick: this.hideCurrentChat}, 
-                            React.createElement("span", null, "×")
-                        ), 
-                        React.createElement("div", {className: "chatContainner"}, 
-                            React.createElement("div", {className: "chatHistory", id: "divChatHistory"}, 
-                                React.createElement(ChatList, {messages:  this.state.messages})
-                            ), 
-                            React.createElement("div", {className: "chatMessage"}, 
-                                React.createElement("input", {type: "text", id: "txtMessage", placeholder: "Ingresar mensaje, presionar ENTER", onKeyPress:  this.sendMessage})
-                            )
-                        )
-                    )
+                React.createElement("div", {className: "chatPanel", ref: "chatPanel"}, 
+                    React.createElement(ChatViewer, {onClick: this.sendMessage.bind(this), ref: (ref) => this.chatViewer = ref, data: "rawData"})
                 ), 
                  this.state.haveAdminPanel ?
-                React.createElement("div", {id: "divAdminPanel", className: "adminPanel"}, 
+                React.createElement("div", {id: "divAdminPanel", className: "adminPanel", ref: "adminPanel"}, 
                     React.createElement(UserList, {users: this.state.users})
                 )
                 : ''

@@ -51,6 +51,7 @@ class User(dict):
         #return json.dumps(self.__dict__)
 
 
+
 cnx = pymssql.connect("localhost","sa","123456","BD_DESCARTE_AT_18102017", as_dict=True)
 
 users = []
@@ -135,7 +136,8 @@ def websocketManager(self, request):
 
         cur = cnx.cursor()
         #sql = """ insert into tChat(userIDSRC, userIDDST, message) values () """ % (self.session["in_UsuarioID"], data["userIDDST"], data["message"])
-        sql = """ insert into tChat(userIDSRC, userIDDST, message) values (%s, %s, '%s') """ % (self.session["in_UsuarioID"], data["userIDDST"], data["message"])
+        sql = """ insert into tChat(userIDSRC, userIDDST, message, [type]) values (%(in_UsuarioID)s, %(userIDDST)s, '%(message)s', 'out'), (%(userIDDST)s, %(in_UsuarioID)s, '%(message)s', 'in') """ % {"in_UsuarioID":self.session["in_UsuarioID"], "userIDDST": data["userIDDST"], "message": data["message"]}
+        #alter table tChat add [type] char(3) default 'out'
         print("sql: [%s]" % sql)
         cur.execute(sql)
         cnx.commit()
@@ -143,11 +145,43 @@ def websocketManager(self, request):
         data['ins'] = datetime.now(r.make_timezone('00:00'))
         if data.get('name') and data.get('message'):
             new_chat = yield r.table("botChat").insert([ data ]).run(conn)
+
+        print("id chatViewer [%s]" % data["userIDDST"])
+
+        chatMessage = {"message":data["message"], "ins":str(datetime.now().strftime("%H:%M:%S")) , "userIDDST":data["userIDDST"]}
+
+
+        payload = {"event":"new chat","data": chatMessage}
+        self.write_message(payload)
+        print(type(data["userIDDST"]))
+        connectionsDict[data["userIDDST"]].write_message(payload)
+        """
+        for c in connections:
+            change['new_val']['ins'] = str(change['new_val']['ins'])
+            payload = {"event":"new chat","data": [ u.__dict__ for u in users ]}
+            c.write_message(payload)
+
+        #"""
         print(">>> end create_chat")
+    elif action == "get chat for this user":
+        data = data["1"]
+        sql = """ select id, userIDSRC as [src], userIDDST as [dst], [message] as [message], convert(varchar(10),ins, 108) as [ins], [type] as [type] from tChat where userIDSRC = %d and userIDDST = %d """ % (int(self.session["in_UsuarioID"]), int(data["userIDDST"]))
+        print("sql: [%s]" % sql)
+        cur = cnx.cursor()
+        cur.execute(sql)
+        chats = cur.fetchall()
+        auxChats = []
+        auxObj = []
+        for chat in chats:
+            auxChats.append(chat)
+        auxObj = {"messages":auxChats, "userIDDST":data["userIDDST"]}
+        payload = {"event":"chat for user", "data": auxObj }
+        self.write_message(payload)
 
 
 
 connections = set()
+connectionsDict = {}
 
 class Serializer(object):
     @staticmethod
@@ -191,16 +225,21 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         except Exception as e:
             print(str(e))
 
+        """
         cur = cnx.cursor()
-        cur.execute("select id, userIDSRC as [src], userIDDST as [dst], [message] as [message], convert(varchar(10),ins, 108) as [ins] from tChat where userIDSRC = %s" % self.session["in_UsuarioID"])
+        cur.execute("select id, userIDSRC as [src], userIDDST as [dst], [message] as [message], convert(varchar(10),ins, 108) as [ins], [type] as [type]  from tChat where userIDSRC = %s" % self.session["in_UsuarioID"])
         rows = cur.fetchall()
         messagesList = []
         for m in rows:
             messagesList.append(m)
         #print(messagesList)
         payload = {"event":"populate chat-list", "data": messagesList}
-        self.write_message(payload)
-        connections.add(self)
+        self.write_message(payload) #"""
+        #connections.add(self)
+        print(type(self.session["in_UsuarioID"]))
+        connectionsDict.update({int(self.session["in_UsuarioID"]): self})
+        #print(connections)
+        print(connectionsDict)
 
 
 
@@ -211,7 +250,9 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         websocketManager(self, request)
 
     def on_close(self):
-        connections.remove(self)
+        print("onClose [%s]" % self.session["in_UsuarioID"])
+        #connections.remove(self)
+        connectionsDict.pop(int(self.session["in_UsuarioID"]))
         pass
 
     def check_origin(self, origin):
@@ -221,7 +262,8 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
 
 @gen.coroutine
 def watch_chats():
-    print('\n#################################\n###>>> Watching db for new chats!\n#################################\n\n')
+    print('\npass\n#################################\n###>>> Watching db for new chats!\n#################################\n\n')
+    """
     conn = yield r.connect(host='localhost', port=28015, db='pyBOT')
     feed = yield r.table("botChat").changes().run(conn)
     union = yield r.union(r.table("botChat").changes(), r.table("botScripts").changes()).run(conn)
@@ -231,10 +273,12 @@ def watch_chats():
         print("\nconexiones WS: %d\n" % len(connections))
         for c in connections:
             change['new_val']['ins'] = str(change['new_val']['ins'])
-            payload = {"event":"new chat","data": [ u.__dict__ for u in users ]}
+            #payload = {"event":"new chat","data": [ u.__dict__ for u in users ]}
+            payload = {"event":"new chat","data": change["new_val"]}
             c.write_message(payload)
         print(change)
         print("watching db CHANGES ############")
+    #"""
 
 def obj_dict(obj):
     return obj.__dict__

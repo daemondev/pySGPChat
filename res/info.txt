@@ -87,3 +87,15 @@ https://www.reactenlightenment.com/basic-react-components/6.9.html
 https://reactjs.org/docs/refs-and-the-dom.html
 https://zhenyong.github.io/react/docs/more-about-refs.html
 #-------------------------------------------------- END   [context] - (23-11-2017 - 17:57:06) }}
+#-------------------------------------------------- BEGIN [firefox allway-private] - (24-11-2017 - 10:57:52) {{
+https://developer.mozilla.org/en-US/docs/Mozilla/Command_Line_Options#-private
+#-------------------------------------------------- END   [firefox allway-private] - (24-11-2017 - 10:57:52) }}
+#-------------------------------------------------- BEGIN [not available] - (24-11-2017 - 21:11:59) {{
+https://www.reddit.com/r/reactjs/comments/3699on/functions_not_available_to_children/
+https://stackoverflow.com/questions/42711758/reactjs-how-to-access-child-components-refs-from-parent
+https://stackoverflow.com/questions/24462679/react-get-react-component-from-a-child-dom-element
+https://stackoverflow.com/questions/24841855/react-js-access-to-component-methods
+https://camjackson.net/post/9-things-every-reactjs-beginner-should-know
+https://github.com/millermedeiros/js-signals/wiki/Comparison-between-different-Observer-Pattern-implementations
+https://www.ctheu.com/2015/02/12/how-to-communicate-between-react-components/
+#-------------------------------------------------- END   [not available] - (24-11-2017 - 21:11:59) }}

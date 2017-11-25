@@ -52,7 +52,7 @@ class User(dict):
 
 
 
-cnx = pymssql.connect("localhost","sa","123456","BD_DESCARTE_AT_18102017", as_dict=True)
+cnx = pymssql.connect("localhost\\SQLEXPRESS","sa","123456","BD_DESCARTE_AT_18102017", as_dict=True)
 
 users = []
 supervisors = []
@@ -88,7 +88,30 @@ def getUsers():
         else:
             users.append(user)
 
+@gen.coroutine
+def tryCreateChatTable():
+    sql = """
+                create table tChat(
+                        id int primary key identity,
+                        userIDSRC int foreign key references TB_USUARIO(in_UsuarioID),
+                        userIDDST int foreign key references TB_USUARIO(in_UsuarioID),
+                        [message] varchar(max),
+                        [type] varchar(3),
+                        ins datetime default getdate(),
+                    ) """
+    try:
+        cur = cnx.cursor()
+        cur.execute(sql)
+        cnx.commit()
+        print("Table tChat created!!!")
+    except Exception as e:
+        print("Table tChat already exists!!!")
+        print(str(e))
+
+tryCreateChatTable()
 getUsers()
+
+
 
 @gen.engine
 def func(*args, **kwargs):
@@ -140,7 +163,11 @@ def websocketManager(self, request):
         #alter table tChat add [type] char(3) default 'out'
         print("sql: [%s]" % sql)
         cur.execute(sql)
-        cnx.commit()
+        try:
+            cnx.commit()
+        except Exception as e:
+            pass
+
 
         data['ins'] = datetime.now(r.make_timezone('00:00'))
         if data.get('name') and data.get('message'):
@@ -150,17 +177,10 @@ def websocketManager(self, request):
 
         chatMessage = {"message":data["message"], "ins":str(datetime.now().strftime("%H:%M:%S")) , "userIDDST":data["userIDDST"]}
 
-
         payload = {"event":"new chat","data": chatMessage}
         self.write_message(payload)
         print(type(data["userIDDST"]))
         connectionsDict[data["userIDDST"]].write_message(payload)
-        """
-        for c in connections:
-            change['new_val']['ins'] = str(change['new_val']['ins'])
-            payload = {"event":"new chat","data": [ u.__dict__ for u in users ]}
-            c.write_message(payload)
-
         #"""
         print(">>> end create_chat")
     elif action == "get chat for this user":
@@ -177,8 +197,6 @@ def websocketManager(self, request):
         auxObj = {"messages":auxChats, "userIDDST":data["userIDDST"]}
         payload = {"event":"chat for user", "data": auxObj }
         self.write_message(payload)
-
-
 
 connections = set()
 connectionsDict = {}
@@ -240,8 +258,6 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         connectionsDict.update({int(self.session["in_UsuarioID"]): self})
         #print(connections)
         print(connectionsDict)
-
-
 
         pass
 

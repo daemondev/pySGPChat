@@ -55,20 +55,23 @@ var UserList = React.createClass({
         return { users: [] };
     },
     componentWillMount: function(){
-        //this.setState({users: this.props.users});
-        this. setState({users: [{"vc_Nombre":"name","vc_ApePaterno":"pat","vc_ApeMaterno":"mat","in_UsuarioID":1}]});
+        this.setState({users: this.props.users});
+        //this. setState({users: [{"vc_Nombre":"name","vc_ApePaterno":"pat","vc_ApeMaterno":"mat","in_UsuarioID":1}]});
     },
     userClickHandler: function(id){
         //alert("prev + id: [" + id + "]");
         this.props.onClick(id);
     },
     render: function(){
-        //var users = this.state.users.map(function(user){
-            //return <User user={user} onClick={ this.userClickHandler } uuid={ user.in_UsuarioID }/>;
-        //});
+        var users = [];
+        var f = this.userClickHandler;
+        this.state.users.forEach(function(user){
+            //return <User user={user} onClick={ this.userClickHandler } key={ user.in_UsuarioID }/>;
+            users.push(<User user={user} onClick={ f } key={ user.in_UsuarioID }/>);
+        });
         return (
-            //<div> {users} </div>
-            <User user={this.state.users[0]} onClick={ this.userClickHandler } uuid={ 5 }/>
+            <div> {users} </div>
+            //<User user={this.state.users[0]} onClick={ this.userClickHandler } uuid={ 5 }/>
         );
     }
 });
@@ -171,6 +174,7 @@ var ChatContainer = React.createClass({
             , messages:[]
             , haveAdminPanel: false
             , users: []
+            , currentChats: []
             , chatViewers: []
             , chatViewersDict: {}
         };
@@ -187,6 +191,10 @@ var ChatContainer = React.createClass({
             messageBox.value = "";
             chatList.innerHTML = chatList.innerHTML +  "<li class='chat'>" + data.name + " - " + data.message + "</li>";  /**/
             //debugger;
+            //
+            if(!this.state.currentChats.indexOf(data.userIDDST) !== -1){
+                this.addChatViewer([data], data.userIDDST);
+            }
             var state = Object.assign({}, this.state);
             //state.chatViewersDict[id].messages.concat(data);
             console.log( state.chatViewersDict[data.userIDDST].state.messages);
@@ -194,7 +202,7 @@ var ChatContainer = React.createClass({
             //var m = state.chatViewersDict[data.userIDDST].state.messages.concat(data);
             console.log( state.chatViewersDict[data.userIDDST].state.messages);
             state.chatViewersDict[data.userIDDST].state.messages.map(function (m){
-                alert(m);
+                //alert(m);
             } );
             console.log("data: " + data.ins + " - " + data.message + " - " + data.userIDDST);
             this.setState(state);
@@ -242,6 +250,7 @@ var ChatContainer = React.createClass({
         //alert(message + " - " + userIDDST);
         var name = this.state.myProps["user"];
         var obj = {"name":name, "message": message, "userIDDST":userIDDST};
+        console.log(obj);
         this.emit("new message", obj);
     },
     receiveUserAction: function(id){
@@ -250,12 +259,14 @@ var ChatContainer = React.createClass({
         this.emit("get chat for this user", payload);
     },
     addChatViewer: function (messages, id){
-
-        this.setState({
-            chatViewers: this.state.chatViewers.concat(
-                <ChatViewer id={ id } onClick={this.sendMessage.bind(this)} ref={(ref) => this.updateState(ref, id)} data="rawData" messages={messages} />
-            )
-        });
+        if(this.state.currentChats.indexOf(id) === -1){
+            this.setState({
+                chatViewers: this.state.chatViewers.concat(
+                    <ChatViewer id={ id } onClick={this.sendMessage.bind(this)} ref={(ref) => this.updateState(ref, id)} data="rawData" messages={messages} />
+                ),
+                currentChats:this.state.currentChats.concat(id)
+            });
+        }
     },
     render: function(){
         return (

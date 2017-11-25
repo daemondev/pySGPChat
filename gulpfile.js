@@ -4,6 +4,7 @@ var gulpBrowser = require("gulp-browser");
 var reactify = require('reactify');
 var del = require('del');
 var size = require('gulp-size');
+var plumber = require('gulp-plumber');
 
 var jsxFilesDir = './static/jsx/*.js';
 var jsOutPutDir = './static/js/chat';
@@ -21,6 +22,7 @@ gulp.task('default', ['del'], function () {
 gulp.task('transform', function () {
   var stream = gulp.src(jsxFilesDir)
     .pipe(gulpBrowser.browserify({transform: ['reactify']}))
+    .pipe(plumber())
     .pipe(gulp.dest(jsOutPutDir))
     .pipe(size());
   return stream;

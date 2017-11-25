@@ -99,3 +99,23 @@ https://camjackson.net/post/9-things-every-reactjs-beginner-should-know
 https://github.com/millermedeiros/js-signals/wiki/Comparison-between-different-Observer-Pattern-implementations
 https://www.ctheu.com/2015/02/12/how-to-communicate-between-react-components/
 #-------------------------------------------------- END   [not available] - (24-11-2017 - 21:11:59) }}
+#-------------------------------------------------- BEGIN [mssql preserve html format] - (25-11-2017 - 12:00:12) {{
+CREATE TABLE dbo.x(y NVARCHAR(255));
+
+INSERT dbo.x SELECT 'Sports & Recreation'
+   UNION ALL SELECT 'x >= y'
+   UNION ALL SELECT 'blat'
+   UNION ALL SELECT '<hooah>';
+
+-- bad:
+SELECT STUFF((SELECT ',' + y
+ FROM dbo.x FOR XML PATH('')), 1, 1, '');
+
+-- good:
+SELECT STUFF((SELECT ',' + y
+ FROM dbo.x FOR XML PATH, TYPE).value('.[1]',
+ 'nvarchar(max)'), 1, 1, '');
+
+ GO
+ DROP TABLE dbo.x;
+#-------------------------------------------------- END   [mssql preserve html format] - (25-11-2017 - 12:00:12) }}

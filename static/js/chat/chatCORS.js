@@ -290,4 +290,5 @@ ReactDOM.render(
     React.createElement(ChatContainer, null),
     document.getElementById('divChatWrapper')
 );
+
 },{}]},{},[1]);

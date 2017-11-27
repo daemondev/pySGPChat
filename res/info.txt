@@ -119,3 +119,28 @@ SELECT STUFF((SELECT ',' + y
  GO
  DROP TABLE dbo.x;
 #-------------------------------------------------- END   [mssql preserve html format] - (25-11-2017 - 12:00:12) }}
+#-------------------------------------------------- BEGIN [of] - (27-11-2017 - 15:31:17) {{
+https://discourse.igniterealtime.org/t/howto-install-and-configure-jitsi-videobridge-plugin-1-2/78155
+https://discourse.igniterealtime.org/t/video-calls-spark/42003/10
+ Trillian client
+https://discourse.igniterealtime.org/t/java-optimization-in-openfire/61882/5
+Go to the installation folder of openfire: Drive:\Openfire\bin
+
+1.) go to bin folder
+
+2.) create a text file and name it to "openfired.vmoptions" and "openfire-service.vmoptions"
+
+3.) Specify the Virtual Memory allocated
+
+Example
+
+4.) Type in: -Xms512m
+
+5.) Type in: -Xmx1024m
+
+4 & 5 will depend on your server/PC memory.
+
+I'm using a server with 8GB RAM and allotted 1GB memory for JAVA.
+
+We have 114 users.
+#-------------------------------------------------- END   [of] - (27-11-2017 - 15:31:17) }}

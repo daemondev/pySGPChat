@@ -119,10 +119,19 @@
     padding:1px;
     background-color: yellow;
 }
-.in{
+.chatHistory .in{
     background-color: yellow;
+    float:left;
+    max-width:195px;
 }
 
-.out{
+.chatHistory .out{
     background-color: green;
+    float:right;
+    max-width:195px;
+}
+
+.chatPanel .userName{
+    background-color: #fff;
+    float: left;
 }

@@ -175,11 +175,15 @@ def websocketManager(self, request):
 
         print("id chatViewer [%s]" % data["userIDDST"])
 
-        chatMessage = {"message":data["message"], "ins":str(datetime.now().strftime("%H:%M:%S")) , "userIDDST":data["userIDDST"]}
+        chatMessage = {"message":data["message"], "ins":str(datetime.now().strftime("%H:%M:%S")) , "userIDDST":data["userIDDST"], "type":"out"}
 
         payload = {"event":"new chat","data": chatMessage}
         self.write_message(payload)
         print(type(data["userIDDST"]))
+
+        chatMessage["type"] = "in"
+        chatMessage["userIDDST"] = int(self.session["in_UsuarioID"])
+        payload = {"event":"new chat","data": chatMessage}
         connectionsDict[data["userIDDST"]].write_message(payload)
         #"""
         print(">>> end create_chat")
@@ -194,7 +198,7 @@ def websocketManager(self, request):
         auxObj = []
         for chat in chats:
             auxChats.append(chat)
-        auxObj = {"messages":auxChats, "userIDDST":data["userIDDST"]}
+        auxObj = {"messages":auxChats, "userIDDST":int(data["userIDDST"])}
         payload = {"event":"chat for user", "data": auxObj }
         self.write_message(payload)
 
@@ -410,8 +414,8 @@ if __name__ == '__main__':
 
         #""" ### Ready work
         server = tornado.httpserver.HTTPServer(ws_app)
-        server.listen(80, address="0.0.0.0") ### omit address """
-        #server.listen(8000, address="0.0.0.0") ### omit address """
+        #server.listen(80, address="0.0.0.0") ### omit address """
+        server.listen(8888, address="0.0.0.0") ### omit address """
 
         """
         server = tornado.httpserver.HTTPServer(ws_app, ssl_options={"certfile": "domain.crt", "keyfile": "domain.key",})

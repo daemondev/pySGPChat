@@ -41,7 +41,7 @@
     width:240px;
     margin:2px;
     padding:auto;
-    background-color: cyan;
+    background-color: #D4FFD4;
 }
 
 .chatPanel, .adminPanel{
@@ -56,7 +56,11 @@
 .chatPanel{
     background-color: green;
     min-width: 240px;
-    min-height: 30px;
+    max-width: 735px;
+
+    max-height: 355px;
+    /*overflow-y: none;*/
+    /*overflow-x: scroll;*/
 }
 
 .adminPanel{
@@ -109,9 +113,12 @@
     height: 26px;
 }
 .closeChat{
-    text-align:right;
+    /*text-align:right;*/
     background-color: red;
     cursor:pointer;
+    float: right;
+    /*margin-right:3px;*/
+    padding:0 4px;
 }
 .chatWrapper .user{
     cursor: pointer;
@@ -120,18 +127,55 @@
     background-color: yellow;
 }
 .chatHistory .in{
-    background-color: yellow;
+    /*#BDFCFF*/
+    /*background-color: #FFFF7F;*/
+    background-color: #FCFC7D;
     float:left;
+    /*margin-left:5px;*/
     max-width:195px;
+    /*margin:2px 0;*/
+    margin:2px auto 2px 5px;
+    display:block !important;
+    clear:both;
+    border-radius: 2px;
+    /*border:1px solid #41A8ED;*/
+    border:1px solid #DFDF07;
+}
+
+.messageDate{
+    font-size:8px;
+}
+
+.messageMessage{
+    font-size:12px;
+}
+.message{
+   padding:5px;
 }
 
 .chatHistory .out{
-    background-color: green;
+    border-radius: 2px;
+    background-color: #AAD4FF;
+    /*background-color: #41A8ED;*/
     float:right;
+    /*margin-right:5px;*/
     max-width:195px;
+    margin:2px 5px 2px auto;
+    display:block !important;
+    text-align:right;
+    clear:both;
+    border:1px solid #41A8ED;
 }
 
 .chatPanel .userName{
-    background-color: #fff;
     float: left;
+}
+
+.userUser{
+    background-color: #66FF66 !important;
+}
+
+.userSpan{
+    font-size: 9px;
+    color:red;
 }

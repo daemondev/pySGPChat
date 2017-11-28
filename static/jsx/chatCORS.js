@@ -2,12 +2,23 @@ var ChatMessage = React.createClass({
     render: function (){
         var message = this.props.message;
         return(
-            <div className={message.type}>
-                <p>HORA: { message.ins } - Mensaje: { message.message }</p>
+            <div className={[message.type, "message"].join(" ")} title={ message.ins } >
+                <div className="messageDate">{ message.ins }</div>
+                <div className="messageMessage">{ message.message }</div>
             </div>
         );
     }
 });
+
+Array.prototype.remByVal = function(val) {
+    for (var i = 0; i < this.length; i++) {
+        if (this[i] === val) {
+            this.splice(i, 1);
+            i--;
+        }
+    }
+    return this;
+}
 
 var ChatList = React.createClass({
     render: function(){
@@ -31,17 +42,14 @@ var User = React.createClass({
 
     },
     openChatViewer: function(event){
-        //alert(this.state.user.in_UsuarioID);
-        this.props.onClick(this.state.user.in_UsuarioID);
-        //alert(event.target.className);
-        //alert(this.props.uuid);
+        this.props.onClick(this.props.id);
     },
     render: function(){
         var user = this.state.user;
         return (
-            <div className="user" ref="user" id={user.in_UsuarioID}>
+            <div className="user" ref="user" id={user.in_UsuarioID} onClick={this.openChatViewer.bind(this)}>
                 <div>
-                    <span onClick={this.openChatViewer.bind(this)} className="userSpan">
+                    <span className="userSpan">
                         {user.vc_Nombre} - {user.vc_ApePaterno} - {user.vc_ApeMaterno}
                     </span>
                 </div>
@@ -56,14 +64,13 @@ var UserList = React.createClass({
     },
     componentWillMount: function(){
         this.setState({users: this.props.users});
-        //this. setState({users: [{"vc_Nombre":"name","vc_ApePaterno":"pat","vc_ApeMaterno":"mat","in_UsuarioID":1}]});
     },
     userClickHandler: function(id){
         this.props.onClick(id);
     },
     render: function(){
         var users = this.state.users.map(function(user){
-            return <User user={user} onClick={ this.userClickHandler } key={ user.in_UsuarioID }/>;
+            return <User user={user} onClick={ this.userClickHandler } key={ user.in_UsuarioID } id={user.in_UsuarioID}/>;
         }, this);
         return (
             <div> {users} </div>
@@ -85,22 +92,16 @@ var ChatViewer = React.createClass({
     },
     hideCurrentChat: function(event){
         this.setState({toggleHide:!this.state.toggleHide});
-        console.log("clicked: " + this.state.toggleHide);
         this.props.onDropChatViewer(this.state.id);
-        //event.target.parentNode.style.display = 'none';
-        //alert(event.target.parentNode.nodeName);
     },
     componentWillMount: function(){
         this.setState({ id: this.props.id, messages: this.props.messages, userName:this.props.userName });
     },
     sendMessage: function(event){
         if(event.key == "Enter"){
-            this.props.onClick(event.target.value, this.state.id);
-            /*
-            var newMessage = this.state.messages.concat(
-                {"message":event.target.value, "ins":"fecha", "type":"out"}
-            );
-            this.setState({messages:newMessage}); /**/
+            if(event.target.value.trim().length > 0){
+                this.props.onClick(event.target.value, this.state.id);
+            }
             event.target.value = "";
         }
     },
@@ -118,9 +119,9 @@ var ChatViewer = React.createClass({
     },
     render: function (){
         return(
-                    <div className="chatViewer" style={this.state.toggleHide ? {}:{display:'none'}} >
-                        <div className="closeChat" onClick={this.hideCurrentChat}>
-                            <span className="userName">{ this.state.userName }</span> <span>&times;</span>
+                    <div className="chatViewer">
+                        <div className="userUser">
+                            <span className="userName">{ this.state.userName }</span> <span className="closeChat" onClick={this.hideCurrentChat}>&#10006;</span>
                         </div>
                         <div className="chatContainner">
                             <div className="chatHistory" id="divChatHistory" ref="chatHistory">
@@ -137,14 +138,11 @@ var ChatViewer = React.createClass({
 
 var MyComponent = React.createClass({
   handleClick: function() {
-    // Explicitly focus the text input using the raw DOM API.
     if (this.myTextInput !== null) {
       this.myTextInput.focus();
     }
   },
   render: function() {
-    // The ref attribute is a callback that saves a reference to the
-    // component to this.myTextInput when the component is mounted.
     return (
       <div>
         <input type="text" ref={(ref) => this.myTextInput = ref} />
@@ -183,7 +181,7 @@ var ChatContainer = React.createClass({
             , ws : null
             , domain : ""
             , separator : "://"
-            , port : "8888"
+            , port : ":8888"
             , protocol : "ws" + "://"
             , namespace : "/websocket"
             , toggleHide: true
@@ -202,35 +200,25 @@ var ChatContainer = React.createClass({
     },
     on: function(event, data){
         if (event == "new chat"){
-
             if(this.state.currentChats.indexOf(data.userIDDST) === -1){
-                //this.addChatViewer([data], data.userIDDST);
                 this.receiveUserAction(data.userIDDST);
                 return;
             }
             var state = Object.assign({}, this.state);
-            //state.chatViewersDict[id].messages.concat(data);
-            //console.log( state.chatViewersDict[data.userIDDST].state.messages);
             var newChat = state.chatViewersDict[data.userIDDST].state.messages.concat(data);
-            //var m = state.chatViewersDict[data.userIDDST].state.messages.concat(data);
-            //console.log( state.chatViewersDict[data.userIDDST].state.messages);
-
             state.chatViewersDict[data.userIDDST].state.messages = newChat;
 
             var userName = "aux";
-            //state.chatViewersDict[data.userIDDST].state.messages.map(function (m){
             var nCV = state.chatViewers.map(function (v){
                 if (v.props.id == data.userIDDST){
-                    return <ChatViewer id={ data.userIDDST } onClick={this.sendMessage.bind(this)} ref={(ref) => this.updateState(ref, data.userIDDST)} data="rawData" messages={newChat} userName={userName}/>
+                    return <ChatViewer id={ data.userIDDST }  key={ data.userIDDST } onClick={this.sendMessage.bind(this)} ref={(ref) => this.updateState(ref, data.userIDDST)} data="rawData" messages={newChat} userName={userName} onDropChatViewer={ this.dropChatViewer }/>
                 }else{
                     return v
                 }
-                console.log(v.props.id);
             }, this);
 
             state.chatViewers = nCV;
 
-            console.log("data: ins: [" + data.ins + "] - message [" + data.message + "] - userIDDST [" + data.userIDDST + "]");
             this.setState(state);
         }else if (event == "only for admins"){
             if(!this.state.haveAdminPanel){
@@ -242,33 +230,6 @@ var ChatContainer = React.createClass({
             this.addChatViewer(data.messages, data.userIDDST);
         }
     },
-    dropChatViewer: function(id){
-        //alert("RUN!! " + id);
-        var state = Object.assign({}, this.state);
-        //debugger;
-        var nCV = state.chatViewers.map(function (v){
-            if (v.props.id == id){
-                return;
-            }else{
-                if (variable !== undefined || variable !== null) {
-                    return v;
-                }
-
-            }
-        }, this);
-
-        state.chatViewers = nCV;
-        var newIds = state.currentChats.map(function(currentID){
-            //alert(currentID);
-            if(id != currentID){
-                return currentID;
-            }
-
-        });
-        state.currentChats = newIds;
-        this.setState(state);
-
-    },
     emit: function (message, data ){
         var json = JSON.stringify({0:message, 1: data})
         this.state.ws.send(json);
@@ -277,64 +238,51 @@ var ChatContainer = React.createClass({
         return;
     },
     componentWillMount: function(){
-        var url = "ws" + this.state.separator + document.domain +":"+ this.state.port + this.state.namespace;
-        var ws = new WebSocket(url);
-        //alert(url);
+        var ws = new WebSocket("ws" + this.state.separator + document.domain + this.state.port + this.state.namespace);
         ws.onmessage = this.onMessage;
         ws.onopen = this.onOpen;
         this.setState({ws:ws});
     },
     componentDidMount: function(){
-        var user = document.getElementById("lbl_linea").innerHTML;
-        var profile = document.getElementById("lblPerfil").innerHTML;
-
         var state = Object.assign({}, this.state);
-        state.myProps["user"] = user;
-        state.myProps["profile"] = profile;
+        state.myProps["user"] = "@daemonDEV";
+        state.myProps["profile"] = "root";
         this.setState(state);
     },
     updateState: function(chatViewer, id){
-        //debugger;
         var state = Object.assign({}, this.state);
         state.chatViewersDict[id] = chatViewer;
         this.setState(state);
-
-        //for(let cv in this.state.chatViewersDict){
-            //alert(cv[id] + " - " + cv);
-        //}
-
-        //this.state.chatViewersDict.map(function(cv){
-            //alert(cv.props.id + " - " + cv.props.userName);
-        //});
-
     },
     sendMessage: function(message, userIDDST){
-        //var u = this.refs.chatPanel.className;
-        //var u = this.chatViewer.props.data;
-        //alert(u);
-        //alert(message + " - " + userIDDST);
         var name = this.state.myProps["user"];
         var obj = {"name":name, "message": message, "userIDDST":userIDDST};
-        //console.log(obj);
         this.emit("new message", obj);
     },
     receiveUserAction: function(id){
         var payload = {"userIDDST":id};
         this.emit("get chat for this user", payload);
     },
-    addChatViewer: function (messages, id){
-        var userName = "";
-        this.state.users.map(function(user){
-            if(user.in_UsuarioID == id){
-                userName =  user.vc_Nombre + " " + user.vc_ApePaterno +" "+ user.vc_ApeMaterno;
-            }
-        });
+    dropChatViewer: function(id){
+        var state = Object.assign({}, this.state);
 
+        var newIds = state.currentChats.filter(n => n != id );
+        state.currentChats = newIds;
+        var nCV = state.chatViewers.filter(cv => cv.props.id != id);
+        state.chatViewers = nCV;
+
+        this.setState(state);
+    },
+    addChatViewer: function (messages, id){
         if(this.state.currentChats.indexOf(id) === -1){
+            var userName = "";
+            this.state.users.map(function(user){
+                if(user.in_UsuarioID == id){
+                    userName =  user.vc_Nombre + " " + user.vc_ApePaterno +" "+ user.vc_ApeMaterno;
+                }
+            });
             this.setState({
-                chatViewers: this.state.chatViewers.concat(
-                    <ChatViewer id={ id } onClick={this.sendMessage.bind(this)} ref={(ref) => this.updateState(ref, id)} data="rawData" messages={messages} userName={userName} onDropChatViewer={ this.dropChatViewer }/>
-                ),
+                chatViewers:  [<ChatViewer id={ id }  key={id} onClick={this.sendMessage.bind(this)} ref={(ref) => this.updateState(ref, id)} data="rawData" messages={messages} userName={userName} onDropChatViewer={ this.dropChatViewer }/>].concat(this.state.chatViewers),
                 currentChats:this.state.currentChats.concat(id)
             });
         }

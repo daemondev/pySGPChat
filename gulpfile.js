@@ -20,9 +20,9 @@ gulp.task('default', ['del'], function () {
 });
 
 gulp.task('transform', function () {
-  var stream = gulp.src(jsxFilesDir)
-    .pipe(gulpBrowser.browserify({transform: ['reactify']}))
+    var stream = gulp.src(jsxFilesDir)
     .pipe(plumber())
+    .pipe(gulpBrowser.browserify({transform: ['reactify']}))
     .pipe(gulp.dest(jsOutPutDir))
     .pipe(size());
   return stream;

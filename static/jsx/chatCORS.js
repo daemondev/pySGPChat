@@ -3,8 +3,12 @@ var ChatMessage = React.createClass({
         var message = this.props.message;
         return(
             <div className={[message.type, "message"].join(" ")} title={ message.ins } >
-                <div className="messageDate">{ message.ins }</div>
-                <div className="messageMessage">{ message.message }</div>
+                { message.type == "in" ? <div className="dleft"></div> : '' }
+                <div className="trueMessage">
+                    <div className="messageDate">{ message.ins }</div>
+                    <div className="messageMessage">{ message.message }</div>
+                </div>
+                { message.type == "out" ? <div className="dright"></div> : '' }
             </div>
         );
     }
@@ -88,6 +92,8 @@ var ChatViewer = React.createClass({
             , userName:""
             , toggleHide:true
             , messages: []
+            , randomValue:  Math.random()
+            , contentEditable: <ContentEditable key={ Math.random() }  onKeyDown={this.sendMessage} reizeChatHistory={ this.resizeChatHistory } />
         };
     },
     hideCurrentChat: function(event){
@@ -97,13 +103,23 @@ var ChatViewer = React.createClass({
     componentWillMount: function(){
         this.setState({ id: this.props.id, messages: this.props.messages, userName:this.props.userName });
     },
+    setContentEditable: function (){
+        this.setState({ contentEditable: <ContentEditable  key={ Math.random() } onKeyDown={this.sendMessage} reizeChatHistory={ this.resizeChatHistory } /> });
+    },
     sendMessage: function(event){
+        if(event.target.nodeName === "DIV"){
+            this.props.onClick(event.target.textContent, this.state.id);
+            this.setContentEditable();
+            return;
+        }
+
         if(event.key == "Enter"){
             if(event.target.value.trim().length > 0){
                 this.props.onClick(event.target.value, this.state.id);
             }
             event.target.value = "";
         }
+
     },
     scrollToBottom: function (id){
         //const tesNode = ReactDOM.findDOMNode(this.refs.chatHistory)
@@ -116,6 +132,14 @@ var ChatViewer = React.createClass({
     },
     componentDidUpdate: function(){
         this.scrollToBottom();
+        //<input type="text" id="txtMessage" placeholder="Ingresar mensaje y presionar ENTER" onKeyPress={ this.sendMessage } />
+    },
+    resizeChatHistory: function(){
+        const cH = ReactDOM.findDOMNode(this.refs.chatHistory);
+        cH.style.height = cH.style.height - 20;
+        //this.refs.chatMessage.style.height = this.refs.chatMessage.style.height + 20;
+        const cM = ReactDOM.findDOMNode(this.refs.chatMessage);
+        cM.style.height = cM.style.height + 20;
     },
     render: function (){
         return(
@@ -124,17 +148,76 @@ var ChatViewer = React.createClass({
                             <span className="userName">{ this.state.userName }</span> <span className="closeChat" onClick={this.hideCurrentChat}>&#10006;</span>
                         </div>
                         <div className="chatContainner">
-                            <div className="chatHistory" id="divChatHistory" ref="chatHistory">
+                            <div className="chatHistory" ref="chatHistory">
                                 <ChatList messages={ this.state.messages } />
                             </div>
-                            <div className="chatMessage">
-                                <input type="text" id="txtMessage" placeholder="Ingresar mensaje, presionar ENTER" onKeyPress={ this.sendMessage } />
+                            <div className="chatMessage" ref="chatMessage">
+                                <ContentEditable rnd={ this.randomValue } ref={(ref) => this.theContentEditable = ref}  onKeyDown={this.sendMessage} reizeChatHistory={ this.resizeChatHistory } />
                             </div>
                         </div>
                     </div>
         );
     }
 });
+var ContentEditable = React.createClass({
+    render: function(){
+        return <div className="text-box" ref="textBox"
+            onKeyPress={this.myKeyPress}
+            contentEditable
+            placeholder="Ingresar Mensaje y Presionar ENTER"
+            ></div>;
+    },
+    myKeyPress: function (e){
+        console.log(this.refs.textBox.clientHeight);
+        if(this.refs.textBox.clientHeight > 25){
+            this.props.reizeChatHistory(25);
+        }
+
+        if(e.key == "Enter"){
+            if(e.target.textContent.trim().length > 0){
+                this.props.onKeyDown(e);
+            }
+            e.target.innerHTML = "";
+            /*
+            e.target.textContent = "";
+            while (e.target.lastChild) {
+                alert("deleting");
+                e.target.removeChild(e.target.lastChild);
+            } //**/
+        }
+    }
+});
+
+function getLastTextNodeIn(node) {
+    while (node) {
+        if (node.nodeType == 3) {
+            return node;
+        } else {
+            node = node.lastChild;
+        }
+    }
+}
+
+function isRangeAfterNode(range, node) {
+    var nodeRange, lastTextNode;
+    if (range.compareBoundaryPoints) {
+        nodeRange = document.createRange();
+        lastTextNode = getLastTextNodeIn(node);
+        nodeRange.selectNodeContents(lastTextNode);
+        nodeRange.collapse(false);
+        return range.compareBoundaryPoints(range.START_TO_END, nodeRange) > -1;
+    } else if (range.compareEndPoints) {
+        if (node.nodeType == 1) {
+            nodeRange = document.body.createTextRange();
+            nodeRange.moveToElementText(node);
+            nodeRange.collapse(false);
+            return range.compareEndPoints("StartToEnd", nodeRange) > -1;
+        } else {
+            return false;
+        }
+    }
+}
+
 
 var MyComponent = React.createClass({
   handleClick: function() {

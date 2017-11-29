@@ -16,23 +16,26 @@
     right:0;
     /*z-index: 9999999 !important;*/
     /*background-color: #D43F3A;*/
-    background-color: red;
+    /*background-color: red;*/
     /*width: 270px;*/
     /*height: 380px;*/
-    padding: 1px;
+    /*padding: 1px;*/
     /*display:inline-block;*/
 }
 
 .chatMain{
     position:relative;
-    background-color: yellow;
+    /*background-color: yellow;*/
     display:block;
-    padding: 2px;
+    /*padding: 2px;*/
     max-height:260px;
  }
 
 .chatViewer div{
     /*display:table-cell !important;*/
+}
+.chatViewer:hover{
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.35);
 }
 .chatViewer{
     display:inline-block;
@@ -41,7 +44,9 @@
     width:240px;
     margin:2px;
     padding:auto;
-    background-color: #D4FFD4;
+    /*background-color: #D4FFD4;*/
+    background-color: #CCCCCC;
+    border: 1px solid #7D7D7D;
 }
 
 .chatPanel, .adminPanel{
@@ -54,7 +59,7 @@
 }
 
 .chatPanel{
-    background-color: green;
+    /*background-color: green;*/
     min-width: 240px;
     max-width: 735px;
 
@@ -93,24 +98,35 @@
 
 .chatHistory{
     display:block;
-    height: 198px;
+    height: 202px;
     width: 100%;
     overflow:auto;
 }
+
+.text-box{
+    background-color: #fff;
+    width:100%;
+    min-height: 26px;
+    border-top: 1px solid #7D7D7D;
+    padding:2px;
+}
+
 .chatMessage{
     display:block;
     position:absolute;
     width:100%;
     height:28px;
     vertical-align: middle;
-    background-color: purple;
-    padding:1px;
+    /*background-color: purple;*/
+
     bottom:0;
     right:0;
 }
 #txtMessage{
     width:100%;
     height: 26px;
+    border-top: 1px solid #7D7D7D;
+    padding:0 2px;
 }
 .closeChat{
     /*text-align:right;*/
@@ -126,20 +142,29 @@
     padding:1px;
     background-color: yellow;
 }
-.chatHistory .in{
-    /*#BDFCFF*/
-    /*background-color: #FFFF7F;*/
-    background-color: #FCFC7D;
-    float:left;
-    /*margin-left:5px;*/
-    max-width:195px;
-    /*margin:2px 0;*/
-    margin:2px auto 2px 5px;
-    display:block !important;
-    clear:both;
-    border-radius: 2px;
-    /*border:1px solid #41A8ED;*/
-    border:1px solid #DFDF07;
+
+.xchatHistory .in:before {
+    /*bottom: 21px;*/
+    color: rgb(255, 255, 255);
+    content: '';
+    display: block;
+    height: 0px;
+    left: -13px;
+    position: relative;
+    /*right: 460px;*/
+    text-decoration: none solid rgb(255, 255, 255);
+    top: 3px;
+    width: 0px;
+    column-rule-color: rgb(255, 255, 255);
+    perspective-origin: 20px 7.5px;
+    transform-origin: 20px 7.5px;
+    caret-color: rgb(255, 255, 255);
+    border-top: 12px solid rgba(0, 0, 0, 0);
+    border-right: 8px solid #FCFC7D;
+    border-bottom: 0px solid rgba(0, 0, 0, 0);
+    border-left: 0px solid rgb(7, 86, 152);
+    font: normal normal 400 normal 16px / 22.4px Cambria, Georgia, sans-serif;
+    outline: rgb(255, 255, 255) none 0px;
 }
 
 .messageDate{
@@ -149,33 +174,205 @@
 .messageMessage{
     font-size:12px;
 }
-.message{
+.trueMessage{
    padding:5px;
 }
 
+.message > div {
+    display: inline-block;
+    vertical-align:top;
+}
+
 .chatHistory .out{
-    border-radius: 2px;
-    background-color: #AAD4FF;
     /*background-color: #41A8ED;*/
     float:right;
     /*margin-right:5px;*/
-    max-width:195px;
-    margin:2px 5px 2px auto;
+    margin:2px 7px 2px auto;
     display:block !important;
-    text-align:right;
     clear:both;
+}
+.chatHistory .in{
+    /*#BDFCFF*/
+    /*background-color: #FFFF7F;*/
+    float:left;
+    /*margin-left:5px;*/
+    /*margin:2px 0;*/
+    margin:2px auto 2px 7px;
+    display:block !important;
+    clear:both;
+}
+
+.chatHistory .in .trueMessage{
+    background-color: #FCFC7D;
+    max-width:195px;
+    border-radius: 2px;
+    /*border:1px solid #41A8ED;*/
+    border:1px solid #DFDF07;
+}
+.chatHistory .out .trueMessage{
+    border-radius: 2px;
+    background-color: #AAD4FF;
+    max-width:195px;
+    text-align:right;
     border:1px solid #41A8ED;
 }
 
+
+.dleft, .dright {
+    top:5px;
+    width: 0;
+    height: 0;
+    position: relative;
+}
+
+.dleft{
+    left:1px;
+    /*background-color: red;*/
+    border-top: 5px solid rgba(0, 0, 0, 0);
+    border-right: 8px solid #FCFC7D;
+    /*border-right: 8px solid #DFDF07;*/
+    border-bottom: 2px solid rgba(0, 0, 0, 0);
+    border-left: 0px solid rgb(7, 86, 152);
+
+
+    column-rule-color: rgb(255, 255, 255);
+    perspective-origin: 20px 7.5px;
+    transform-origin: 20px 7.5px;
+    caret-color: rgb(255, 255, 255);
+    font: normal normal 400 normal 16px / 22.4px Cambria, Georgia, sans-serif;
+    outline: rgb(255, 255, 255) none 0px;
+}
+.dright{
+    right:1px;
+    /*background-color: blue;*/
+    border-top: 5px solid rgba(0, 0, 0, 0);
+    border-right: 0px solid rgb(7, 86, 152);
+    border-bottom: 4px solid rgba(0, 0, 0, 0);
+    /*border-left: 8px solid #AAD4FF;*/
+    border-left: 8px solid #41A8ED;
+
+    column-rule-color: rgb(255, 255, 255);
+    perspective-origin: 20px 7.5px;
+    transform-origin: 20px 7.5px;
+    caret-color: rgb(255, 255, 255);
+    font: normal normal 400 normal 16px / 22.4px Cambria, Georgia, sans-serif;
+    outline: rgb(255, 255, 255) none 0px;
+
+    transition: box-shadow 0.2s ease-in-out 0s;
+    background-clip:content-box;
+}
+
+.xchatHistory .out:before {
+    /*bottom: 21px;*/
+    color: rgb(255, 255, 255);
+    content: '';
+    display: block;
+    height: 0px;
+    left: 0px;
+    position: relative;
+    right: 40px;
+    text-decoration: none solid rgb(255, 255, 255);
+    top: 3px;
+    width: 0px;
+    column-rule-color: rgb(255, 255, 255);
+    perspective-origin: 20px 7.5px;
+    transform-origin: 20px 7.5px;
+    caret-color: rgb(255, 255, 255);
+    border-top: 12px solid rgba(0, 0, 0, 0);
+    border-right: 0px solid rgb(7, 86, 152);
+    border-bottom: 0px solid rgba(0, 0, 0, 0);
+    /*border-left: 8px solid #AAD4FF;*/
+    border-left: 8px solid green;
+    font: normal normal 400 normal 16px / 22.4px Cambria, Georgia, sans-serif;
+    outline: rgb(255, 255, 255) none 0px;
+}
+
 .chatPanel .userName{
-    float: left;
+    /*float: left;*/
+    /*margin: 0 auto;*/
 }
 
 .userUser{
-    background-color: #66FF66 !important;
+    background-color: #7D7D7D  !important;
+    color: #fff;
+    font-size: 12px;
+    display:block;
+    width: 100%;
+    height: auto;
+    text-align: center;
 }
 
 .userSpan{
     font-size: 9px;
     color:red;
 }
+/*#-------------------------------------------------- BEGIN [arrow's] - (28-11-2017 - 22:51:34) {{*/
+/*
+.chatHistory .out {
+    color: rgb(51, 51, 51);
+    text-align:right;
+    position: relative;
+    clear: both;
+    right: 0px;
+    text-decoration: none solid rgb(51, 51, 51);
+    top: 0px;
+    max-width: 195px;
+    column-rule-color: rgb(51, 51, 51);
+    perspective-origin: 235px 31px;
+    transform-origin: 235px 31px;
+    caret-color: rgb(51, 51, 51);
+    background: rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box;
+    border:1px solid #41A8ED;
+    border-radius: 2px;
+    font: normal normal 400 normal 16px / 22.4px Cambria, Georgia, sans-serif;
+    margin:2px 7px 2px auto;
+    outline: rgb(51, 51, 51) none 0px;
+}
+
+.chatHistory .out:after {
+    color: rgb(51, 51, 51);
+    content: '';
+    display: block;
+    height: 0px;
+    left: 193px;
+    position: absolute;
+    right: -21px;
+    text-decoration: none solid rgb(51, 51, 51);
+    top: 6px;
+    width: 0px;
+    column-rule-color: rgb(51, 51, 51);
+    perspective-origin: 10.5px 9px;
+    transform-origin: 10.5px 9px;
+    caret-color: rgb(51, 51, 51);
+    border-top: 3px solid rgba(0, 0, 0, 0);
+    border-right: 0px solid rgb(255, 255, 255);
+    border-bottom: 3px solid rgba(0, 0, 0, 0);
+    border-left: 6px solid rgb(255, 255, 255);
+    font: normal normal 400 normal 16px / 22.4px Cambria, Georgia, sans-serif;
+    outline: rgb(51, 51, 51) none 0px;
+}
+
+.chatHistory .out:before {
+    color: rgb(51, 51, 51);
+    content: '';
+    display: block;
+    height: 0px;
+    left: 193px;
+    position: absolute;
+    right: -30px;
+    text-decoration: none solid rgb(51, 51, 51);
+    top: 5;
+    width: 0px;
+    column-rule-color: rgb(51, 51, 51);
+    perspective-origin: 15px 15px;
+    transform-origin: 15px 15px;
+    caret-color: rgb(51, 51, 51);
+    border-top: 4px solid rgba(0, 0, 0, 0);
+    border-right: 0px solid rgb(90, 143, 0);
+    border-bottom: 4px solid rgba(0, 0, 0, 0);
+    border-left: 8px solid #41A8ED;
+    font: normal normal 400 normal 16px / 22.4px Cambria, Georgia, sans-serif;
+    outline: rgb(51, 51, 51) none 0px;
+} /**/
+
+/*#-------------------------------------------------- END   [arrow's] - (28-11-2017 - 22:51:34) }}*/

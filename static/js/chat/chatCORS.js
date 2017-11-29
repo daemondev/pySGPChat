@@ -4,8 +4,12 @@ var ChatMessage = React.createClass({displayName: "ChatMessage",
         var message = this.props.message;
         return(
             React.createElement("div", {className: [message.type, "message"].join(" "), title:  message.ins}, 
-                React.createElement("div", {className: "messageDate"},  message.ins), 
-                React.createElement("div", {className: "messageMessage"},  message.message)
+                 message.type == "in" ? React.createElement("div", {className: "dleft"}) : '', 
+                React.createElement("div", {className: "trueMessage"}, 
+                    React.createElement("div", {className: "messageDate"},  message.ins), 
+                    React.createElement("div", {className: "messageMessage"},  message.message)
+                ), 
+                 message.type == "out" ? React.createElement("div", {className: "dright"}) : ''
             )
         );
     }
@@ -89,6 +93,8 @@ var ChatViewer = React.createClass({displayName: "ChatViewer",
             , userName:""
             , toggleHide:true
             , messages: []
+            , randomValue:  Math.random()
+            , contentEditable: React.createElement(ContentEditable, {key:  Math.random(), onKeyDown: this.sendMessage, reizeChatHistory:  this.resizeChatHistory})
         };
     },
     hideCurrentChat: function(event){
@@ -98,13 +104,23 @@ var ChatViewer = React.createClass({displayName: "ChatViewer",
     componentWillMount: function(){
         this.setState({ id: this.props.id, messages: this.props.messages, userName:this.props.userName });
     },
+    setContentEditable: function (){
+        this.setState({ contentEditable: React.createElement(ContentEditable, {key:  Math.random(), onKeyDown: this.sendMessage, reizeChatHistory:  this.resizeChatHistory}) });
+    },
     sendMessage: function(event){
+        if(event.target.nodeName === "DIV"){
+            this.props.onClick(event.target.textContent, this.state.id);
+            this.setContentEditable();
+            return;
+        }
+
         if(event.key == "Enter"){
             if(event.target.value.trim().length > 0){
                 this.props.onClick(event.target.value, this.state.id);
             }
             event.target.value = "";
         }
+
     },
     scrollToBottom: function (id){
         //const tesNode = ReactDOM.findDOMNode(this.refs.chatHistory)
@@ -117,6 +133,14 @@ var ChatViewer = React.createClass({displayName: "ChatViewer",
     },
     componentDidUpdate: function(){
         this.scrollToBottom();
+        //<input type="text" id="txtMessage" placeholder="Ingresar mensaje y presionar ENTER" onKeyPress={ this.sendMessage } />
+    },
+    resizeChatHistory: function(){
+        const cH = ReactDOM.findDOMNode(this.refs.chatHistory);
+        cH.style.height = cH.style.height - 20;
+        //this.refs.chatMessage.style.height = this.refs.chatMessage.style.height + 20;
+        const cM = ReactDOM.findDOMNode(this.refs.chatMessage);
+        cM.style.height = cM.style.height + 20;
     },
     render: function (){
         return(
@@ -125,17 +149,76 @@ var ChatViewer = React.createClass({displayName: "ChatViewer",
                             React.createElement("span", {className: "userName"},  this.state.userName), " ", React.createElement("span", {className: "closeChat", onClick: this.hideCurrentChat}, "✖")
                         ), 
                         React.createElement("div", {className: "chatContainner"}, 
-                            React.createElement("div", {className: "chatHistory", id: "divChatHistory", ref: "chatHistory"}, 
+                            React.createElement("div", {className: "chatHistory", ref: "chatHistory"}, 
                                 React.createElement(ChatList, {messages:  this.state.messages})
                             ), 
-                            React.createElement("div", {className: "chatMessage"}, 
-                                React.createElement("input", {type: "text", id: "txtMessage", placeholder: "Ingresar mensaje, presionar ENTER", onKeyPress:  this.sendMessage})
+                            React.createElement("div", {className: "chatMessage", ref: "chatMessage"}, 
+                                React.createElement(ContentEditable, {rnd:  this.randomValue, ref: (ref) => this.theContentEditable = ref, onKeyDown: this.sendMessage, reizeChatHistory:  this.resizeChatHistory})
                             )
                         )
                     )
         );
     }
 });
+var ContentEditable = React.createClass({displayName: "ContentEditable",
+    render: function(){
+        return React.createElement("div", {className: "text-box", ref: "textBox", 
+            onKeyPress: this.myKeyPress, 
+            contentEditable: true, 
+            placeholder: "Ingresar Mensaje y Presionar ENTER"
+            });
+    },
+    myKeyPress: function (e){
+        console.log(this.refs.textBox.clientHeight);
+        if(this.refs.textBox.clientHeight > 25){
+            this.props.reizeChatHistory(25);
+        }
+
+        if(e.key == "Enter"){
+            if(e.target.textContent.trim().length > 0){
+                this.props.onKeyDown(e);
+            }
+            e.target.innerHTML = "";
+            /*
+            e.target.textContent = "";
+            while (e.target.lastChild) {
+                alert("deleting");
+                e.target.removeChild(e.target.lastChild);
+            } //**/
+        }
+    }
+});
+
+function getLastTextNodeIn(node) {
+    while (node) {
+        if (node.nodeType == 3) {
+            return node;
+        } else {
+            node = node.lastChild;
+        }
+    }
+}
+
+function isRangeAfterNode(range, node) {
+    var nodeRange, lastTextNode;
+    if (range.compareBoundaryPoints) {
+        nodeRange = document.createRange();
+        lastTextNode = getLastTextNodeIn(node);
+        nodeRange.selectNodeContents(lastTextNode);
+        nodeRange.collapse(false);
+        return range.compareBoundaryPoints(range.START_TO_END, nodeRange) > -1;
+    } else if (range.compareEndPoints) {
+        if (node.nodeType == 1) {
+            nodeRange = document.body.createTextRange();
+            nodeRange.moveToElementText(node);
+            nodeRange.collapse(false);
+            return range.compareEndPoints("StartToEnd", nodeRange) > -1;
+        } else {
+            return false;
+        }
+    }
+}
+
 
 var MyComponent = React.createClass({displayName: "MyComponent",
   handleClick: function() {
@@ -316,5 +399,4 @@ ReactDOM.render(
     React.createElement(ChatContainer, null),
     document.getElementById('divChatWrapper')
 );
-
 },{}]},{},[1]);

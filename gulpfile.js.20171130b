@@ -34,20 +34,61 @@ gulp.task('del', function () {
   return del([jsOutPutDir]);
 });
 
-//#-------------------------------------------------- BEGIN [watcher] - (30-11-2017 - 17:34:45) {{
+//gulp.task('default', function () {
 gulp.task('gulp-reload', function(){
-    if(p) p.kill();
+    //spawn('gulp', ['watch'], {stdio: 'inherit'});
+    if(p){
+        p.kill();
+    }
+    //p = spawn('gulp', ['watch'], {stdio: 'inherit'});
     p = spawn(process.argv[0],[process.argv[1]],{stdio: 'inherit'});
     process.exit();
 });
+
+//#-------------------------------------------------- BEGIN [watcher] - (30-11-2017 - 17:34:45) {{
+gulp.task('watch', function() {
+  //const restartingGulpProcessCmd = 'while true; do gulp watch2 --colors; done;';
+  const restartingGulpProcessCmd = 'cmd /c gulp watch2';
+  const restartingGulpProcess = require('child_process').exec(restartingGulpProcessCmd);
+  restartingGulpProcess.stdout.pipe(process.stdout);
+  restartingGulpProcess.stderr.pipe(process.stderr);
+});
 //#-------------------------------------------------- END   [watcher] - (30-11-2017 - 17:34:45) }}
 
+
+//gulp.task('watch2', ['del'], function () {
 gulp.task('default', ['del'], function () {
     gulp.start('transformJSAndDist');
     gulp.watch(jsxFilesDir, ['transformJSAndDist']);
     gulp.watch(cssFilesDir, ['compressCss']);
     gulp.watch('gulpfile.js', ['gulp-reload']);
+    gulp.watch('./gulpfile.jsx').on('change' ,function(){
+        //var p;
+        var childProcess = require('child_process');
+        if(process.platform === 'win32'){
+            if(p){
+                childProcess.exec('taskkill /PID' + p.id + ' /T /F', function(){});
+                p.kill();
+                console.log("########### kill!!!!!");
+            }else{
+                console.log("########### aassign!!!!!");
+
+                p = childProcess.spawn(process.argv[0],[process.argv[1]],{stdio: 'inherit'});
+                //p.kill()
+                //console.log("########### p.id: "+  p);
+            }
+        }
+    });
+    //gulp.watch('gulpfile.js', ['default']);
+    //gulp.watch(['gulpfile.js'], restart);
 });
+
+//gulp.task('watch', function () {
+    //gulp.watch('gulpfile.js', ['gulp-reload']);
+//});
+
+//gulp.task('default', ['watch']);
+//gulp.task('default', autoreload('watch'));
 
 //##############################################################################
 

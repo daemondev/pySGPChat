@@ -14,19 +14,28 @@
     position: fixed;
     bottom:1px;
     right:0;
+    /*z-index: 9999999 !important;*/
+    /*background-color: #D43F3A;*/
+    /*background-color: red;*/
+    /*width: 270px;*/
+    /*height: 380px;*/
+    /*padding: 1px;*/
+    /*display:inline-block;*/
 }
 
 .chatMain{
     position:relative;
+    /*background-color: yellow;*/
     display:block;
+    /*padding: 2px;*/
     max-height:260px;
  }
 
 .chatViewer div{
+    /*display:table-cell !important;*/
 }
 .chatViewer:hover{
-    -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.35);
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.35);
 }
 .chatViewer{
     display:inline-block;
@@ -35,10 +44,10 @@
     width:240px;
     margin:2px;
     padding:auto;
+    /*background-color: #D4FFD4;*/
     background-color: #FDFDB7;
     border: 1px solid #D84E0E;
-    -webkit-animation: fade 0.5s;
-            animation: fade 0.5s;
+    animation: fade 0.5s;
 }
 
 .broadcast{
@@ -53,12 +62,15 @@
     width: 41px;
     height: 41px;
     display: inline-block;
+    /*line-height: 5px;*/
     border-radius:50%;
     border: 1px solid #BD2E29;
     background-color: #D43F3A;
     color: #FFF;
     text-align: center;
     padding-top: 11px;
+    /*vertical-align:bottom;*/
+    /*margin: auto;*/
     font-size: 8px;
     cursor:pointer;
     margin: auto;
@@ -100,22 +112,35 @@
 }
 
 .chatPanel, .adminPanel{
+    /*display:inline-block !important;*/
+    /*vertical-align:top;*/
+    /*height:100%;*/
+    /*width: 50%;*/
+    /*position: absolute;*/
+    /*position: relative;*/
 }
 
 #divChatPanel{
+    /*background-color: green;*/
     min-width: 240px;
     max-width: 735px;
 
     max-height: 355px;
-    -webkit-transition-property: visibility, opacity;
+    /*overflow-y: none;*/
+    /*overflow-x: scroll;*/
     transition-property: visibility, opacity;
-    -webkit-transition-duration: 0.5s, 0.5s;
-            transition-duration: 0.5s, 0.5s;
-    -webkit-animation: fade 0.5s;
-            animation: fade 0.5s;
+    transition-duration: 0.5s, 0.5s;
+    animation: fade 0.5s;
 }
 
 .adminPanel{
+    /*
+    position: absolute;
+    top:0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100; /**/
 }
 
 .sendToAll{
@@ -127,9 +152,11 @@
     width: 41px;
     height: 41px;
     display: inline-block;
+    /*line-height: 35px;*/
     border-radius:50%;
     border: 1px solid #00FF00;
     text-align: center;
+    /*vertical-align:baseline;*/
     padding-top:9px;
     line-height:8px;
     margin: auto;
@@ -146,6 +173,7 @@
 }
 
 #divMiniPanel{
+    /*float:right;*/
     display:block;
     clear:both;
     text-align:right;
@@ -156,28 +184,28 @@
 }
 
 #divAdminPanel{
+    /*background-color: #D7DEF7;*/
+    /*height:263%;*/
     position:   fixed;
+    /*width: 16vw;*/
+    /*top: calc(-33vw + 21%);*/
+    /*right:-8px;*/
+    /*bottom: 260px;*/
     top: 94px;
     right:-1px;
-    -webkit-transition-property: visibility, opacity;
     transition-property: visibility, opacity;
-    -webkit-transition-duration: 0.5s, 0.5s;
-            transition-duration: 0.5s, 0.5s;
+    transition-duration: 0.5s, 0.5s;
 
-    -webkit-animation: fade 0.5s;
+    /*opacity: 1;*/
+    /*transition: opacity 1s linear*/
 
-            animation: fade 0.5s;
-} 
 
-@-webkit-keyframes hiddden {
-    0% {
-        opacity: 1;
-    }
-
-    100% {
-        opacity: 0;
-    }
-} 
+    /*transition-property: display, border-radius;*/
+    /*transition-duration: 1s;*/
+    /*transition-timing-function: linear;*/
+    /*z-index:99999999;*/
+    animation: fade 0.5s;
+} /**/
 
 @keyframes hiddden {
     0% {
@@ -186,15 +214,6 @@
 
     100% {
         opacity: 0;
-    }
-}
-@-webkit-keyframes fade {
-    0% {
-        opacity: 0;
-    }
-
-    100% {
-        opacity: 1;
     }
 }
 @keyframes fade {
@@ -212,10 +231,11 @@
     opacity: 0;
     visibility: hidden;
     background-color: transparent !important;
-    -webkit-transition-property: opacity, visibility;
     transition-property: opacity, visibility;
-    -webkit-transition-duration: 0.5s, 0.5s;
-            transition-duration: 0.5s, 0.5s;
+    transition-duration: 0.5s, 0.5s;
+    /*transition-delay: 0s, 1s;*/
+
+    /*animation: hiddden 2s;*/
 }
 
 
@@ -223,13 +243,16 @@
     opacity: 0;
     visibility: hidden;
     background-color: transparent !important;
-    -webkit-transition-property: opacity, visibility;
     transition-property: opacity, visibility;
-    -webkit-transition-duration: 0.5s, 0.5s;
-            transition-duration: 0.5s, 0.5s;
+    transition-duration: 0.5s, 0.5s;
+    /*transition-delay: 0s, 1s;*/
+
+    /*animation: hiddden 2s;*/
 }
 
 .chatContainner{
+    /*width: 251px;*/
+    /*height: 200px;*/
 }
 
 .chatHistory{
@@ -253,6 +276,8 @@
     width:100%;
     height:28px;
     vertical-align: middle;
+    /*background-color: purple;*/
+
     bottom:0;
     right:0;
 }
@@ -263,9 +288,11 @@
     padding:0 2px;
 }
 .closeChat{
+    /*text-align:right;*/
     background-color: red;
     cursor:pointer;
     float: right;
+    /*margin-right:3px;*/
     padding:0 4px 0 3px;
 }
 .chatWrapper .user{
@@ -278,22 +305,20 @@
 }
 
 .xchatHistory .in:before {
+    /*bottom: 21px;*/
     color: rgb(255, 255, 255);
     content: '';
     display: block;
     height: 0px;
     left: -13px;
     position: relative;
-    -webkit-text-decoration: none solid rgb(255, 255, 255);
-            text-decoration: none solid rgb(255, 255, 255);
+    /*right: 460px;*/
+    text-decoration: none solid rgb(255, 255, 255);
     top: 3px;
     width: 0px;
-    -webkit-column-rule-color: rgb(255, 255, 255);
-            column-rule-color: rgb(255, 255, 255);
-    -webkit-perspective-origin: 20px 7.5px;
-            perspective-origin: 20px 7.5px;
-    -webkit-transform-origin: 20px 7.5px;
-            transform-origin: 20px 7.5px;
+    column-rule-color: rgb(255, 255, 255);
+    perspective-origin: 20px 7.5px;
+    transform-origin: 20px 7.5px;
     caret-color: rgb(255, 255, 255);
     border-top: 12px solid rgba(0, 0, 0, 0);
     border-right: 8px solid #FCFC7D;
@@ -320,13 +345,19 @@
 }
 
 .chatHistory .out{
+    /*background-color: #41A8ED;*/
     float:right;
+    /*margin-right:5px;*/
     margin:2px 7px 2px auto;
     display:block !important;
     clear:both;
 }
 .chatHistory .in{
+    /*#BDFCFF*/
+    /*background-color: #FFFF7F;*/
     float:left;
+    /*margin-left:5px;*/
+    /*margin:2px 0;*/
     margin:2px auto 2px 7px;
     display:block !important;
     clear:both;
@@ -336,6 +367,7 @@
     background-color: #FCFC7D;
     max-width:195px;
     border-radius: 2px;
+    /*border:1px solid #41A8ED;*/
     border:1px solid #DFDF07;
 }
 .chatHistory .out .trueMessage{
@@ -356,53 +388,43 @@
 
 .dleft{
     left:1px;
+    /*background-color: red;*/
     border-top: 5px solid rgba(0, 0, 0, 0);
     border-right: 8px solid #FCFC7D;
+    /*border-right: 8px solid #DFDF07;*/
     border-bottom: 2px solid rgba(0, 0, 0, 0);
     border-left: 0px solid rgb(7, 86, 152);
 
 
-    -webkit-column-rule-color: rgb(255, 255, 255);
-
-
-            column-rule-color: rgb(255, 255, 255);
-    -webkit-perspective-origin: 20px 7.5px;
-            perspective-origin: 20px 7.5px;
-    -webkit-transform-origin: 20px 7.5px;
-            transform-origin: 20px 7.5px;
+    column-rule-color: rgb(255, 255, 255);
+    perspective-origin: 20px 7.5px;
+    transform-origin: 20px 7.5px;
     caret-color: rgb(255, 255, 255);
     font: normal normal 400 normal 16px / 22.4px Cambria, Georgia, sans-serif;
     outline: rgb(255, 255, 255) none 0px;
 }
 .dright{
     right:1px;
+    /*background-color: blue;*/
     border-top: 5px solid rgba(0, 0, 0, 0);
     border-right: 0px solid rgb(7, 86, 152);
     border-bottom: 4px solid rgba(0, 0, 0, 0);
+    /*border-left: 8px solid #AAD4FF;*/
     border-left: 8px solid #41A8ED;
 
-    -webkit-column-rule-color: rgb(255, 255, 255);
-
-            column-rule-color: rgb(255, 255, 255);
-    -webkit-perspective-origin: 20px 7.5px;
-            perspective-origin: 20px 7.5px;
-    -webkit-transform-origin: 20px 7.5px;
-            transform-origin: 20px 7.5px;
+    column-rule-color: rgb(255, 255, 255);
+    perspective-origin: 20px 7.5px;
+    transform-origin: 20px 7.5px;
     caret-color: rgb(255, 255, 255);
     font: normal normal 400 normal 16px / 22.4px Cambria, Georgia, sans-serif;
     outline: rgb(255, 255, 255) none 0px;
 
-    -webkit-transition: -webkit-box-shadow 0.2s ease-in-out 0s;
-
-    transition: -webkit-box-shadow 0.2s ease-in-out 0s;
-
     transition: box-shadow 0.2s ease-in-out 0s;
-
-    transition: box-shadow 0.2s ease-in-out 0s, -webkit-box-shadow 0.2s ease-in-out 0s;
     background-clip:content-box;
 }
 
 .xchatHistory .out:before {
+    /*bottom: 21px;*/
     color: rgb(255, 255, 255);
     content: '';
     display: block;
@@ -410,26 +432,25 @@
     left: 0px;
     position: relative;
     right: 40px;
-    -webkit-text-decoration: none solid rgb(255, 255, 255);
-            text-decoration: none solid rgb(255, 255, 255);
+    text-decoration: none solid rgb(255, 255, 255);
     top: 3px;
     width: 0px;
-    -webkit-column-rule-color: rgb(255, 255, 255);
-            column-rule-color: rgb(255, 255, 255);
-    -webkit-perspective-origin: 20px 7.5px;
-            perspective-origin: 20px 7.5px;
-    -webkit-transform-origin: 20px 7.5px;
-            transform-origin: 20px 7.5px;
+    column-rule-color: rgb(255, 255, 255);
+    perspective-origin: 20px 7.5px;
+    transform-origin: 20px 7.5px;
     caret-color: rgb(255, 255, 255);
     border-top: 12px solid rgba(0, 0, 0, 0);
     border-right: 0px solid rgb(7, 86, 152);
     border-bottom: 0px solid rgba(0, 0, 0, 0);
+    /*border-left: 8px solid #AAD4FF;*/
     border-left: 8px solid green;
     font: normal normal 400 normal 16px / 22.4px Cambria, Georgia, sans-serif;
     outline: rgb(255, 255, 255) none 0px;
 }
 
 .chatPanel .userName{
+    /*float: left;*/
+    /*margin: 0 auto;*/
 }
 
 .userUser{
@@ -446,3 +467,73 @@
     font-size: 9px;
     color:#41A8ED;
 }
+/*#-------------------------------------------------- BEGIN [arrow's] - (28-11-2017 - 22:51:34) {{*/
+/*
+.chatHistory .out {
+    color: rgb(51, 51, 51);
+    text-align:right;
+    position: relative;
+    clear: both;
+    right: 0px;
+    text-decoration: none solid rgb(51, 51, 51);
+    top: 0px;
+    max-width: 195px;
+    column-rule-color: rgb(51, 51, 51);
+    perspective-origin: 235px 31px;
+    transform-origin: 235px 31px;
+    caret-color: rgb(51, 51, 51);
+    background: rgb(255, 255, 255) none repeat scroll 0% 0% / auto padding-box border-box;
+    border:1px solid #41A8ED;
+    border-radius: 2px;
+    font: normal normal 400 normal 16px / 22.4px Cambria, Georgia, sans-serif;
+    margin:2px 7px 2px auto;
+    outline: rgb(51, 51, 51) none 0px;
+}
+
+.chatHistory .out:after {
+    color: rgb(51, 51, 51);
+    content: '';
+    display: block;
+    height: 0px;
+    left: 193px;
+    position: absolute;
+    right: -21px;
+    text-decoration: none solid rgb(51, 51, 51);
+    top: 6px;
+    width: 0px;
+    column-rule-color: rgb(51, 51, 51);
+    perspective-origin: 10.5px 9px;
+    transform-origin: 10.5px 9px;
+    caret-color: rgb(51, 51, 51);
+    border-top: 3px solid rgba(0, 0, 0, 0);
+    border-right: 0px solid rgb(255, 255, 255);
+    border-bottom: 3px solid rgba(0, 0, 0, 0);
+    border-left: 6px solid rgb(255, 255, 255);
+    font: normal normal 400 normal 16px / 22.4px Cambria, Georgia, sans-serif;
+    outline: rgb(51, 51, 51) none 0px;
+}
+
+.chatHistory .out:before {
+    color: rgb(51, 51, 51);
+    content: '';
+    display: block;
+    height: 0px;
+    left: 193px;
+    position: absolute;
+    right: -30px;
+    text-decoration: none solid rgb(51, 51, 51);
+    top: 5;
+    width: 0px;
+    column-rule-color: rgb(51, 51, 51);
+    perspective-origin: 15px 15px;
+    transform-origin: 15px 15px;
+    caret-color: rgb(51, 51, 51);
+    border-top: 4px solid rgba(0, 0, 0, 0);
+    border-right: 0px solid rgb(90, 143, 0);
+    border-bottom: 4px solid rgba(0, 0, 0, 0);
+    border-left: 8px solid #41A8ED;
+    font: normal normal 400 normal 16px / 22.4px Cambria, Georgia, sans-serif;
+    outline: rgb(51, 51, 51) none 0px;
+} /**/
+
+/*#-------------------------------------------------- END   [arrow's] - (28-11-2017 - 22:51:34) }}*/

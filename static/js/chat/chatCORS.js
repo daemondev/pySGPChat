@@ -153,8 +153,6 @@ var ChatViewer = React.createClass({displayName: "ChatViewer",
 
     },
     scrollToBottom: function (id){
-        //const tesNode = ReactDOM.findDOMNode(this.refs.chatHistory)
-        //window.scrollTo(0, tesNode.offsetTop);
         var div = this.refs.chatHistory;
         div.scrollTop = div.scrollHeight - div.clientHeight;
     },
@@ -163,12 +161,10 @@ var ChatViewer = React.createClass({displayName: "ChatViewer",
     },
     componentDidUpdate: function(){
         this.scrollToBottom();
-        //<input type="text" id="txtMessage" placeholder="Ingresar mensaje y presionar ENTER" onKeyPress={ this.sendMessage } />
     },
     resizeChatHistory: function(){
         const cH = ReactDOM.findDOMNode(this.refs.chatHistory);
         cH.style.height = cH.style.height - 20;
-        //this.refs.chatMessage.style.height = this.refs.chatMessage.style.height + 20;
         const cM = ReactDOM.findDOMNode(this.refs.chatMessage);
         cM.style.height = cM.style.height + 20;
     },
@@ -209,12 +205,6 @@ var ContentEditable = React.createClass({displayName: "ContentEditable",
                 this.props.onKeyDown(e);
             }
             e.target.innerHTML = "";
-            /*
-            e.target.textContent = "";
-            while (e.target.lastChild) {
-                alert("deleting");
-                e.target.removeChild(e.target.lastChild);
-            } //**/
         }
     }
 });
@@ -412,10 +402,6 @@ var ChatContainer = React.createClass({displayName: "ChatContainer",
     },
     scrollSmoothToBottom: function  (id) {
         var div = document.getElementById(id);
-        /*
-        $('#' + id).animate({
-            scrollTop: div.scrollHeight - div.clientHeight
-        }, 500); /**/
     },
     hideAdminPanel: function(){
         this.setState({toggleHide:!this.state.toggleHide});

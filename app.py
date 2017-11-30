@@ -302,7 +302,7 @@ class SendJavascript(tornado.web.RequestHandler):
     @gen.coroutine
     def get(self):
         try:
-            with open('static/js/chat/chatCORS.js', 'rb') as jsFile:
+            with open('static/js/chat/chatCORS.min.js', 'rb') as jsFile:
                 data = jsFile.read()
                 self.write(data)
             self.finish()
@@ -315,7 +315,7 @@ class SendCSS(tornado.web.RequestHandler):
     def get(self):
         try:
             self.set_header('Content-type', 'text/css')
-            with open('static/css/chat/chatCORS.css', 'rb') as cssFile:
+            with open('static/css/chat/chatCORS.min.css', 'rb') as cssFile:
                 data = cssFile.read()
                 self.write(data)
             self.finish()

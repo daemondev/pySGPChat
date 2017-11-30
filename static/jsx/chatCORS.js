@@ -53,8 +53,9 @@ var User = React.createClass({
         return (
             <div className="user" ref="user" id={user.in_UsuarioID} onClick={this.openChatViewer.bind(this)}>
                 <div>
+                    <span className="userAvatar"> <p className={user.avatar} > { user.avatar } </p> </span>
                     <span className="userSpan">
-                        {user.vc_Nombre} - {user.vc_ApePaterno} - {user.vc_ApeMaterno}
+                        {user.vc_Nombre}, {user.vc_ApePaterno} {user.vc_ApeMaterno}
                     </span>
                 </div>
             </div>
@@ -62,9 +63,30 @@ var User = React.createClass({
     }
 });
 
+var BtnAll = React.createClass({
+    openChatViewer: function(event){
+        this.props.onClick(this.props.id);
+    },
+    hideAdminPanel: function (){
+        this.props.hideAdminPanel();
+    },
+    render: function(){
+        return (
+            <div className="sendToAllWrapper">
+                <span className="sendToAll" onClick={ this.openChatViewer.bind(this)} > <p>ENVIAR  </p><p>A </p><p> TODOS</p> </span>
+            </div>
+        );
+    }
+});
+
 var UserList = React.createClass({
+    statics: {
+        setConnectedState: function (id){
+            alert(id);
+        }
+    },
     getInitialState: function(){
-        return { users: [] };
+        return { users: [], usersDict: {}};
     },
     componentWillMount: function(){
         this.setState({users: this.props.users});
@@ -72,12 +94,20 @@ var UserList = React.createClass({
     userClickHandler: function(id){
         this.props.onClick(id);
     },
+    hideAdminPanel: function (){
+        this.props.onHideAdminPanel();
+    },
     render: function(){
+        var btnSendToAll = null;
         var users = this.state.users.map(function(user){
+            if(user.in_UsuarioID == 0){
+                btnSendToAll = [<BtnAll onClick={ this.userClickHandler } key={ user.in_UsuarioID } id={user.in_UsuarioID} hideAdminPanel={ this.hideAdminPanel } />];
+                return;
+            }
             return <User user={user} onClick={ this.userClickHandler } key={ user.in_UsuarioID } id={user.in_UsuarioID}/>;
         }, this);
         return (
-            <div> {users} </div>
+            <div>  {btnSendToAll} <div className="userListWrapper"> {users} </div> </div>
         );
     }
 });
@@ -143,8 +173,8 @@ var ChatViewer = React.createClass({
     },
     render: function (){
         return(
-                    <div className="chatViewer">
-                        <div className="userUser">
+                    <div className={["chatViewer", ( this.state.id != 0 ? "broadcast" : "" )].join(" ")}>
+                        <div className={["userUser", ( this.state.id == 0 ? "broadcastUser" : "" )].join(" ")}>
                             <span className="userName">{ this.state.userName }</span> <span className="closeChat" onClick={this.hideCurrentChat}>&#10006;</span>
                         </div>
                         <div className="chatContainner">
@@ -267,7 +297,8 @@ var ChatContainer = React.createClass({
             , port : ":8888"
             , protocol : "ws" + "://"
             , namespace : "/websocket"
-            , toggleHide: true
+            , toggleHide: false
+            , toggleHideChatPanel: false
             , step:1
             , messages:[]
             , haveAdminPanel: false
@@ -287,6 +318,7 @@ var ChatContainer = React.createClass({
                 this.receiveUserAction(data.userIDDST);
                 return;
             }
+            this.activateChatPanel();
             var state = Object.assign({}, this.state);
             var newChat = state.chatViewersDict[data.userIDDST].state.messages.concat(data);
             state.chatViewersDict[data.userIDDST].state.messages = newChat;
@@ -311,6 +343,8 @@ var ChatContainer = React.createClass({
             this.setState({messages:data});
         }else if(event == "chat for user"){
             this.addChatViewer(data.messages, data.userIDDST);
+        }else if(event == "set user connection state"){
+
         }
     },
     emit: function (message, data ){
@@ -356,8 +390,13 @@ var ChatContainer = React.createClass({
 
         this.setState(state);
     },
+    activateChatPanel(){
+        this.setState({toggleHideChatPanel:false});
+    },
     addChatViewer: function (messages, id){
+        this.activateChatPanel();
         if(this.state.currentChats.indexOf(id) === -1){
+
             var userName = "";
             this.state.users.map(function(user){
                 if(user.in_UsuarioID == id){
@@ -377,18 +416,25 @@ var ChatContainer = React.createClass({
             scrollTop: div.scrollHeight - div.clientHeight
         }, 500); /**/
     },
+    hideAdminPanel: function(){
+        this.setState({toggleHide:!this.state.toggleHide});
+    },
+    toggleChatPanel: function (event){
+        this.setState({toggleHideChatPanel:!this.state.toggleHideChatPanel});
+    },
     render: function(){
         return (
             <div className="chatMain">
-                <div className="chatPanel" ref="chatPanel">
+                <div className="hideAdminPanel" onClick={ this.hideAdminPanel.bind(this) } > <span> { this.state.toggleHide ? "OCULTAR": "MOSTRAR" }</span> <span>PANEL</span> </div>
+                <div id="divMiniPanel" onClick={this.toggleChatPanel.bind(this)}><span>miniPanel</span> </div>
+                <div id="divChatPanel" ref="myChatPanel" className={ this.state.toggleHideChatPanel ? "hiddden": "" } >
                     { this.state.chatViewers }
                 </div>
                 { this.state.haveAdminPanel ?
-                <div id="divAdminPanel" className="adminPanel" ref="adminPanel">
-                    <UserList users={this.state.users} onClick={ this.receiveUserAction } />
+                <div id="divAdminPanel" className={ this.state.toggleHide ? "hiddden": "" } ref="adminPanel">
+                    <UserList users={this.state.users} onClick={ this.receiveUserAction } onHideAdminPanel={this.hideAdminPanel} />
                 </div>
                 : '' }
-
             </div>
         );
     }

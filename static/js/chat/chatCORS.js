@@ -54,8 +54,9 @@ var User = React.createClass({displayName: "User",
         return (
             React.createElement("div", {className: "user", ref: "user", id: user.in_UsuarioID, onClick: this.openChatViewer.bind(this)}, 
                 React.createElement("div", null, 
+                    React.createElement("span", {className: "userAvatar"}, " ", React.createElement("p", {className: user.avatar}, " ",  user.avatar, " "), " "), 
                     React.createElement("span", {className: "userSpan"}, 
-                        user.vc_Nombre, " - ", user.vc_ApePaterno, " - ", user.vc_ApeMaterno
+                        user.vc_Nombre, ", ", user.vc_ApePaterno, " ", user.vc_ApeMaterno
                     )
                 )
             )
@@ -63,9 +64,30 @@ var User = React.createClass({displayName: "User",
     }
 });
 
+var BtnAll = React.createClass({displayName: "BtnAll",
+    openChatViewer: function(event){
+        this.props.onClick(this.props.id);
+    },
+    hideAdminPanel: function (){
+        this.props.hideAdminPanel();
+    },
+    render: function(){
+        return (
+            React.createElement("div", {className: "sendToAllWrapper"}, 
+                React.createElement("span", {className: "sendToAll", onClick:  this.openChatViewer.bind(this)}, " ", React.createElement("p", null, "ENVIAR  "), React.createElement("p", null, "A "), React.createElement("p", null, " TODOS"), " ")
+            )
+        );
+    }
+});
+
 var UserList = React.createClass({displayName: "UserList",
+    statics: {
+        setConnectedState: function (id){
+            alert(id);
+        }
+    },
     getInitialState: function(){
-        return { users: [] };
+        return { users: [], usersDict: {}};
     },
     componentWillMount: function(){
         this.setState({users: this.props.users});
@@ -73,12 +95,20 @@ var UserList = React.createClass({displayName: "UserList",
     userClickHandler: function(id){
         this.props.onClick(id);
     },
+    hideAdminPanel: function (){
+        this.props.onHideAdminPanel();
+    },
     render: function(){
+        var btnSendToAll = null;
         var users = this.state.users.map(function(user){
+            if(user.in_UsuarioID == 0){
+                btnSendToAll = [React.createElement(BtnAll, {onClick:  this.userClickHandler, key:  user.in_UsuarioID, id: user.in_UsuarioID, hideAdminPanel:  this.hideAdminPanel})];
+                return;
+            }
             return React.createElement(User, {user: user, onClick:  this.userClickHandler, key:  user.in_UsuarioID, id: user.in_UsuarioID});
         }, this);
         return (
-            React.createElement("div", null, " ", users, " ")
+            React.createElement("div", null, "  ", btnSendToAll, " ", React.createElement("div", {className: "userListWrapper"}, " ", users, " "), " ")
         );
     }
 });
@@ -144,8 +174,8 @@ var ChatViewer = React.createClass({displayName: "ChatViewer",
     },
     render: function (){
         return(
-                    React.createElement("div", {className: "chatViewer"}, 
-                        React.createElement("div", {className: "userUser"}, 
+                    React.createElement("div", {className: ["chatViewer", ( this.state.id != 0 ? "broadcast" : "" )].join(" ")}, 
+                        React.createElement("div", {className: ["userUser", ( this.state.id == 0 ? "broadcastUser" : "" )].join(" ")}, 
                             React.createElement("span", {className: "userName"},  this.state.userName), " ", React.createElement("span", {className: "closeChat", onClick: this.hideCurrentChat}, "✖")
                         ), 
                         React.createElement("div", {className: "chatContainner"}, 
@@ -268,7 +298,8 @@ var ChatContainer = React.createClass({displayName: "ChatContainer",
             , port : ":8888"
             , protocol : "ws" + "://"
             , namespace : "/websocket"
-            , toggleHide: true
+            , toggleHide: false
+            , toggleHideChatPanel: false
             , step:1
             , messages:[]
             , haveAdminPanel: false
@@ -288,6 +319,7 @@ var ChatContainer = React.createClass({displayName: "ChatContainer",
                 this.receiveUserAction(data.userIDDST);
                 return;
             }
+            this.activateChatPanel();
             var state = Object.assign({}, this.state);
             var newChat = state.chatViewersDict[data.userIDDST].state.messages.concat(data);
             state.chatViewersDict[data.userIDDST].state.messages = newChat;
@@ -312,6 +344,8 @@ var ChatContainer = React.createClass({displayName: "ChatContainer",
             this.setState({messages:data});
         }else if(event == "chat for user"){
             this.addChatViewer(data.messages, data.userIDDST);
+        }else if(event == "set user connection state"){
+
         }
     },
     emit: function (message, data ){
@@ -357,8 +391,13 @@ var ChatContainer = React.createClass({displayName: "ChatContainer",
 
         this.setState(state);
     },
+    activateChatPanel(){
+        this.setState({toggleHideChatPanel:false});
+    },
     addChatViewer: function (messages, id){
+        this.activateChatPanel();
         if(this.state.currentChats.indexOf(id) === -1){
+
             var userName = "";
             this.state.users.map(function(user){
                 if(user.in_UsuarioID == id){
@@ -378,18 +417,25 @@ var ChatContainer = React.createClass({displayName: "ChatContainer",
             scrollTop: div.scrollHeight - div.clientHeight
         }, 500); /**/
     },
+    hideAdminPanel: function(){
+        this.setState({toggleHide:!this.state.toggleHide});
+    },
+    toggleChatPanel: function (event){
+        this.setState({toggleHideChatPanel:!this.state.toggleHideChatPanel});
+    },
     render: function(){
         return (
             React.createElement("div", {className: "chatMain"}, 
-                React.createElement("div", {className: "chatPanel", ref: "chatPanel"}, 
+                React.createElement("div", {className: "hideAdminPanel", onClick:  this.hideAdminPanel.bind(this) }, " ", React.createElement("span", null, " ",  this.state.toggleHide ? "OCULTAR": "MOSTRAR"), " ", React.createElement("span", null, "PANEL"), " "), 
+                React.createElement("div", {id: "divMiniPanel", onClick: this.toggleChatPanel.bind(this)}, React.createElement("span", null, "miniPanel"), " "), 
+                React.createElement("div", {id: "divChatPanel", ref: "myChatPanel", className:  this.state.toggleHideChatPanel ? "hiddden": ""}, 
                      this.state.chatViewers
                 ), 
                  this.state.haveAdminPanel ?
-                React.createElement("div", {id: "divAdminPanel", className: "adminPanel", ref: "adminPanel"}, 
-                    React.createElement(UserList, {users: this.state.users, onClick:  this.receiveUserAction})
+                React.createElement("div", {id: "divAdminPanel", className:  this.state.toggleHide ? "hiddden": "", ref: "adminPanel"}, 
+                    React.createElement(UserList, {users: this.state.users, onClick:  this.receiveUserAction, onHideAdminPanel: this.hideAdminPanel})
                 )
                 : ''
-
             )
         );
     }
@@ -399,4 +445,5 @@ ReactDOM.render(
     React.createElement(ChatContainer, null),
     document.getElementById('divChatWrapper')
 );
+
 },{}]},{},[1]);

@@ -39,6 +39,7 @@ class User(dict):
         vc_Correo = ""
         vc_ClaveCorreo = ""
         EstadoConexion = False
+        avatar = ""
 
     #def __repr__(self):
         #return json.dumps(self.__dict__)
@@ -54,7 +55,7 @@ allPerss = []
 @gen.coroutine
 def getUsers():
     cur = cnx.cursor()
-    cur.execute("select * from TB_USUARIO")
+    cur.execute("select *, case in_PerfilID when 1 then 'Adm' when 2 then 'Ase' when 3 then 'Sup' when 4 then 'Cli' end as [avatar] from TB_USUARIO union  select 0, '', 'ENVIAR A TODOS', '','','','',0,0,0,'',0,0,'','',1, ''")
     rows = cur.fetchall()
 
     for u in rows:
@@ -75,8 +76,9 @@ def getUsers():
         user.vc_Correo = u["vc_Correo"]
         user.vc_ClaveCorreo = u["vc_ClaveCorreo"]
         user.EstadoConexion = u["EstadoConexion"]
+        user.avatar = u["avatar"]
         allPerss.append(user)
-        if u["in_PerfilID"] == 1:
+        if u["in_PerfilID"] == 1 or u["in_UsuarioID"] == 0:
             supervisors.append(user)
         else:
             users.append(user)
@@ -149,16 +151,47 @@ def websocketManager(self, request):
     if action == "new message":
         data = data["1"]
 
+        sql = ""
+        auxArrayToSendMessages = []
+        if data["userIDDST"] == 0:
+            sql = """insert into tChat(userIDSRC, userIDDST, message, [type]) values """
+            for u in allPerss:
+                if u.in_UsuarioID != int(self.session["in_UsuarioID"]) and u.in_UsuarioID != 0:
+                    auxArrayToSendMessages.append(u.in_UsuarioID)
+                    sql +=  """ (%(in_UsuarioID)s, %(userIDDST)s, '%(message)s', 'out'), (%(userIDDST)s, %(in_UsuarioID)s, '%(message)s', 'in'),""" % {"in_UsuarioID":self.session["in_UsuarioID"], "userIDDST": u.in_UsuarioID, "message": data["message"].replace('"','\\"').replace("'","''")}
+            sql = sql[:-1]
+
+        else:
+            auxArrayToSendMessages.append(data["userIDDST"])
+            sql = """ insert into tChat(userIDSRC, userIDDST, message, [type]) values (%(in_UsuarioID)s, %(userIDDST)s, '%(message)s', 'out'), (%(userIDDST)s, %(in_UsuarioID)s, '%(message)s', 'in') """ % {"in_UsuarioID":self.session["in_UsuarioID"], "userIDDST": data["userIDDST"], "message": data["message"].replace('"','\\"').replace("'","''")}
+
         cur = cnx.cursor()
-        sql = """ insert into tChat(userIDSRC, userIDDST, message, [type]) values (%(in_UsuarioID)s, %(userIDDST)s, '%(message)s', 'out'), (%(userIDDST)s, %(in_UsuarioID)s, '%(message)s', 'in') """ % {"in_UsuarioID":self.session["in_UsuarioID"], "userIDDST": data["userIDDST"], "message": data["message"].replace('"','\\"').replace("'","''")}
-        #sql = """ insert into tChat(userIDSRC, userIDDST, message, [type]) values (%(in_UsuarioID)s, %(userIDDST)s, '%(message)s', 'out'), (%(userIDDST)s, %(in_UsuarioID)s, '%(message)s', 'in') """
-        print("sql: [%s]" % sql)
-        #cur.execute(sql,( {"in_UsuarioID":self.session["in_UsuarioID"], "userIDDST": data["userIDDST"], "message": data["message"]}))
+
+        print("\nsql: [%s]\n" % sql)
         cur.execute(sql)
         try:
             cnx.commit()
         except Exception as e:
             pass
+
+
+        chatMessage = {"message":data["message"], "ins":str(datetime.now().strftime("%H:%M:%S")) , "userIDDST":data["userIDDST"], "type":"out"}
+        payload = {"event":"new chat","data": chatMessage}
+        self.write_message(payload)
+
+
+
+        chatMessage["type"] = "in"
+
+        try:
+            for u in auxArrayToSendMessages:
+                chatMessage["userIDDST"] = int(self.session["in_UsuarioID"])
+                payload = {"event":"new chat","data": chatMessage}
+                connectionsDict[u].write_message(payload)
+        except Exception as e:
+            print(str(e))
+
+        """"
 
         chatMessage = {"message":data["message"], "ins":str(datetime.now().strftime("%H:%M:%S")) , "userIDDST":data["userIDDST"], "type":"out"}
 
@@ -169,6 +202,9 @@ def websocketManager(self, request):
         chatMessage["userIDDST"] = int(self.session["in_UsuarioID"])
         payload = {"event":"new chat","data": chatMessage}
         connectionsDict[data["userIDDST"]].write_message(payload)
+        """
+
+
         #"""
         print(">>> end create_chat")
     elif action == "get chat for this user":
@@ -225,10 +261,10 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
                 auxUsers = [ u.__dict__ for u in supervisors ]
 
             payload = {"event":"only for admins","data": auxUsers}
-
             self.write_message(payload)
         except Exception as e:
             print(str(e))
+        setUserConnectionState(int(self.session["in_UsuarioID"]), "connected")
 
         connectionsDict.update({int(self.session["in_UsuarioID"]): self})
         print(len(connectionsDict))
@@ -240,12 +276,22 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
     def on_close(self):
         print("onClose [%s]" % self.session["in_UsuarioID"])
         connectionsDict.pop(int(self.session["in_UsuarioID"]))
+        setUserConnectionState(int(self.session["in_UsuarioID"]), "disconnected")
         pass
 
     def check_origin(self, origin):
         #parsed_origin = urllib.parse.urlparse(origin)
         #return parsed_origin.netloc.endswith(".mydomain.com")
         return True
+
+@gen.coroutine
+def setUserConnectionState(id, state):
+    data = { "userIDDST":  id, "state": state}
+    payload = {"event":"set user connection state","data": data}
+
+    for i,c in connectionsDict.items():
+        if i != id:
+            c.write_message(payload)
 
 def obj_dict(obj):
     return obj.__dict__

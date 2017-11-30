@@ -45,8 +45,70 @@
     margin:2px;
     padding:auto;
     /*background-color: #D4FFD4;*/
-    background-color: #CCCCCC;
-    border: 1px solid #7D7D7D;
+    background-color: #FDFDB7;
+    border: 1px solid #D84E0E;
+    animation: fade 0.5s;
+}
+
+.broadcast{
+    background-color: #CCCCCC !important;
+    border: 1px solid #7D7D7D !important;
+}
+.broadcastUser {
+    background-color: #7D7D7D !important;
+    color: #FFFF2A !important;
+}
+.hideAdminPanel{
+    width: 41px;
+    height: 41px;
+    display: inline-block;
+    /*line-height: 5px;*/
+    border-radius:50%;
+    border: 1px solid #BD2E29;
+    background-color: #D43F3A;
+    color: #FFF;
+    text-align: center;
+    padding-top: 11px;
+    /*vertical-align:bottom;*/
+    /*margin: auto;*/
+    font-size: 8px;
+    cursor:pointer;
+    margin: auto;
+    right:0;
+    top:52px;
+    position: fixed;
+}
+.user .Adm, .user .Ase, .user .Sup, .user .Cli{
+    width: 37px;
+    height: 37px;
+    display: inline-block;
+    line-height: 35px;
+    border-radius:50%;
+    border: 1px solid #00FF00;
+    background-color: #fef;
+    text-align: center;
+    vertical-align:baseline;
+    margin: auto;
+}
+.user .Adm{
+    background-color: #FFCCCC;
+}
+
+.user .Ase{
+    background-color: #CCFFCC;
+}
+
+.user .Sup{
+    background-color: #CCCCFF;
+}
+
+
+.userAvatar{
+
+}
+
+.userConnected{
+    border-width:1px;
 }
 
 .chatPanel, .adminPanel{
@@ -58,7 +120,7 @@
     /*position: relative;*/
 }
 
-.chatPanel{
+#divChatPanel{
     /*background-color: green;*/
     min-width: 240px;
     max-width: 735px;
@@ -66,6 +128,9 @@
     max-height: 355px;
     /*overflow-y: none;*/
     /*overflow-x: scroll;*/
+    transition-property: visibility, opacity;
+    transition-duration: 0.5s, 0.5s;
+    animation: fade 0.5s;
 }
 
 .adminPanel{
@@ -78,18 +143,112 @@
     z-index: 100; /**/
 }
 
-.adminPanel{
-    background-color: blue;
+.sendToAll{
+    background-color: #3C8DBC;
+    text-align:center;
+    cursor: pointer;
+    color:#E1E1E1;
+
+    width: 41px;
+    height: 41px;
+    display: inline-block;
+    /*line-height: 35px;*/
+    border-radius:50%;
+    border: 1px solid #00FF00;
+    text-align: center;
+    /*vertical-align:baseline;*/
+    padding-top:9px;
+    line-height:8px;
+    margin: auto;
+    font-size: 8px;
+}
+.sendToAllWrapper{
+    text-align: right;
+}
+
+.userListWrapper{
+    max-height:300px;
+    width:200px;
+    overflow:auto;
+}
+
+#divMiniPanel{
+    /*float:right;*/
+    display:block;
+    clear:both;
+    text-align:right;
+    position: absolute;
+    top:-15px;
+    right:0;
+    cursor:pointer;
+}
+
+#divAdminPanel{
+    /*background-color: #D7DEF7;*/
     /*height:263%;*/
-    position:   absolute;
+    position:   fixed;
     /*width: 16vw;*/
     /*top: calc(-33vw + 21%);*/
     /*right:-8px;*/
-    bottom: 260px;
+    /*bottom: 260px;*/
+    top: 94px;
     right:-1px;
-    /*z-index:99999999;*/
+    transition-property: visibility, opacity;
+    transition-duration: 0.5s, 0.5s;
 
+    /*opacity: 1;*/
+    /*transition: opacity 1s linear*/
+
+
+    /*transition-property: display, border-radius;*/
+    /*transition-duration: 1s;*/
+    /*transition-timing-function: linear;*/
+    /*z-index:99999999;*/
+    animation: fade 0.5s;
 } /**/
+
+@keyframes hiddden {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+@keyframes fade {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+#divChatPanel.hiddden {
+    height:0;
+    opacity: 0;
+    visibility: hidden;
+    background-color: transparent !important;
+    transition-property: opacity, visibility;
+    transition-duration: 0.5s, 0.5s;
+    /*transition-delay: 0s, 1s;*/
+
+    /*animation: hiddden 2s;*/
+}
+
+
+#divAdminPanel.hiddden {
+    opacity: 0;
+    visibility: hidden;
+    background-color: transparent !important;
+    transition-property: opacity, visibility;
+    transition-duration: 0.5s, 0.5s;
+    /*transition-delay: 0s, 1s;*/
+
+    /*animation: hiddden 2s;*/
+}
 
 .chatContainner{
     /*width: 251px;*/
@@ -134,13 +293,15 @@
     cursor:pointer;
     float: right;
     /*margin-right:3px;*/
-    padding:0 4px;
+    padding:0 4px 0 3px;
 }
 .chatWrapper .user{
     cursor: pointer;
     margin:2px;
     padding:1px;
-    background-color: yellow;
+    background-color: #D7DEF7;
+    border:1px solid #BEC9F2;
+    border-radius:50% 0 0 50%;
 }
 
 .xchatHistory .in:before {
@@ -304,7 +465,7 @@
 
 .userSpan{
     font-size: 9px;
-    color:red;
+    color:#41A8ED;
 }
 /*#-------------------------------------------------- BEGIN [arrow's] - (28-11-2017 - 22:51:34) {{*/
 /*

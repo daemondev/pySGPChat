@@ -1,10 +1,13 @@
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+require('inh.js');
+
 exports.default = React.createClass({
-  displayName: "app",
+  displayName: 'app',
   getInitialState: function getInitialState() {
     return { num: this.getRandomNumber() };
   },
@@ -13,10 +16,11 @@ exports.default = React.createClass({
   },
   render: function render() {
     return React.createElement(
-      "div",
+      'div',
       null,
-      "Your dice roll:",
-      this.state.num
+      'Your dice roll:',
+      this.state.num,
+      React.createElement(Inh, null)
     );
   }
 });

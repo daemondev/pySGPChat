@@ -1,6 +1,4 @@
-import 'inh.js'
-
-export default React.createClass({
+export default Inh = React.createClass({
   getInitialState() {
     return { num: this.getRandomNumber() };
   },
@@ -13,7 +11,6 @@ export default React.createClass({
     return <div>
       Your dice roll:
       {this.state.num}
-      <Inh />
     </div>;
   }
 });

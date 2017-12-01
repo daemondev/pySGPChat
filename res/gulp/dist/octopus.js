@@ -1,3 +1,4 @@
+//https://www.typescriptlang.org/docs/handbook/classes.html
 var Octopus = /** @class */ (function () {
     function Octopus(theName) {
         this.numberOfLegs = 8;

@@ -303,6 +303,8 @@ var ChatContainer = React.createClass({displayName: "ChatContainer",
         var data = eval('(' + e.data + ')');
         this.on(data["event"], data["data"]);
     },
+
+
     on: function(event, data){
         if (event == "new chat"){
             if(this.state.currentChats.indexOf(data.userIDDST) === -1){
@@ -310,6 +312,7 @@ var ChatContainer = React.createClass({displayName: "ChatContainer",
                 return;
             }
             this.activateChatPanel();
+
             var state = Object.assign({}, this.state);
             var newChat = state.chatViewersDict[data.userIDDST].state.messages.concat(data);
             state.chatViewersDict[data.userIDDST].state.messages = newChat;
@@ -425,6 +428,31 @@ var ChatContainer = React.createClass({displayName: "ChatContainer",
             )
         );
     }
+});
+
+
+
+var Child = React.createClass({displayName: "Child",
+  handleClick: function(){
+    this.props.owner.setState({
+      count: this.props.count + 1,
+    });
+  },
+  render: function(){
+    return React.createElement("div", {onClick: this.handleClick}, this.props.count);
+  }
+});
+
+var Parent = React.createClass({displayName: "Parent",
+  getInitialState: function(){
+    return {
+      count: 0,
+      owner: this
+    };
+  },
+  render: function(){
+    return React.createElement(Child, React.__spread({},  this.state))
+  }
 });
 
 ReactDOM.render(

@@ -144,3 +144,31 @@ I'm using a server with 8GB RAM and allotted 1GB memory for JAVA.
 
 We have 114 users.
 #-------------------------------------------------- END   [of] - (27-11-2017 - 15:31:17) }}
+#-------------------------------------------------- BEGIN [node CLEAN cli terminal] - (30-11-2017 - 21:20:52) {{
+var readline = require('readline')
+  , cli = readline.createInterface({
+      input : process.stdin,
+      output : process.stdout
+  });
+
+var myPrompt = ' > myPropmt '
+cli.setPrompt(myPrompt, myPrompt.length);
+// prompt length so you can use "color" in your prompt
+cli.prompt();
+// Display ' > myPrompt ' with all standard features (history also!)
+
+cli.on('line', function(cmd){ // fired each time the input has a new line
+   cli.prompt();
+})
+
+cli.input.on('keypress', function(key){  // self explanatory
+  // arguments is a "key" object
+  // with really nice properties such as ctrl : false
+  process.stdout.write(JSON.stringify(arguments))
+});
+#-------------------------------------------------- END   [node CLEAN cli terminal] - (30-11-2017 - 21:20:52) }}
+#-------------------------------------------------- BEGIN [emitters] - (30-11-2017 - 21:23:33) {{
+https://github.com/facebook/emitter
+https://stackoverflow.com/questions/22886682/how-can-gulp-be-restarted-upon-each-gulpfile-change
+https://supportweb.cs.bham.ac.uk/docs/tutorials/docsystem/build/tutorials/gvim/gvim.html
+#-------------------------------------------------- END   [emitters] - (30-11-2017 - 21:23:33) }}

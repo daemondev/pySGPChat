@@ -16,7 +16,7 @@ var strip = require('gulp-strip-comments');
 var runSequence = require("run-sequence");
 var autoprefixer = require("gulp-autoprefixer");
 var spawn = require('child_process').spawn;
-//var newer = require('gulp-newer');
+var newer = require('gulp-newer');
 var data = require('gulp-data');
 //var restart = require('gulp-restart');
 //var autoreload = require("autoreload-gulp");
@@ -43,51 +43,33 @@ gulp.task('gulp-reload', function(){
     process.exit();
 });
 
+
 gulp.task('watcher', function(){
     return gulp.src('dev/gulpfile.js')
-        //.pipe(newer('gulpfile.js'))
+        .pipe(newer('gulpfile.js'))
         .pipe(gulp.dest('.'))
-        /*
         .pipe(data( function(file) {
-            console.log("\n  gulpfile.js changed! Restarting gulp...\n  #######################################\n") ;
+            console.log('gulpfile.js changed! Restarting gulp...') ;
             if(p) p.kill();
             p = spawn(process.argv[0],[process.argv[1]],{stdio: 'inherit'});
+            process.exit();
             return process.exit() ;
-        })); /**/
+        }));
 });
-
-var __filenameTasks = ['default'];
-var watcher = gulp.watch(__filename).once('change', function(){
-    this.removeAllListeners();
-  watcher.end(); // we haven't re-required the file yet
-                 // so is the old watcher
-  delete require.cache[__filename];
-  require(__filename);
-  process.nextTick(function(){
-    gulp.start(__filenameTasks);
-  });
-});
-
-var css = 0, js = 0;
 
 //#-------------------------------------------------- END   [watcher] - (30-11-2017 - 17:34:45) }}
 
-//gulp.task('default', ['del'], function () {
-gulp.task('default', function () {
-    console.log("\n\t\t | ------------- |\n\t\t | GULP READY!!! |\n\t\t | _____________ |(by @daemonDEV)\n") ;
-    //gulp.start('transformJSAndDist');
+gulp.task('default', ['del'], function () {
+    gulp.start('transformJSAndDist');
     gulp.watch(jsxFilesDir, ['transformJSAndDist']);
     gulp.watch(cssFilesDir, ['compressCss']);
-    //gulp.watch('gulpfile.js', process.exit);
-    //gulp.watch('dev/gulpfile.js', ['gulp-reload']);
+    //gulp.watch('gulpfile.js', ['gulp-reload']);
     gulp.watch('dev/gulpfile.js', ['watcher']);
 });
 
 //##############################################################################
 
 gulp.task('transferCss', function(){
-    css++;
-    console.log("\n### BEGIN transferCss ("+ css +")\n");
     var stream = gulp.src(cssFilesDir)
         .pipe(strip.text({trim:true}))
         .pipe(autoprefixer())
@@ -97,7 +79,6 @@ gulp.task('transferCss', function(){
 });
 
 gulp.task('compressCss', ["transferCss"], function(){
-    console.log("### BEGIN compressCss");
     var stream = gulp.src(cssFile)
         .pipe(cssnano())
         .pipe(rename({suffix:'.min'}))
@@ -117,6 +98,7 @@ function pumpCb(err) {
         runSequence('del');
     }
     this.emit('end');
+    //this.end();
 }
 ///*
 var origSrc = gulp.src;
@@ -145,8 +127,6 @@ function fixPipe(stream) {
 
 
 gulp.task('transform', function () {
-    js++;
-    console.log("\n### BEGIN transform ("+ js +")\n");
     var s = strip({});
     s.on('error',function(e){
         console.log(e);
@@ -181,7 +161,6 @@ gulp.task('transformJS', function(pumpCb){
 });
 
 gulp.task('transformJSAndDist', ['transform'], function (cb) {
-    console.log("### BEGIN transformJSAndDist");
   pump([
       gulp.src(jsFile),
       uglify(),

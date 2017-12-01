@@ -312,6 +312,14 @@ var ChatContainer = React.createClass({
         var data = eval('(' + e.data + ')');
         this.on(data["event"], data["data"]);
     },
+
+    /*
+    handleClick() {
+      this.setState(prevState => ({
+        words: [...prevState.words, 'marklar'],
+      }));
+    }, /**/
+
     on: function(event, data){
         if (event == "new chat"){
             if(this.state.currentChats.indexOf(data.userIDDST) === -1){
@@ -319,6 +327,11 @@ var ChatContainer = React.createClass({
                 return;
             }
             this.activateChatPanel();
+            /*
+            var player = {score: 1, name: 'Jeff'};
+            var newPlayer = Object.assign({}, player, {score: 2});
+            var newPlayer = {...player, score: 2}; /**/
+
             var state = Object.assign({}, this.state);
             var newChat = state.chatViewersDict[data.userIDDST].state.messages.concat(data);
             state.chatViewersDict[data.userIDDST].state.messages = newChat;
@@ -438,6 +451,31 @@ var ChatContainer = React.createClass({
             </div>
         );
     }
+});
+
+
+
+var Child = React.createClass({
+  handleClick: function(){
+    this.props.owner.setState({
+      count: this.props.count + 1,
+    });
+  },
+  render: function(){
+    return <div onClick={this.handleClick}>{this.props.count}</div>;
+  }
+});
+
+var Parent = React.createClass({
+  getInitialState: function(){
+    return {
+      count: 0,
+      owner: this
+    };
+  },
+  render: function(){
+    return <Child {...this.state}/>
+  }
 });
 
 ReactDOM.render(

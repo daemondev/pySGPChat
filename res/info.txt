@@ -172,3 +172,12 @@ https://github.com/facebook/emitter
 https://stackoverflow.com/questions/22886682/how-can-gulp-be-restarted-upon-each-gulpfile-change
 https://supportweb.cs.bham.ac.uk/docs/tutorials/docsystem/build/tutorials/gvim/gvim.html
 #-------------------------------------------------- END   [emitters] - (30-11-2017 - 21:23:33) }}
+#-------------------------------------------------- BEGIN [spark message route] - (01-12-2017 - 11:49:10) {{
+ route.all-resources
+
+true
+	Presione para editar esta propiedad 	Click to encrypt this property 	Presione para borrar esta propiedad
+route.really-all-resources
+
+true
+#-------------------------------------------------- END   [spark message route] - (01-12-2017 - 11:49:10) }}

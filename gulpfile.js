@@ -53,7 +53,7 @@ var watcher = gulp.watch(__filename).once('change', function(){
     process.removeAllListeners();
     process.nextTick(function(){
         gulp.start(__filenameTasks);
-        notify({ title: "GULP RELOADING", message: "GULP RELOADED and READY!!! ("+ "ok" +")." }).write("");
+        notify({ title: "GULP RELOADING!!!", message: "GULP RELOADED and READY!!! ("+ "ok" +")." }).write("");
     });
 });
 
@@ -69,9 +69,14 @@ gulp.task('default', function () {
     gulp.watch(jsxFilesDir, ['transformJSAndDist']);
     gulp.watch(cssFilesDir, ['compressCss']);
     gulp.watch('dev/gulpfile.js', ['watcher']);
-    notify({ title: "GULP STARTING", message: "GULP UP and READY!!! ("+ "ok" +")." }).write("");
+    gulp.watch('app.py', ['app']);
+    notify({ title: "GULP STARTED!!!", message: "GULP UP and READY!!! ("+ "ok" +")." }).write("");
 });
 
+gulp.task('app', function(){
+    return gulp.src("app.py").
+        pipe(notify({title:"MAIN FILE: [" + "app.py" + "] RELOADING SERVER" , message:"\r\tnapp.py RELOADING SERVER!!!\r"}));
+});
 
 gulp.task('transferCss', function(){
     css++;

@@ -181,3 +181,118 @@ route.really-all-resources
 
 true
 #-------------------------------------------------- END   [spark message route] - (01-12-2017 - 11:49:10) }}
+#-------------------------------------------------- BEGIN [redux] - (02-12-2017 - 11:00:39) {{
+https://medium.com/react-redux/combinando-react-js-y-redux-js-7b45a9dc39ac
+#-------------------------------------------------- END   [redux] - (02-12-2017 - 11:00:39) }}
+#-------------------------------------------------- BEGIN [inputRef] - (02-12-2017 - 11:40:37) {{
+
+function CustomTextInput(props) {
+  return (
+    <div>
+      <input ref={props.inputRef} />
+    </div>
+  );
+}
+
+function Parent(props) {
+  return (
+    <div>
+      My input: <CustomTextInput inputRef={props.inputRef} />
+    </div>
+  );
+}
+
+
+class Grandparent extends React.Component {
+  render() {
+    return (
+      <Parent
+        inputRef={el => this.inputElement = el}
+      />
+    );
+  }
+}
+
+
+#-------------------------------------------------- END   [inputRef] - (02-12-2017 - 11:40:37) }}
+#-------------------------------------------------- BEGIN [info] - (02-12-2017 - 13:36:34) {{
+http://blog.koalite.com/2014/09/crear-un-componente-con-reactjs/
+http://blog.revathskumar.com/2015/05/react-interation-with-components.html
+sed -e 's/this.state/this.props/' 's/handleChange/onChange/' -i form.js
+cat chatCORS.js | sed -e 's/this.state/this.props/g;s/handleChange/onChange/' > aap.js
+https://stackoverflow.com/questions/29503213/use-state-or-refs-in-react-js-form-components/29504636#29504636
+http://michelletilley.net/2014/09/24/custom-react-components-and-the-valuelink-property.html
+https://reactjs.org/docs/context.html
+https://reactjs.org/docs/refs-and-the-dom.html
+context -- here
+https://medium.com/@mweststrate/how-to-safely-use-react-context-b7e343eff076
+https://medium.com/react-redux/combinando-react-js-y-redux-js-7b45a9dc39ac
+#-------------------------------------------------- END   [info] - (02-12-2017 - 13:36:34) }}
+
+#-------------------------------------------------- BEGIN [reactjs modal] - (02-12-2017 - 14:06:18) {{
+
+var ParentThing = React.createClass({
+  ...
+  render: function() {
+    return <Modal ref="modal" />;
+  },
+
+  handleSomeClick: function() {
+    this.refs.modal.open();
+  }
+});
+
+var Modal = React.createClass({
+  setInitialState: function() {
+    return {
+      display: false
+    }
+  },
+  close: function() {
+    this.setState({ display: false });
+  },
+  open: function() {
+    this.setState({ display: true });
+  },
+  render: function() {
+    return (
+      <div className={this.state.display ? "show" : "hide"}>
+        <a className="close" onClick={this.close}>&times;</a>
+      </div>
+    )
+  }
+});
+
+If you like the idea of a controlled Modal component, but don't want to do all the boilerplate typing, you could even go so far as to implement something like the valueLink property for the Modal to simplify this pattern.
+
+var ParentThing = React.createClass({
+  ...
+  mixins: [React.addons.LinkedStateMixin],
+
+  getInitialState: function() {
+    return { showModal: false };
+  },
+
+  render: function() {
+    return <Modal displayLink={this.linkState("showModal")} />;
+  },
+
+  handleSomeClick: function() {
+    this.setState({showModal: true});
+  }
+});
+
+var Modal = React.createClass({
+  close: function() {
+    this.props.displayLink.requestChange(false);
+  },
+
+  render: function() {
+    return (
+      <div className={this.props.displayLink.value? "show" : "hide"}>
+        <a className="close" onClick={this.close}>&times;</a>
+      </div>
+    )
+  }
+});
+#-------------------------------------------------- END   [reactjs modal] - (02-12-2017 - 14:06:18) }}

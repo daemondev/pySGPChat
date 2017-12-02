@@ -48,6 +48,12 @@ var User = React.createClass({
     openChatViewer: function(event){
         this.props.onClick(this.props.id);
     },
+    message: function(){
+        alert("my message");
+    },
+    childContextTypes: {
+        messsage: React.PropTypes.func
+    },
     render: function(){
         var user = this.state.user;
         return (
@@ -67,9 +73,6 @@ var BtnAll = React.createClass({
     openChatViewer: function(event){
         this.props.onClick(this.props.id);
     },
-    hideAdminPanel: function (){
-        this.props.hideAdminPanel();
-    },
     render: function(){
         return (
             <div className="sendToAllWrapper">
@@ -86,7 +89,7 @@ var UserList = React.createClass({
         }
     },
     getInitialState: function(){
-        return { users: [], usersDict: {}};
+        return { users: [], usersDict: {}, allUsers: []};
     },
     componentWillMount: function(){
         this.setState({users: this.props.users});
@@ -94,20 +97,31 @@ var UserList = React.createClass({
     userClickHandler: function(id){
         this.props.onClick(id);
     },
-    hideAdminPanel: function (){
-        this.props.onHideAdminPanel();
+    updateState: function(user, id){
+        var u = [];
+        u[id] = user;
+        u = this.state.allUsers.concat(u);
+        //this.setState({allUsers:u});
+    },
+    componentDidMount: function(){
+        //this.state.all
+        //alert("rendered");
     },
     render: function(){
         var btnSendToAll = null;
+        var allUsers = [];
         var users = this.state.users.map(function(user){
             if(user.in_UsuarioID == 0){
-                btnSendToAll = [<BtnAll onClick={ this.userClickHandler } key={ user.in_UsuarioID } id={user.in_UsuarioID} hideAdminPanel={ this.hideAdminPanel } />];
+                btnSendToAll = [<BtnAll onClick={ this.userClickHandler } key={ user.in_UsuarioID } id={user.in_UsuarioID} />];
                 return;
             }
-            return <User user={user} onClick={ this.userClickHandler } key={ user.in_UsuarioID } id={user.in_UsuarioID}/>;
+            var u = <User user={user} onClick={ this.userClickHandler } key={ user.in_UsuarioID } id={user.in_UsuarioID} ref={ref => this.updateState(ref, user.in_UsuarioID)} />;
+            allUsers[user.in_UsuarioID] = u;
+            return u;
         }, this);
+        //this.setState({allUsers: allUsers});
         return (
-            <div>  {btnSendToAll} <div className="userListWrapper"> {users} </div> </div>
+            <div> {btnSendToAll} <div className="userListWrapper"> {users} </div> </div>
         );
     }
 });
@@ -269,23 +283,6 @@ var MyComponent = React.createClass({
   }
 });
 
-var AdminPanel = React.createClass({
-    getInitialState: function(){
-        return { users:[] };
-    },
-    render: function(){
-        var users = this.props.users;
-        return (
-            <div>
-                <div className="innerAdminPanel">
-                    <h1>in Admin Panel</h1>
-                    <UserList users={users} />
-                </div>
-            </div>
-        );
-    }
-});
-
 var ChatContainer = React.createClass({
     getInitialState: function(){
         return {
@@ -297,7 +294,7 @@ var ChatContainer = React.createClass({
             , port : ":8888"
             , protocol : "ws" + "://"
             , namespace : "/websocket"
-            , toggleHide: false
+            , toggleHide: true
             , toggleHideChatPanel: false
             , step:1
             , messages:[]
@@ -357,7 +354,7 @@ var ChatContainer = React.createClass({
         }else if(event == "chat for user"){
             this.addChatViewer(data.messages, data.userIDDST);
         }else if(event == "set user connection state"){
-
+            //alert("userIDDST: " + data.userIDDST + "state: " + data.state);
         }
     },
     emit: function (message, data ){
@@ -393,6 +390,9 @@ var ChatContainer = React.createClass({
         var payload = {"userIDDST":id};
         this.emit("get chat for this user", payload);
     },
+    //getChildContext: function(){
+        //return { message:""  }
+    //},
     dropChatViewer: function(id){
         var state = Object.assign({}, this.state);
 
@@ -438,7 +438,7 @@ var ChatContainer = React.createClass({
     render: function(){
         return (
             <div className="chatMain">
-                <div className="hideAdminPanel" onClick={ this.hideAdminPanel.bind(this) } > <span> { this.state.toggleHide ? "OCULTAR": "MOSTRAR" }</span> <span>PANEL</span> </div>
+                <div className="hideAdminPanel" onClick={ this.hideAdminPanel.bind(this) } > <span> { this.state.toggleHide ? "MOSTRAR" : "OCULTAR" }</span> <span>PANEL</span> </div>
                 <div id="divMiniPanel" onClick={this.toggleChatPanel.bind(this)}><span>miniPanel</span> </div>
                 <div id="divChatPanel" ref="myChatPanel" className={ this.state.toggleHideChatPanel ? "hiddden": "" } >
                     { this.state.chatViewers }

@@ -324,7 +324,7 @@ class SendCSS(tornado.web.RequestHandler):
 
 @gen.coroutine
 def get(self):
-    file_name = 'file.ext'
+    file_name = 'file.dat'
     buf_size = 4096
     self.set_header('Content-Type', 'application/octet-stream')
     self.set_header('Content-Disposition', 'attachment; filename=' + file_name)

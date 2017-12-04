@@ -1,0 +1,6 @@
+[console_scripts]
+pychat = pySGPChat.runner:runner
+
+[gui_scripts]
+pySGPChat = myTCL.runner:runner
+

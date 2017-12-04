@@ -1,0 +1,448 @@
+.chatWrapper *:after, .chatWrapper *:before {
+    content: '';
+    content: none;
+}
+.chatWrapper *{
+    margin:0;
+    padding:0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+.chatWrapper{
+    position: fixed;
+    bottom:1px;
+    right:0;
+}
+
+.chatMain{
+    position:relative;
+    display:block;
+    max-height:260px;
+ }
+
+.chatViewer div{
+}
+.chatViewer:hover{
+    -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.35);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.35);
+}
+.chatViewer{
+    display:inline-block;
+    position: relative;
+    height:250px;
+    width:240px;
+    margin:2px;
+    padding:auto;
+    background-color: #FDFDB7;
+    border: 1px solid #D84E0E;
+    -webkit-animation: fade 0.5s;
+            animation: fade 0.5s;
+}
+
+.broadcast{
+    background-color: #CCCCCC !important;
+    border: 1px solid #7D7D7D !important;
+}
+.broadcastUser {
+    background-color: #7D7D7D !important;
+    color: #FFFF2A !important;
+}
+.hideAdminPanel{
+    width: 41px;
+    height: 41px;
+    display: inline-block;
+    border-radius:50%;
+    border: 1px solid #BD2E29;
+    background-color: #D43F3A;
+    color: #FFF;
+    text-align: center;
+    padding-top: 11px;
+    font-size: 8px;
+    cursor:pointer;
+    margin: auto;
+    right:0;
+    top:52px;
+    position: fixed;
+}
+.user .Adm, .user .Ase, .user .Sup, .user .Cli{
+    width: 37px;
+    height: 37px;
+    display: inline-block;
+    line-height: 35px;
+    border-radius:50%;
+    border: 1px solid #00FF00;
+    background-color: #fef;
+    text-align: center;
+    vertical-align:baseline;
+    margin: auto;
+}
+.user .Adm{
+    background-color: #FFCCCC;
+}
+
+.user .Ase{
+    background-color: #CCFFCC;
+}
+
+.user .Sup{
+    background-color: #CCCCFF;
+}
+
+
+.userAvatar{
+
+}
+
+.userConnected{
+    border-width:1px;
+}
+
+.chatPanel, .adminPanel{
+}
+
+#divChatPanel{
+    min-width: 240px;
+    max-width: 735px;
+
+    max-height: 355px;
+    -webkit-transition-property: visibility, opacity;
+    transition-property: visibility, opacity;
+    -webkit-transition-duration: 0.5s, 0.5s;
+            transition-duration: 0.5s, 0.5s;
+    -webkit-animation: fade 0.5s;
+            animation: fade 0.5s;
+}
+
+.adminPanel{
+}
+
+.sendToAll{
+    background-color: #3C8DBC;
+    text-align:center;
+    cursor: pointer;
+    color:#E1E1E1;
+
+    width: 41px;
+    height: 41px;
+    display: inline-block;
+    border-radius:50%;
+    border: 1px solid #00FF00;
+    text-align: center;
+    padding-top:9px;
+    line-height:8px;
+    margin: auto;
+    font-size: 8px;
+}
+.sendToAllWrapper{
+    text-align: right;
+}
+
+.userListWrapper{
+    max-height:300px;
+    width:200px;
+    overflow:auto;
+}
+
+#divMiniPanel{
+    display:block;
+    clear:both;
+    text-align:right;
+    position: absolute;
+    top:-15px;
+    right:0;
+    cursor:pointer;
+}
+
+#divAdminPanel{
+    position:   fixed;
+    top: 94px;
+    right:-1px;
+    -webkit-transition-property: visibility, opacity;
+    transition-property: visibility, opacity;
+    -webkit-transition-duration: 0.5s, 0.5s;
+            transition-duration: 0.5s, 0.5s;
+
+    -webkit-animation: fade 0.5s;
+
+            animation: fade 0.5s;
+} 
+
+@-webkit-keyframes hiddden {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+} 
+
+@keyframes hiddden {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+@-webkit-keyframes fade {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+@keyframes fade {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+#divChatPanel.hiddden {
+    height:0;
+    opacity: 0;
+    visibility: hidden;
+    background-color: transparent !important;
+    -webkit-transition-property: opacity, visibility;
+    transition-property: opacity, visibility;
+    -webkit-transition-duration: 0.5s, 0.5s;
+            transition-duration: 0.5s, 0.5s;
+}
+
+
+#divAdminPanel.hiddden {
+    opacity: 0;
+    visibility: hidden;
+    background-color: transparent !important;
+    -webkit-transition-property: opacity, visibility;
+    transition-property: opacity, visibility;
+    -webkit-transition-duration: 0.5s, 0.5s;
+            transition-duration: 0.5s, 0.5s;
+}
+
+.chatContainner{
+}
+
+.chatHistory{
+    display:block;
+    height: 202px;
+    width: 100%;
+    overflow:auto;
+}
+
+.text-box{
+    background-color: #fff;
+    width:100%;
+    min-height: 26px;
+    border-top: 1px solid #7D7D7D;
+    padding:2px;
+}
+
+.chatMessage{
+    display:block;
+    position:absolute;
+    width:100%;
+    height:28px;
+    vertical-align: middle;
+    bottom:0;
+    right:0;
+}
+#txtMessage{
+    width:100%;
+    height: 26px;
+    border-top: 1px solid #7D7D7D;
+    padding:0 2px;
+}
+.closeChat{
+    background-color: red;
+    cursor:pointer;
+    float: right;
+    padding:0 4px 0 3px;
+}
+.chatWrapper .user{
+    cursor: pointer;
+    margin:2px;
+    padding:1px;
+    background-color: #D7DEF7;
+    border:1px solid #BEC9F2;
+    border-radius:50% 0 0 50%;
+}
+
+.xchatHistory .in:before {
+    color: rgb(255, 255, 255);
+    content: '';
+    display: block;
+    height: 0px;
+    left: -13px;
+    position: relative;
+    -webkit-text-decoration: none solid rgb(255, 255, 255);
+            text-decoration: none solid rgb(255, 255, 255);
+    top: 3px;
+    width: 0px;
+    -webkit-column-rule-color: rgb(255, 255, 255);
+            column-rule-color: rgb(255, 255, 255);
+    -webkit-perspective-origin: 20px 7.5px;
+            perspective-origin: 20px 7.5px;
+    -webkit-transform-origin: 20px 7.5px;
+            transform-origin: 20px 7.5px;
+    caret-color: rgb(255, 255, 255);
+    border-top: 12px solid rgba(0, 0, 0, 0);
+    border-right: 8px solid #FCFC7D;
+    border-bottom: 0px solid rgba(0, 0, 0, 0);
+    border-left: 0px solid rgb(7, 86, 152);
+    font: normal normal 400 normal 16px / 22.4px Cambria, Georgia, sans-serif;
+    outline: rgb(255, 255, 255) none 0px;
+}
+
+.messageDate{
+    font-size:8px;
+}
+
+.messageMessage{
+    font-size:12px;
+}
+.trueMessage{
+   padding:5px;
+}
+
+.message > div {
+    display: inline-block;
+    vertical-align:top;
+}
+
+.chatHistory .out{
+    float:right;
+    margin:2px 7px 2px auto;
+    display:block !important;
+    clear:both;
+}
+.chatHistory .in{
+    float:left;
+    margin:2px auto 2px 7px;
+    display:block !important;
+    clear:both;
+}
+
+.chatHistory .in .trueMessage{
+    background-color: #FCFC7D;
+    max-width:195px;
+    border-radius: 2px;
+    border:1px solid #DFDF07;
+}
+.chatHistory .out .trueMessage{
+    border-radius: 2px;
+    background-color: #AAD4FF;
+    max-width:195px;
+    text-align:right;
+    border:1px solid #41A8ED;
+}
+
+
+.dleft, .dright {
+    top:5px;
+    width: 0;
+    height: 0;
+    position: relative;
+}
+
+.dleft{
+    left:1px;
+    border-top: 5px solid rgba(0, 0, 0, 0);
+    border-right: 8px solid #FCFC7D;
+    border-bottom: 2px solid rgba(0, 0, 0, 0);
+    border-left: 0px solid rgb(7, 86, 152);
+
+
+    -webkit-column-rule-color: rgb(255, 255, 255);
+
+
+            column-rule-color: rgb(255, 255, 255);
+    -webkit-perspective-origin: 20px 7.5px;
+            perspective-origin: 20px 7.5px;
+    -webkit-transform-origin: 20px 7.5px;
+            transform-origin: 20px 7.5px;
+    caret-color: rgb(255, 255, 255);
+    font: normal normal 400 normal 16px / 22.4px Cambria, Georgia, sans-serif;
+    outline: rgb(255, 255, 255) none 0px;
+}
+.dright{
+    right:1px;
+    border-top: 5px solid rgba(0, 0, 0, 0);
+    border-right: 0px solid rgb(7, 86, 152);
+    border-bottom: 4px solid rgba(0, 0, 0, 0);
+    border-left: 8px solid #41A8ED;
+
+    -webkit-column-rule-color: rgb(255, 255, 255);
+
+            column-rule-color: rgb(255, 255, 255);
+    -webkit-perspective-origin: 20px 7.5px;
+            perspective-origin: 20px 7.5px;
+    -webkit-transform-origin: 20px 7.5px;
+            transform-origin: 20px 7.5px;
+    caret-color: rgb(255, 255, 255);
+    font: normal normal 400 normal 16px / 22.4px Cambria, Georgia, sans-serif;
+    outline: rgb(255, 255, 255) none 0px;
+
+    -webkit-transition: -webkit-box-shadow 0.2s ease-in-out 0s;
+
+    transition: -webkit-box-shadow 0.2s ease-in-out 0s;
+
+    transition: box-shadow 0.2s ease-in-out 0s;
+
+    transition: box-shadow 0.2s ease-in-out 0s, -webkit-box-shadow 0.2s ease-in-out 0s;
+    background-clip:content-box;
+}
+
+.xchatHistory .out:before {
+    color: rgb(255, 255, 255);
+    content: '';
+    display: block;
+    height: 0px;
+    left: 0px;
+    position: relative;
+    right: 40px;
+    -webkit-text-decoration: none solid rgb(255, 255, 255);
+            text-decoration: none solid rgb(255, 255, 255);
+    top: 3px;
+    width: 0px;
+    -webkit-column-rule-color: rgb(255, 255, 255);
+            column-rule-color: rgb(255, 255, 255);
+    -webkit-perspective-origin: 20px 7.5px;
+            perspective-origin: 20px 7.5px;
+    -webkit-transform-origin: 20px 7.5px;
+            transform-origin: 20px 7.5px;
+    caret-color: rgb(255, 255, 255);
+    border-top: 12px solid rgba(0, 0, 0, 0);
+    border-right: 0px solid rgb(7, 86, 152);
+    border-bottom: 0px solid rgba(0, 0, 0, 0);
+    border-left: 8px solid green;
+    font: normal normal 400 normal 16px / 22.4px Cambria, Georgia, sans-serif;
+    outline: rgb(255, 255, 255) none 0px;
+}
+
+.chatPanel .userName{
+}
+
+.userUser{
+    background-color: #7D7D7D  !important;
+    color: #fff;
+    font-size: 12px;
+    display:block;
+    width: 100%;
+    height: auto;
+    text-align: center;
+}
+
+.userSpan{
+    font-size: 9px;
+    color:#41A8ED;
+}

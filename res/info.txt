@@ -296,3 +296,32 @@ var Modal = React.createClass({
   }
 });
 #-------------------------------------------------- END   [reactjs modal] - (02-12-2017 - 14:06:18) }}
+#-------------------------------------------------- BEGIN [remove python comments] - (04-12-2017 - 15:38:58) {{
+with open(filename1, 'r') as f:
+    lines = f.readlines()
+
+with open(filename2, 'w') as f:
+    for line in lines:
+        # Keep the Shebang line
+        if line[0:2] == "#!":
+            f.writelines(line)
+        # Also keep existing empty lines
+        elif not line.strip():
+            f.writelines(line)
+        # But remove comments from other lines
+        else:
+            line = line.split('#')
+            stripped_string = line[0].rstrip()
+            # Write the line only if the comment was after the code.
+            # Discard lines that only contain comments.
+            if stripped_string:
+                f.writelines(stripped_string)
+                f.writelines('\n')
+#-------------------------------------------------- END   [remove python comments] - (04-12-2017 - 15:38:58) }}
+#-------------------------------------------------- BEGIN [add shortcut] - (04-12-2017 - 15:57:20) {{
+msilib.add_data(self.db, "Shortcut",
+        [("S_APP_%s" % index, executable.shortcutDir,
+                executable.shortcutName, "TARGETDIR",
+                "[TARGETDIR]%s" % baseName, None, None, None,
+                None, None, None, "TARGETDIR")]) # <--- Working directory.
+#-------------------------------------------------- END   [add shortcut] - (04-12-2017 - 15:57:20) }}

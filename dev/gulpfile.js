@@ -27,12 +27,12 @@ var data = require('gulp-data');
 //const babel = require('gulp-babel');
 
 var jsxFilesDir = './dev/jsx/*.js';
-var jsOutPutDir = './static/js/chat';
+var jsOutPutDir = './lib/static/js/chat';
 
 var cssFilesDir = './dev/css/chat/*.css';
-var cssOutPutDir = './static/css/chat';
-var cssFile = './static/css/chat/chatCORS.css';
-var jsFile = './static/js/chat/chatCORS.js';
+var cssOutPutDir = './lib/static/css/chat';
+var cssFile = './lib/static/css/chat/chatCORS.css';
+var jsFile = './lib/static/js/chat/chatCORS.js';
 var p;
 
 // tasks

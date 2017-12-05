@@ -320,7 +320,7 @@ class SendJavascript(tornado.web.RequestHandler):
     def get(self):
         try:
             #with open('lib/static/js/chat/chatCORS.min.js', 'rb') as jsFile:
-            with open('lib/static/js/chat/chatCORS.js', 'rb') as jsFile:
+            with open('lib/static/js/chat/chatCORS.min.js', 'rb') as jsFile:
                 data = jsFile.read()
                 self.write(data)
             self.finish()

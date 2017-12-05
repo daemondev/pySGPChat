@@ -56,12 +56,13 @@ var User = React.createClass({
     },
     render: function(){
         var user = this.state.user;
+        var username = user.vc_Nombre + ", " +  user.vc_ApePaterno + " "+ user.vc_ApeMaterno;
         return (
-            <div className="user" ref="user" id={user.in_UsuarioID} onClick={this.openChatViewer.bind(this)}>
-                <div>
+            <div className="user" ref="user" id={user.in_UsuarioID} onClick={this.openChatViewer.bind(this)} title={ username } >
+                <div title={ username } >
                     <span className="userAvatar"> <p className={user.avatar} > { user.avatar } </p> </span>
-                    <span className="userSpan">
-                        {user.vc_Nombre}, {user.vc_ApePaterno} {user.vc_ApeMaterno}
+                    <span className="userSpan" title={ username } >
+                        { this.props.truncateString(username ,28) }
                     </span>
                 </div>
             </div>
@@ -115,7 +116,7 @@ var UserList = React.createClass({
                 btnSendToAll = [<BtnAll onClick={ this.userClickHandler } key={ user.in_UsuarioID } id={user.in_UsuarioID} />];
                 return;
             }
-            var u = <User user={user} onClick={ this.userClickHandler } key={ user.in_UsuarioID } id={user.in_UsuarioID} ref={ref => this.updateState(ref, user.in_UsuarioID)} />;
+            var u = <User user={user} onClick={ this.userClickHandler } key={ user.in_UsuarioID } truncateString={ this.props.owner.truncateString } id={user.in_UsuarioID} ref={ref => this.updateState(ref, user.in_UsuarioID)} />;
             allUsers[user.in_UsuarioID] = u;
             return u;
         }, this);
@@ -177,6 +178,7 @@ var ChatViewer = React.createClass({
     componentDidUpdate: function(){
         this.scrollToBottom();
         //<input type="text" id="txtMessage" placeholder="Ingresar mensaje y presionar ENTER" onKeyPress={ this.sendMessage } />
+        //<ContentEditable rnd={ this.randomValue } ref={(ref) => this.theContentEditable = ref}  onKeyDown={this.sendMessage} reizeChatHistory={ this.resizeChatHistory } />
     },
     resizeChatHistory: function(){
         const cH = ReactDOM.findDOMNode(this.refs.chatHistory);
@@ -186,17 +188,18 @@ var ChatViewer = React.createClass({
         cM.style.height = cM.style.height + 20;
     },
     render: function (){
+        var truncatedUserName = this.props.owner.truncateString(this.state.userName, 28);
         return(
                     <div className={["chatViewer", ( this.state.id != 0 ? "broadcast" : "" )].join(" ")}>
-                        <div className={["userUser", ( this.state.id == 0 ? "broadcastUser" : "" )].join(" ")}>
-                            <span className="userName">{ this.state.userName }</span> <span className="closeChat" onClick={this.hideCurrentChat}>&#10006;</span>
+                        <div  title={ this.state.userName } className={["userUser", ( this.state.id == 0 ? "broadcastUser" : "" )].join(" ")}>
+                            <span className="userName">{ truncatedUserName }</span> <span className="closeChat" onClick={this.hideCurrentChat}>&#10006;</span>
                         </div>
                         <div className="chatContainner">
                             <div className="chatHistory" ref="chatHistory">
                                 <ChatList messages={ this.state.messages } />
                             </div>
                             <div className="chatMessage" ref="chatMessage">
-                                <ContentEditable rnd={ this.randomValue } ref={(ref) => this.theContentEditable = ref}  onKeyDown={this.sendMessage} reizeChatHistory={ this.resizeChatHistory } />
+                                <input type="text" id="txtMessage" placeholder="Ingresar mensaje y presionar ENTER" onKeyPress={ this.sendMessage } />
                             </div>
                         </div>
                     </div>
@@ -303,6 +306,8 @@ var ChatContainer = React.createClass({
             , currentChats: []
             , chatViewers: []
             , chatViewersDict: {}
+            , hiddeToggleChatManager: true
+            , owner: this
         };
     },
     onMessage: function(e){
@@ -336,7 +341,7 @@ var ChatContainer = React.createClass({
             var userName = "aux";
             var nCV = state.chatViewers.map(function (v){
                 if (v.props.id == data.userIDDST){
-                    return <ChatViewer id={ data.userIDDST }  key={ data.userIDDST } onClick={this.sendMessage.bind(this)} ref={(ref) => this.updateState(ref, data.userIDDST)} data="rawData" messages={newChat} userName={userName} onDropChatViewer={ this.dropChatViewer }/>
+                    return <ChatViewer id={ data.userIDDST }  key={ data.userIDDST } onClick={this.sendMessage.bind(this)}  owner={this.state.owner} ref={(ref) => this.updateState(ref, data.userIDDST)} data="rawData" messages={newChat} userName={userName} onDropChatViewer={ this.dropChatViewer }/>
                 }else{
                     return v
                 }
@@ -364,11 +369,57 @@ var ChatContainer = React.createClass({
     onOpen: function(event,a){
         return;
     },
+    notifier: function(){
+        console.log("CLEAN websockets");
+    },
     componentWillMount: function(){
+        var prevWS = this.state.ws;
+        if(prevWS != null){
+            prevWS.removeEventListener("onopen", this.notifier);
+            prevWS.removeEventListener("onerror", this.notifier);
+            prevWS.removeEventListener("onclose", this.notifier);
+        }
+
         var ws = new WebSocket("ws" + this.state.separator + document.domain + this.state.port + this.state.namespace);
         ws.onmessage = this.onMessage;
         ws.onopen = this.onOpen;
+        ws.onclose = this.onClose;
+        ws.onerror = this.onError;
         this.setState({ws:ws});
+    },
+    reconnectSocket: function(e){
+        //this.componentWillMount();
+        that = this;
+        setTimeout(function(){
+            console.log("WebSocketClient: reconnecting...");
+            that.componentWillMount();
+        },2*1000);
+    },
+    onClose: function(e){
+        /*
+        switch (e){
+            case 1000:	// CLOSE_NORMAL
+                    console.log("WebSocket: closed");
+                    break;
+            default:	// Abnormal closure
+                    this.reconnectSocket(e);
+                    break;
+        }
+        this.onClose(e); /**/
+        this.reconnectSocket(e);
+    },
+    onError: function(e){
+
+        /*
+        switch (e.code){
+            case 'ECONNREFUSED':
+                    this.reconnectSocket(e);
+                    break;
+            default:
+                    this.onError(e);
+                    break;
+        }/**/
+        this.reconnectSocket(e);
     },
     componentDidMount: function(){
         var state = Object.assign({}, this.state);
@@ -400,6 +451,9 @@ var ChatContainer = React.createClass({
         state.currentChats = newIds;
         var nCV = state.chatViewers.filter(cv => cv.props.id != id);
         state.chatViewers = nCV;
+        if(nCV.length == 0){
+            state.hiddeToggleChatManager = true;
+        }
 
         this.setState(state);
     },
@@ -413,12 +467,24 @@ var ChatContainer = React.createClass({
             var userName = "";
             this.state.users.map(function(user){
                 if(user.in_UsuarioID == id){
+                    //userName =  this.truncateString(user.vc_Nombre + " " + user.vc_ApePaterno +" "+ user.vc_ApeMaterno, 28);
                     userName =  user.vc_Nombre + " " + user.vc_ApePaterno +" "+ user.vc_ApeMaterno;
                 }
-            });
+            }, this);
+            var currentChatViewers = this.state.chatViewers;
+            var deletedChatViewer = null;
+            var newCurrentsChats = this.state.currentChats;
+
+            if(currentChatViewers.length > 3){
+                deletedChatViewer = currentChatViewers.pop();
+                newCurrentsChats = newCurrentsChats.filter(n => n != deletedChatViewer.props.id );
+                console.log("deleting: " + deletedChatViewer.props.id + " - length: " + currentChatViewers.length );
+            }
+
             this.setState({
-                chatViewers:  [<ChatViewer id={ id }  key={id} onClick={this.sendMessage.bind(this)} ref={(ref) => this.updateState(ref, id)} data="rawData" messages={messages} userName={userName} onDropChatViewer={ this.dropChatViewer }/>].concat(this.state.chatViewers),
-                currentChats:this.state.currentChats.concat(id)
+                chatViewers:  [<ChatViewer id={ id }  key={id} onClick={this.sendMessage.bind(this)} ref={(ref) => this.updateState(ref, id)} owner={this.state.owner}  data="rawData" messages={messages} userName={userName} onDropChatViewer={ this.dropChatViewer }/>].concat(currentChatViewers),
+                hiddeToggleChatManager: false,
+                currentChats: newCurrentsChats.concat(id)
             });
         }
     },
@@ -433,19 +499,48 @@ var ChatContainer = React.createClass({
         this.setState({toggleHide:!this.state.toggleHide});
     },
     toggleChatPanel: function (event){
+        /*
+        var classNamesTop = [];
+        var classNamesDown = [];
+
+        if(this.state.toggleHideChatPanel){
+            classNamesDown = ["toggleFooter", "arrowDown", "hiddden"];
+            classNamesTop = ["toggleHeader", "arrowTop"];
+        }else{
+            classNamesDown = ["toggleFooter", "arrowDown" ];
+            classNamesTop = ["toggleHeader", "arrowTop", "hiddden"];
+        } /**/
+
         this.setState({toggleHideChatPanel:!this.state.toggleHideChatPanel});
+    },
+    truncateString: function (str, num) {
+        if (str.length < num) return str;
+
+        var truncStr = str.slice(0, num);
+        var truncStrArr = truncStr.split(' ');
+        var truncStrArrLen=truncStrArr.length;
+
+        if(truncStrArrLen > 1 && truncStrArr[truncStrArrLen - 1] !== str.split(' ')[truncStrArrLen - 1]) {
+            truncStrArr.pop();
+            truncStr = truncStrArr.join(' ');
+        }
+        return str.length > num ? truncStr + '...' : truncStr;
     },
     render: function(){
         return (
             <div className="chatMain">
                 <div className="hideAdminPanel" onClick={ this.hideAdminPanel.bind(this) } > <span> { this.state.toggleHide ? "MOSTRAR" : "OCULTAR" }</span> <span>PANEL</span> </div>
-                <div id="divMiniPanel" onClick={this.toggleChatPanel.bind(this)}><span>miniPanel</span> </div>
+                <div id="divMiniPanel" className={ this.state.hiddeToggleChatManager ? "hiddden": "" }  onClick={this.toggleChatPanel.bind(this)}> <div className="togglePanelContainner">
+                        <span id="spanToggleHeader" className={ !this.state.toggleHideChatPanel ? "hiddden": "" }></span>
+                        <span id="spanToggleText">{ this.state.toggleHideChatPanel ? "MOSTRAR" : "OCULTAR" } chat</span>
+                        <span id="spanToggleFooter" className={ this.state.toggleHideChatPanel ? "hiddden": "" }></span>
+                </div> </div>
                 <div id="divChatPanel" ref="myChatPanel" className={ this.state.toggleHideChatPanel ? "hiddden": "" } >
                     { this.state.chatViewers }
                 </div>
                 { this.state.haveAdminPanel ?
                 <div id="divAdminPanel" className={ this.state.toggleHide ? "hiddden": "" } ref="adminPanel">
-                    <UserList users={this.state.users} onClick={ this.receiveUserAction } onHideAdminPanel={this.hideAdminPanel} />
+                    <UserList users={this.state.users} onClick={ this.receiveUserAction } onHideAdminPanel={this.hideAdminPanel} owner={this.state.owner} />
                 </div>
                 : '' }
             </div>

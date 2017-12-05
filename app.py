@@ -24,7 +24,7 @@ import pymssql
 #-------------------------------------------------- END   [support for MSSQL] - (20-11-2017 - 10:41:12) }}
 
 #-------------------------------------------------- BEGIN [producction] - (04-12-2017 - 14:21:01) {{
-#"""
+"""
 from tornado.platform.twisted import TwistedIOLoop
 from twisted.internet import reactor
 TwistedIOLoop().install() #"""
@@ -219,7 +219,7 @@ def websocketManager(self, request):
         print(">>> end create_chat")
     elif action == "get chat for this user":
         data = data["1"]
-        sql = """ select id, userIDSRC as [src], userIDDST as [dst], [message] as [message], convert(varchar(10),ins, 108) as [ins], [type] as [type] from tChat where userIDSRC = %d and userIDDST = %d """ % (int(self.session["in_UsuarioID"]), int(data["userIDDST"]))
+        sql = """ select id, userIDSRC as [src], userIDDST as [dst], [message] as [message], convert(varchar(10),ins, 108) as [ins], [type] as [type] from tChat where userIDSRC = %d and userIDDST = %d and convert(char(8),ins,112) = convert(char(8), getdate(), 112) """ % (int(self.session["in_UsuarioID"]), int(data["userIDDST"]))
         print("sql: [%s]" % sql)
         cur = cnx.cursor()
         cur.execute(sql)
@@ -270,10 +270,14 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
             elif self.session["in_PerfilID"] == "2":
                 auxUsers = [ u.__dict__ for u in supervisors ]
 
+            for u in allPerss:
+                print(u.in_UsuarioID, u.vc_Nombre)
+
             payload = {"event":"only for admins","data": auxUsers}
             self.write_message(payload)
         except Exception as e:
             print(str(e))
+
         setUserConnectionState(int(self.session["in_UsuarioID"]), "connected")
 
         connectionsDict.update({int(self.session["in_UsuarioID"]): self})
@@ -284,10 +288,13 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         websocketManager(self, request)
 
     def on_close(self):
-        print("onClose [%s]" % self.session["in_UsuarioID"])
-        connectionsDict.pop(int(self.session["in_UsuarioID"]))
-        setUserConnectionState(int(self.session["in_UsuarioID"]), "disconnected")
-        pass
+        try:
+            print("onClose [%s]" % self.session["in_UsuarioID"])
+            connectionsDict.pop(int(self.session["in_UsuarioID"]))
+            setUserConnectionState(int(self.session["in_UsuarioID"]), "disconnected")
+        except Exception as e:
+            print(str(e))
+            pass
 
     def check_origin(self, origin):
         #parsed_origin = urllib.parse.urlparse(origin)
@@ -312,7 +319,8 @@ class SendJavascript(tornado.web.RequestHandler):
     @gen.coroutine
     def get(self):
         try:
-            with open('lib/static/js/chat/chatCORS.min.js', 'rb') as jsFile:
+            #with open('lib/static/js/chat/chatCORS.min.js', 'rb') as jsFile:
+            with open('lib/static/js/chat/chatCORS.js', 'rb') as jsFile:
                 data = jsFile.read()
                 self.write(data)
             self.finish()
@@ -406,5 +414,5 @@ if __name__ == '__main__':
         server = tornado.httpserver.HTTPServer(ws_app, ssl_options={"certfile": "domain.crt", "keyfile": "domain.key",})
         server.listen(443, address="0.0.0.0") #"""
 
-        #tornado.ioloop.IOLoop.instance().start() #"""
-        reactor.run()
+        tornado.ioloop.IOLoop.instance().start() #"""
+        #reactor.run()

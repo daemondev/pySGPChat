@@ -123,7 +123,7 @@
 #divChatPanel{
     /*background-color: green;*/
     min-width: 240px;
-    max-width: 735px;
+    max-width: 990px;
 
     max-height: 355px;
     /*overflow-y: none;*/
@@ -167,8 +167,8 @@
 }
 
 .userListWrapper{
-    max-height:300px;
-    width:200px;
+    max-height:288px;
+    width:220px;
     overflow:auto;
 }
 
@@ -181,7 +181,12 @@
     top:-15px;
     right:0;
     cursor:pointer;
+
+    transition-property: visibility, opacity;
+    transition-duration: 0.5s, 0.5s;
+    animation: fade 0.5s;
 }
+
 
 #divAdminPanel{
     /*background-color: #D7DEF7;*/
@@ -238,6 +243,13 @@
     /*animation: hiddden 2s;*/
 }
 
+#divMiniPanel.hiddden {
+    opacity: 0;
+    visibility: hidden;
+    background-color: transparent !important;
+    transition-property: opacity, visibility;
+    transition-duration: 0.5s, 0.5s;
+}
 
 #divAdminPanel.hiddden {
     opacity: 0;
@@ -286,6 +298,7 @@
     height: 26px;
     border-top: 1px solid #7D7D7D;
     padding:0 2px;
+    font-size: 12px;
 }
 .closeChat{
     /*text-align:right;*/
@@ -333,7 +346,7 @@
 }
 
 .messageMessage{
-    font-size:12px;
+    font-size:11px;
 }
 .trueMessage{
    padding:5px;
@@ -467,6 +480,58 @@
     font-size: 9px;
     color:#41A8ED;
 }
+
+
+#divMiniPanel span{
+    display:block;
+    /*background-color: blue;*/
+}
+.togglePanelContainner{
+     position: absolute;
+     /*top:-10px;*/
+     top:-5px;
+     right:0;
+     padding-right:2px;
+}
+#spanToggleFooter{
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 9px 28px 0 28px;
+    border-color: #007bff transparent transparent transparent;
+
+    transition-property: visibility, opacity;
+    transition-duration: 0.5s, 0.5s;
+    animation: fade 0.5s;
+}
+#spanToggleHeader{
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 28px 9px 28px;
+    border-color: transparent transparent #007bff transparent;
+
+    transition-property: visibility, opacity;
+    transition-duration: 0.5s, 0.5s;
+    animation: fade 0.5s;
+}
+
+#spanToggleText{
+    font-size: 8px;
+    text-align:center;
+    color:#0551A3;
+}
+
+#spanToggleFooter.hiddden, #spanToggleHeader.hiddden {
+    height:0;
+    opacity: 0;
+    border:0;
+    visibility: hidden;
+    background-color: transparent !important;
+    transition-property: opacity, visibility;
+    transition-duration: 0.5s, 0.5s;
+}
+
 /*#-------------------------------------------------- BEGIN [arrow's] - (28-11-2017 - 22:51:34) {{*/
 /*
 .chatHistory .out {

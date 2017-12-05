@@ -104,7 +104,7 @@
 
 #divChatPanel{
     min-width: 240px;
-    max-width: 735px;
+    max-width: 990px;
 
     max-height: 355px;
     -webkit-transition-property: visibility, opacity;
@@ -140,8 +140,8 @@
 }
 
 .userListWrapper{
-    max-height:300px;
-    width:200px;
+    max-height:288px;
+    width:220px;
     overflow:auto;
 }
 
@@ -153,7 +153,16 @@
     top:-15px;
     right:0;
     cursor:pointer;
+
+    -webkit-transition-property: visibility, opacity;
+
+    transition-property: visibility, opacity;
+    -webkit-transition-duration: 0.5s, 0.5s;
+            transition-duration: 0.5s, 0.5s;
+    -webkit-animation: fade 0.5s;
+            animation: fade 0.5s;
 }
+
 
 #divAdminPanel{
     position:   fixed;
@@ -218,6 +227,15 @@
             transition-duration: 0.5s, 0.5s;
 }
 
+#divMiniPanel.hiddden {
+    opacity: 0;
+    visibility: hidden;
+    background-color: transparent !important;
+    -webkit-transition-property: opacity, visibility;
+    transition-property: opacity, visibility;
+    -webkit-transition-duration: 0.5s, 0.5s;
+            transition-duration: 0.5s, 0.5s;
+}
 
 #divAdminPanel.hiddden {
     opacity: 0;
@@ -261,6 +279,7 @@
     height: 26px;
     border-top: 1px solid #7D7D7D;
     padding:0 2px;
+    font-size: 12px;
 }
 .closeChat{
     background-color: red;
@@ -308,7 +327,7 @@
 }
 
 .messageMessage{
-    font-size:12px;
+    font-size:11px;
 }
 .trueMessage{
    padding:5px;
@@ -446,3 +465,63 @@
     font-size: 9px;
     color:#41A8ED;
 }
+
+
+#divMiniPanel span{
+    display:block;
+}
+.togglePanelContainner{
+     position: absolute;
+     top:-5px;
+     right:0;
+     padding-right:2px;
+}
+#spanToggleFooter{
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 9px 28px 0 28px;
+    border-color: #007bff transparent transparent transparent;
+
+    -webkit-transition-property: visibility, opacity;
+
+    transition-property: visibility, opacity;
+    -webkit-transition-duration: 0.5s, 0.5s;
+            transition-duration: 0.5s, 0.5s;
+    -webkit-animation: fade 0.5s;
+            animation: fade 0.5s;
+}
+#spanToggleHeader{
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 28px 9px 28px;
+    border-color: transparent transparent #007bff transparent;
+
+    -webkit-transition-property: visibility, opacity;
+
+    transition-property: visibility, opacity;
+    -webkit-transition-duration: 0.5s, 0.5s;
+            transition-duration: 0.5s, 0.5s;
+    -webkit-animation: fade 0.5s;
+            animation: fade 0.5s;
+}
+
+#spanToggleText{
+    font-size: 8px;
+    text-align:center;
+    color:#0551A3;
+}
+
+#spanToggleFooter.hiddden, #spanToggleHeader.hiddden {
+    height:0;
+    opacity: 0;
+    border:0;
+    visibility: hidden;
+    background-color: transparent !important;
+    -webkit-transition-property: opacity, visibility;
+    transition-property: opacity, visibility;
+    -webkit-transition-duration: 0.5s, 0.5s;
+            transition-duration: 0.5s, 0.5s;
+}
+

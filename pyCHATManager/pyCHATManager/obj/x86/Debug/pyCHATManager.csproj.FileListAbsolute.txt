@@ -1,0 +1,7 @@
+Z:\rsms\python\pySGPChat\pyCHATManager\pyCHATManager\obj\x86\Debug\pyCHATManager.Form1.resources
+Z:\rsms\python\pySGPChat\pyCHATManager\pyCHATManager\obj\x86\Debug\pyCHATManager.Properties.Resources.resources
+Z:\rsms\python\pySGPChat\pyCHATManager\pyCHATManager\obj\x86\Debug\pyCHATManager.csproj.GenerateResource.Cache
+Z:\rsms\python\pySGPChat\pyCHATManager\pyCHATManager\bin\Debug\pyCHATManager.exe
+Z:\rsms\python\pySGPChat\pyCHATManager\pyCHATManager\bin\Debug\pyCHATManager.pdb
+Z:\rsms\python\pySGPChat\pyCHATManager\pyCHATManager\obj\x86\Debug\pyCHATManager.exe
+Z:\rsms\python\pySGPChat\pyCHATManager\pyCHATManager\obj\x86\Debug\pyCHATManager.pdb

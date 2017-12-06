@@ -9,7 +9,12 @@ from tornado import gen
 
 import json
 from datetime import datetime
-import os
+import os, sys
+
+pySGPChatMSSQLHost = os.environ.get("pySGPChatMSSQLHost","localhost\\SQLEXPRESS")
+pySGPChatMSSQLUsr = os.environ.get("pySGPChatMSSQLUsr","sa")
+pySGPChatMSSQLPwd = os.environ.get("pySGPChatMSSQLPwd","123456")
+pySGPChatMSSQLDB = os.environ.get("pySGPChatMSSQLDB","BD_DESCARTE_AT_18102017")
 
 #-------------------------------------------------- BEGIN [DEV MODE] - (19-10-2017 - 11:00:51) {{
 #import tornado.wsgi
@@ -55,8 +60,23 @@ class User(dict):
         #return json.dumps(self.__dict__)
 
 
+try:
+    pySGPChatMSSQLHost = sys.argv[1]
+    pySGPChatMSSQLUsr = sys.argv[2]
+    pySGPChatMSSQLPwd = sys.argv[3]
+    pySGPChatMSSQLDB = sys.argv[4]
+    print("success retrieve args from cli")
+    print("pySGPChatMSSQLHost: %s" % pySGPChatMSSQLHost,"pySGPChatMSSQLUsr: %s" %pySGPChatMSSQLUsr, "pySGPChatMSSQLPwd: %s " % pySGPChatMSSQLPwd,"pySGPChatMSSQLDB: %\n\ns " % pySGPChatMSSQLDB)
+except Exception as e:
+    print("fail retrieving cli args")
 
-cnx = pymssql.connect("localhost\\SQLEXPRESS","sa","123456","BD_DESCARTE_AT_18102017", as_dict=True)
+
+try:
+    print("pySGPChatMSSQLHost: %s" % pySGPChatMSSQLHost,"pySGPChatMSSQLUsr: %s" %pySGPChatMSSQLUsr, "pySGPChatMSSQLPwd: %s " % pySGPChatMSSQLPwd,"pySGPChatMSSQLDB: %s " % pySGPChatMSSQLDB)
+    cnx = pymssql.connect(pySGPChatMSSQLHost,pySGPChatMSSQLUsr,pySGPChatMSSQLPwd,pySGPChatMSSQLDB, as_dict=True)
+except Exception as e:
+    cnx = pymssql.connect("localhost\\SQLEXPRESS","sa","123456","BD_DESCARTE_AT_18102017", as_dict=True)
+    print("load default DB configuration")
 
 users = []
 supervisors = []
@@ -395,7 +415,7 @@ config = dict(
             DB_TABLES=["botChat", "botActions", "botConfig", "botScripts", "botUsers"]
         )
 
-if __name__ == '__main__':
+def main():
     parser = argparse.ArgumentParser(description="pySGPChat Configurator")
     parser.add_argument("--setup", dest="run_setup", action="store_true")
     args = parser.parse_args()
@@ -416,3 +436,7 @@ if __name__ == '__main__':
 
         tornado.ioloop.IOLoop.instance().start() #"""
         #reactor.run()
+
+
+if __name__ == '__main__':
+    main()

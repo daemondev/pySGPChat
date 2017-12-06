@@ -178,10 +178,10 @@ if __name__ == "__main__":
 
         entry_points={
             'console_scripts': [
-                'pychat = pySGPChat.runner:runner',
+                'pychat = pySGPChat.app:main',
             ],
             'gui_scripts': [
-                'pySGPChat = myTCL.runner:runner',
+                'pySGPChat = pySGPChat.app:main',
             ]
         },
     )

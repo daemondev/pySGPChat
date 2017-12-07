@@ -26,6 +26,11 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnTestConnection = new System.Windows.Forms.Button();
+            this.btnExit = new System.Windows.Forms.Button();
+            this.btnStopPySGPChatService = new System.Windows.Forms.Button();
+            this.lblPySGPChatExeDir = new System.Windows.Forms.Label();
+            this.btnRestart = new System.Windows.Forms.Button();
             this.chkEdit = new System.Windows.Forms.CheckBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tsstDebug = new System.Windows.Forms.ToolStripStatusLabel();
@@ -39,17 +44,16 @@
             this.label2 = new System.Windows.Forms.Label();
             this.txtHost = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.btnRestart = new System.Windows.Forms.Button();
-            this.lblPySGPChatExeDir = new System.Windows.Forms.Label();
-            this.btnStopPySGPChatService = new System.Windows.Forms.Button();
             this.trayIcon = new System.Windows.Forms.NotifyIcon(this.components);
-            this.btnExit = new System.Windows.Forms.Button();
+            this.cboDatabases = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.cboDatabases);
+            this.groupBox1.Controls.Add(this.btnTestConnection);
             this.groupBox1.Controls.Add(this.btnExit);
             this.groupBox1.Controls.Add(this.btnStopPySGPChatService);
             this.groupBox1.Controls.Add(this.lblPySGPChatExeDir);
@@ -69,10 +73,60 @@
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(331, 428);
+            this.groupBox1.Size = new System.Drawing.Size(331, 460);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "MSSQL DB Server Connection Config";
+            // 
+            // btnTestConnection
+            // 
+            this.btnTestConnection.Location = new System.Drawing.Point(15, 147);
+            this.btnTestConnection.Name = "btnTestConnection";
+            this.btnTestConnection.Size = new System.Drawing.Size(299, 23);
+            this.btnTestConnection.TabIndex = 16;
+            this.btnTestConnection.Text = "TEST CONNECTION";
+            this.btnTestConnection.UseVisualStyleBackColor = true;
+            this.btnTestConnection.Click += new System.EventHandler(this.btnTestConnection_Click);
+            // 
+            // btnExit
+            // 
+            this.btnExit.Location = new System.Drawing.Point(15, 396);
+            this.btnExit.Name = "btnExit";
+            this.btnExit.Size = new System.Drawing.Size(299, 23);
+            this.btnExit.TabIndex = 15;
+            this.btnExit.Text = "EXIT";
+            this.btnExit.UseVisualStyleBackColor = true;
+            this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
+            // 
+            // btnStopPySGPChatService
+            // 
+            this.btnStopPySGPChatService.Location = new System.Drawing.Point(15, 367);
+            this.btnStopPySGPChatService.Name = "btnStopPySGPChatService";
+            this.btnStopPySGPChatService.Size = new System.Drawing.Size(299, 23);
+            this.btnStopPySGPChatService.TabIndex = 14;
+            this.btnStopPySGPChatService.Text = "STOP pySGPChat SERVICE";
+            this.btnStopPySGPChatService.UseVisualStyleBackColor = true;
+            this.btnStopPySGPChatService.Click += new System.EventHandler(this.btnStopPySGPChatService_Click);
+            // 
+            // lblPySGPChatExeDir
+            // 
+            this.lblPySGPChatExeDir.AutoSize = true;
+            this.lblPySGPChatExeDir.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.lblPySGPChatExeDir.Location = new System.Drawing.Point(15, 313);
+            this.lblPySGPChatExeDir.Name = "lblPySGPChatExeDir";
+            this.lblPySGPChatExeDir.Size = new System.Drawing.Size(16, 13);
+            this.lblPySGPChatExeDir.TabIndex = 13;
+            this.lblPySGPChatExeDir.Text = "...";
+            // 
+            // btnRestart
+            // 
+            this.btnRestart.Location = new System.Drawing.Point(15, 338);
+            this.btnRestart.Name = "btnRestart";
+            this.btnRestart.Size = new System.Drawing.Size(299, 23);
+            this.btnRestart.TabIndex = 12;
+            this.btnRestart.Text = "START pySGPChat SERVICE";
+            this.btnRestart.UseVisualStyleBackColor = true;
+            this.btnRestart.Click += new System.EventHandler(this.btnRestart_Click);
             // 
             // chkEdit
             // 
@@ -92,7 +146,7 @@
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsstDebug});
-            this.statusStrip1.Location = new System.Drawing.Point(3, 403);
+            this.statusStrip1.Location = new System.Drawing.Point(3, 435);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(325, 22);
             this.statusStrip1.TabIndex = 10;
@@ -107,14 +161,14 @@
             // lsbProcess
             // 
             this.lsbProcess.FormattingEnabled = true;
-            this.lsbProcess.Location = new System.Drawing.Point(15, 180);
+            this.lsbProcess.Location = new System.Drawing.Point(15, 211);
             this.lsbProcess.Name = "lsbProcess";
             this.lsbProcess.Size = new System.Drawing.Size(299, 95);
             this.lsbProcess.TabIndex = 9;
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(15, 147);
+            this.btnSave.Location = new System.Drawing.Point(15, 176);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(299, 23);
             this.btnSave.TabIndex = 8;
@@ -142,6 +196,7 @@
             // 
             this.txtPassword.Location = new System.Drawing.Point(118, 87);
             this.txtPassword.Name = "txtPassword";
+            this.txtPassword.PasswordChar = '*';
             this.txtPassword.Size = new System.Drawing.Size(196, 20);
             this.txtPassword.TabIndex = 5;
             // 
@@ -186,36 +241,6 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "HOST:";
             // 
-            // btnRestart
-            // 
-            this.btnRestart.Location = new System.Drawing.Point(15, 307);
-            this.btnRestart.Name = "btnRestart";
-            this.btnRestart.Size = new System.Drawing.Size(299, 23);
-            this.btnRestart.TabIndex = 12;
-            this.btnRestart.Text = "START pySGPChat SERVICE";
-            this.btnRestart.UseVisualStyleBackColor = true;
-            this.btnRestart.Click += new System.EventHandler(this.btnRestart_Click);
-            // 
-            // lblPySGPChatExeDir
-            // 
-            this.lblPySGPChatExeDir.AutoSize = true;
-            this.lblPySGPChatExeDir.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.lblPySGPChatExeDir.Location = new System.Drawing.Point(15, 282);
-            this.lblPySGPChatExeDir.Name = "lblPySGPChatExeDir";
-            this.lblPySGPChatExeDir.Size = new System.Drawing.Size(16, 13);
-            this.lblPySGPChatExeDir.TabIndex = 13;
-            this.lblPySGPChatExeDir.Text = "...";
-            // 
-            // btnStopPySGPChatService
-            // 
-            this.btnStopPySGPChatService.Location = new System.Drawing.Point(15, 336);
-            this.btnStopPySGPChatService.Name = "btnStopPySGPChatService";
-            this.btnStopPySGPChatService.Size = new System.Drawing.Size(299, 23);
-            this.btnStopPySGPChatService.TabIndex = 14;
-            this.btnStopPySGPChatService.Text = "STOP pySGPChat SERVICE";
-            this.btnStopPySGPChatService.UseVisualStyleBackColor = true;
-            this.btnStopPySGPChatService.Click += new System.EventHandler(this.btnStopPySGPChatService_Click);
-            // 
             // trayIcon
             // 
             this.trayIcon.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info;
@@ -223,21 +248,20 @@
             this.trayIcon.Text = "pySGPChat Service Manager";
             this.trayIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseDoubleClick);
             // 
-            // btnExit
+            // cboDatabases
             // 
-            this.btnExit.Location = new System.Drawing.Point(15, 365);
-            this.btnExit.Name = "btnExit";
-            this.btnExit.Size = new System.Drawing.Size(299, 23);
-            this.btnExit.TabIndex = 15;
-            this.btnExit.Text = "EXIT";
-            this.btnExit.UseVisualStyleBackColor = true;
-            this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
+            this.cboDatabases.FormattingEnabled = true;
+            this.cboDatabases.Location = new System.Drawing.Point(118, 113);
+            this.cboDatabases.Name = "cboDatabases";
+            this.cboDatabases.Size = new System.Drawing.Size(196, 21);
+            this.cboDatabases.TabIndex = 17;
+            this.cboDatabases.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(331, 428);
+            this.ClientSize = new System.Drawing.Size(331, 460);
             this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -276,6 +300,8 @@
         private System.Windows.Forms.Button btnStopPySGPChatService;
         private System.Windows.Forms.NotifyIcon trayIcon;
         private System.Windows.Forms.Button btnExit;
+        private System.Windows.Forms.Button btnTestConnection;
+        private System.Windows.Forms.ComboBox cboDatabases;
     }
 }
 

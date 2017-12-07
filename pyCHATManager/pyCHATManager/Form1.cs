@@ -14,7 +14,7 @@ namespace pyCHATManager {
             t1 = new Timer();
             t1.Tick += new EventHandler(t1_Tick);
             t1.Interval = 2000;
-            //notifyIcon1.Click += ToggleMinimizeState;
+            //notifyIcon1.Click += ToggleMinimizeState;            
         }
 
         void t1_Tick(object sender, EventArgs e) {
@@ -42,6 +42,7 @@ namespace pyCHATManager {
                 txtUser.Text = usr;
                 txtPassword.Text = pwd;
                 txtDatabase.Text = db;
+                cboDatabases.Text = db;
 
                 tsstDebug.Text = "Configuration OK";
 
@@ -53,12 +54,12 @@ namespace pyCHATManager {
         }
 
         private void Form1_Load(object sender, EventArgs e) {
-            
+            txtDatabase.Hide();
             //this.Resize += SetMinimizeState;
             //this.FormClosing += SetMinimizeState;
             btnStopPySGPChatService.Enabled = false;
-            loadEnvVars();
-            MessageBox.Show(string.Format("{0} {1} {2} {3}", host, usr, pwd, db));
+            loadEnvVars();            
+            cboDatabases.Items.Add("<search>");
             t1.Start();
             string pySGPChatFileExeDir = getPySGPChatBinaryDir();
             if (!string.IsNullOrEmpty(pySGPChatFileExeDir)) {
@@ -115,6 +116,8 @@ namespace pyCHATManager {
             txtPassword.Enabled = state;
             txtDatabase.Enabled = state;
             btnSave.Enabled = state;
+            btnTestConnection.Enabled = state;
+            cboDatabases.Enabled = state;
             if (state) {                
                 chkEdit.ForeColor = Color.Green;
             } else {
@@ -156,7 +159,8 @@ namespace pyCHATManager {
                 host = txtHost.Text;
                 usr = txtUser.Text;
                 pwd = txtPassword.Text;
-                db = txtDatabase.Text;
+                //db = txtDatabase.Text;
+                db = cboDatabases.Text;
 
                 EnvironmentVariableTarget t = EnvironmentVariableTarget.Machine;
 
@@ -179,10 +183,20 @@ namespace pyCHATManager {
         
         }
 
+        void syncData() {
+            host = txtHost.Text;
+            usr = txtUser.Text;
+            pwd = txtPassword.Text;
+            db = cboDatabases.Text;
+        }
+
         bool start() {            
             try {
+                syncData();
                 System.Diagnostics.ProcessStartInfo proc = new System.Diagnostics.ProcessStartInfo(lblPySGPChatExeDir.Text);
-                proc.Arguments = string.Format("{0} {1} {2} {3}",host, usr, pwd, db);
+                //proc.Arguments = string.Format("{0} {1} {2} {3}",host, usr, pwd, db);
+                MessageBox.Show(string.Format("{0} {1} {2} {3}", host, usr, pwd, db));
+                proc.Arguments = "--setup";
                 proc.WorkingDirectory = pySGPChatWorkDir;
                 System.Diagnostics.Process.Start(proc);
                 return true;
@@ -270,8 +284,7 @@ namespace pyCHATManager {
         private void ToggleMinimizeState(object sender, EventArgs e) {
 
         }
-
-        // Show/Hide window and tray icon to match window state.
+        
         private void SetMinimizeState(object sender, EventArgs e) {
             bool isMinimized = this.WindowState == FormWindowState.Minimized;
             WindowState = FormWindowState.Minimized;
@@ -284,6 +297,139 @@ namespace pyCHATManager {
             Application.Exit();
         }
 
-       
+        private void btnTestConnection_Click(object sender, EventArgs e) {
+            syncData();
+
+            if (string.IsNullOrEmpty(db)) {
+                MessageBox.Show("PLEASE INPUT A DATABASENAME");
+                return;
+            }
+            string cnxString = string.Format("Data Source={0}; Initial Catalog={1}; User ID={2}; Password={3}",host, db , usr, pwd);            
+            System.Data.SqlClient.SqlConnection cnx = new System.Data.SqlClient.SqlConnection(cnxString);
+            string message = "";
+            try {
+                cnx.Open();
+                /*
+                System.Data.SqlClient.SqlCommand cmd = new System.Data.SqlClient.SqlCommand("select * from master.sys.databases",cnx);                
+                IDataReader rdr = cmd.ExecuteReader();
+                while(rdr.Read()){                    
+                    MessageBox.Show(rdr.GetString(0));
+                } /**/
+
+                /*
+                DataTable databases = cnx.GetSchema("Databases");
+                foreach (DataRow item in databases.Rows) {
+                    string databaseName = item.Field<string>("database_name");
+                    short dbID = item.Field<short>("dbid");
+                    DateTime created = item.Field<DateTime>("create_date");
+                    MessageBox.Show(string.Format("databaseName: {0} - databaseID: {1} - createdTime: {2}", databaseName, dbID, created.ToString()));
+                }/**/
+            } catch (System.Data.SqlClient.SqlException ex) {
+                message = ex.Message;
+            }
+
+            if (cnx.State.Equals(System.Data.ConnectionState.Open)) {
+                MessageBox.Show("SUCCESSFUL CONNECTION!!! CURRENT STATE: ["+ cnx.State.ToString() +"]");
+                cnx.Close();
+            } else {
+                MessageBox.Show("FAIL CONNECTION WITH SERVER!!!: ["+ message +"]");
+            }
+        }
+
+        void populateCboDatabases(){
+            syncData();
+
+            if(string.IsNullOrEmpty(host)){
+                host = "localhost";
+            }
+
+            string cnxString = string.Format("Data Source={0}; Integrated Security=true;", host);
+            System.Data.SqlClient.SqlConnection cnx = new System.Data.SqlClient.SqlConnection(cnxString);
+            string message = "";
+            cboDatabases.Items.Clear();
+
+            try {
+                cnx.Open();                
+            } catch (System.Data.SqlClient.SqlException ex) {
+                try {
+                    if (db.Equals(search)) {
+                        db = "";
+                    }
+                    cnxString = string.Format("Data Source={0}; Initial Catalog={1}; User ID={2}; Password={3}", host, db, usr, pwd);
+                    cnx = new System.Data.SqlClient.SqlConnection(cnxString);
+                    cnx.Open();
+                } catch {}
+                message = ex.Message;
+            }
+            if (cnx.State.Equals(System.Data.ConnectionState.Open)) {
+                DataTable databases = cnx.GetSchema("Databases");
+                foreach (DataRow item in databases.Rows) {
+                    string databaseName = item.Field<string>("database_name");
+                    cboDatabases.Items.Add(databaseName);
+                }
+            }
+
+            cboDatabases.Items.Add(search);
+        }
+        string search = "<search>";
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e) {
+            if (cboDatabases.Text.Equals(search)) {
+                populateCboDatabases();
+                cboDatabases.Text = "";
+                cboDatabases.DroppedDown = true;
+            }            
+        }        
+    }
+
+    class ColorSelector : ComboBox {
+        public ColorSelector() {
+            DrawMode = DrawMode.OwnerDrawFixed;
+            DropDownStyle = ComboBoxStyle.DropDownList;
+        }
+
+        // Draws the items into the ColorSelector object
+        protected override void OnDrawItem(DrawItemEventArgs e) {
+            e.DrawBackground();
+            e.DrawFocusRectangle();
+
+            DropDownItem item = new  DropDownItem(Items[e.Index].ToString());
+            // Draw the colored 16 x 16 square
+            e.Graphics.DrawImage(item.Image, e.Bounds.Left, e.Bounds.Top);
+            // Draw the value (in this case, the color name)
+            e.Graphics.DrawString(item.Value, e.Font, new
+                    SolidBrush(e.ForeColor), e.Bounds.Left + item.Image.Width, e.Bounds.Top + 2);
+
+            base.OnDrawItem(e);
+        }
+    }
+
+    public class DropDownItem {
+        public string Value {
+            get { return value; }
+            set { this.value = value; }
+        }
+        private string value;
+
+        public Image Image {
+            get { return img; }
+            set { img = value; }
+        }
+        private Image img;
+
+        public DropDownItem()
+            : this("") { }
+
+        public DropDownItem(string val) {
+            value = val;
+            this.img = new Bitmap(16, 16);
+            Graphics g = Graphics.FromImage(img);
+            Brush b = new SolidBrush(Color.FromName(val));
+            g.DrawRectangle(Pens.White, 0, 0, img.Width, img.Height);
+            g.FillRectangle(b, 1, 1, img.Width - 1, img.Height - 1);
+        }
+
+        public override string ToString() {
+            return value;
+        }
     }
 }

@@ -64,6 +64,7 @@ logMailer.info("latest BOTH LOGGER RUN!!!")
 pySGPChatMSSQLHost = os.environ.get("pySGPChatMSSQLHost","localhost\\SQLEXPRESS")
 pySGPChatMSSQLUsr = os.environ.get("pySGPChatMSSQLUsr","sa")
 pySGPChatMSSQLPwd = os.environ.get("pySGPChatMSSQLPwd","123456")
+pySGPChatPORT = os.environ.get("pySGPChatPORT","8888")
 pySGPChatMSSQLDB = os.environ.get("pySGPChatMSSQLDB","BD_DESCARTE_AT_18102017")
 
 #-------------------------------------------------- BEGIN [DEV MODE] - (19-10-2017 - 11:00:51) {{
@@ -118,8 +119,9 @@ try:
         pySGPChatMSSQLUsr = sys.argv[2]
         pySGPChatMSSQLPwd = sys.argv[3]
         pySGPChatMSSQLDB = sys.argv[4]
+        pySGPChatPORT = sys.argv[5]
         print("success retrieve args from cli")
-        print("pySGPChatMSSQLHost: %s" % pySGPChatMSSQLHost,"pySGPChatMSSQLUsr: %s" %pySGPChatMSSQLUsr, "pySGPChatMSSQLPwd: %s " % pySGPChatMSSQLPwd,"pySGPChatMSSQLDB: %\n\ns " % pySGPChatMSSQLDB)
+        print("pySGPChatMSSQLHost: %s" % pySGPChatMSSQLHost,"pySGPChatMSSQLUsr: %s" %pySGPChatMSSQLUsr, "pySGPChatMSSQLPwd: %s " % pySGPChatMSSQLPwd,"pySGPChatMSSQLDB: %\n\ns " % pySGPChatMSSQLDB, "pySGPChatPORT: %s" % pySGPChatPORT)
 
 except Exception as e:
     print("fail retrieving cli args")
@@ -408,7 +410,7 @@ class SendJavascript(tornado.web.RequestHandler):
         try:
             #with open('lib/static/js/chat/chatCORS.min.js', 'rb') as jsFile:
             with open('lib/static/js/chat/chatCORS.min.js', 'rb') as jsFile:
-                data = jsFile.read()
+                data = jsFile.read().replace(b"xxPORTxx",bytes(config["PORT"]))
                 self.write(data)
             self.finish()
         except Exception as e:
@@ -480,7 +482,9 @@ config = dict(
             DB_HOST="localhost",
             DB_PORT=28015,
             DB_NAME="pyBOT",
-            DB_TABLES=["botChat", "botActions", "botConfig", "botScripts", "botUsers"]
+            DB_TABLES=["botChat", "botActions", "botConfig", "botScripts", "botUsers"],
+            #PORT=8888
+            PORT=int(pySGPChatPORT)
         )
 
 def runserver(serviceMode=False):
@@ -493,7 +497,7 @@ def runserver(serviceMode=False):
     #""" ### Ready work
     server = tornado.httpserver.HTTPServer(ws_app)
     #server.listen(80, address="0.0.0.0") ### omit address """
-    server.listen(8888, address="0.0.0.0") ### omit address """
+    server.listen(config["PORT"], address="0.0.0.0") ### omit address """
 
     """
     server = tornado.httpserver.HTTPServer(ws_app, ssl_options={"certfile": "domain.crt", "keyfile": "domain.key",})
@@ -510,6 +514,7 @@ def main():
     parser.add_argument("--db", dest="pySGPChatMSSQLDB")
     parser.add_argument("--usr", dest="pySGPChatMSSQLUsr")
     parser.add_argument("--pwd", dest="pySGPChatMSSQLPwd")
+    parser.add_argument("--port", dest="pySGPChatPORT")
     args = parser.parse_args()
 
     globals().update(vars(args))
@@ -519,6 +524,7 @@ def main():
     print("DB: >>>>>>>>>>>>>>>>>>>",args.pySGPChatMSSQLDB)
     print("USR: >>>>>>>>>>>>>>>>>>>",args.pySGPChatMSSQLUsr)
     print("PWD: >>>>>>>>>>>>>>>>>>>",args.pySGPChatMSSQLPwd)
+    print("PORT: >>>>>>>>>>>>>>>>>>>",args.pySGPChatPORT)
 
     if args.run_setup:
         try:

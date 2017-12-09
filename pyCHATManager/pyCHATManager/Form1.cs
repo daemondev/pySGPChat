@@ -25,24 +25,26 @@ namespace pyCHATManager {
             }
         }
 
-        string host, usr, pwd, db, pySGPChatPath;
+        string host, usr, pwd, db, pySGPChatPath, port;
         void loadEnvVars() {
             lsbProcess.Items.Clear();
             
             try {
                 toggleState(chkEdit.Checked);
-
-                host = Environment.GetEnvironmentVariable("pySGPChatMSSQLHost");
-                usr = Environment.GetEnvironmentVariable("pySGPChatMSSQLUsr");
-                pwd = Environment.GetEnvironmentVariable("pySGPChatMSSQLPwd");
-                db = Environment.GetEnvironmentVariable("pySGPChatMSSQLDB");
-                pySGPChatPath = Environment.GetEnvironmentVariable("pySGPChatPath");
+                EnvironmentVariableTarget t = EnvironmentVariableTarget.Machine;
+                host = Environment.GetEnvironmentVariable("pySGPChatMSSQLHost",t);
+                usr = Environment.GetEnvironmentVariable("pySGPChatMSSQLUsr",t);
+                pwd = Environment.GetEnvironmentVariable("pySGPChatMSSQLPwd",t);
+                db = Environment.GetEnvironmentVariable("pySGPChatMSSQLDB",t);
+                port = Environment.GetEnvironmentVariable("pySGPChatPORT",t);
+                pySGPChatPath = Environment.GetEnvironmentVariable("pySGPChatPath",t);
 
                 txtHost.Text = host;
                 txtUser.Text = usr;
                 txtPassword.Text = pwd;
                 txtDatabase.Text = db;
                 cboDatabases.Text = db;
+                txtServicePort.Text = port;
 
                 tsstDebug.Text = "Configuration OK";
 
@@ -118,6 +120,7 @@ namespace pyCHATManager {
             btnSave.Enabled = state;
             btnTestConnection.Enabled = state;
             cboDatabases.Enabled = state;
+            txtServicePort.Enabled = state;
             if (state) {                
                 chkEdit.ForeColor = Color.Green;
             } else {
@@ -161,6 +164,7 @@ namespace pyCHATManager {
                 pwd = txtPassword.Text;
                 //db = txtDatabase.Text;
                 db = cboDatabases.Text;
+                port = txtServicePort.Text;
 
                 EnvironmentVariableTarget t = EnvironmentVariableTarget.Machine;
 
@@ -168,6 +172,7 @@ namespace pyCHATManager {
                 Environment.SetEnvironmentVariable("pySGPChatMSSQLUsr", usr, t);
                 Environment.SetEnvironmentVariable("pySGPChatMSSQLPwd", pwd, t);
                 Environment.SetEnvironmentVariable("pySGPChatMSSQLDB", db, t);
+                Environment.SetEnvironmentVariable("pySGPChatPORT", port, t);
                 loadEnvVars();
             } catch {
                 tsstDebug.Text = "Error saving DB config";
@@ -188,15 +193,16 @@ namespace pyCHATManager {
             usr = txtUser.Text;
             pwd = txtPassword.Text;
             db = cboDatabases.Text;
+            port = txtServicePort.Text;
         }
 
         bool start() {            
             try {
                 syncData();
                 System.Diagnostics.ProcessStartInfo proc = new System.Diagnostics.ProcessStartInfo(lblPySGPChatExeDir.Text);
-                //proc.Arguments = string.Format("{0} {1} {2} {3}",host, usr, pwd, db);
-                MessageBox.Show(string.Format("{0} {1} {2} {3}", host, usr, pwd, db));
-                proc.Arguments = "--setup";
+                proc.Arguments = string.Format("--setup --host {0} --usr {1} --pwd {2} --db {3} --port {4}", host, usr, pwd, db, port);
+                //MessageBox.Show(string.Format("--setup --host {0} --usr {1} --pwd {2} --db {3} --port {4}", host, usr, pwd, db, port));
+                //proc.Arguments = "--setup";
                 proc.WorkingDirectory = pySGPChatWorkDir;
                 System.Diagnostics.Process.Start(proc);
                 return true;

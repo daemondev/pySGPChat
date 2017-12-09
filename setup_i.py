@@ -36,7 +36,8 @@ if sys.platform == "win32":
 #CommonFilesFolder
 #CommonAppDataFolder
 executables = [
-        Executable('app.py', base=base, targetName = 'pySGPChat.exe', shortcutName="pySGPchat", shortcutDir="DesktopFolder",  icon="chat.ico"),
+        #Executable('app.py', base=base, targetName = 'pySGPChat.exe', shortcutName="pySGPchat", shortcutDir="DesktopFolder",  icon="chat.ico"),
+        Executable('app.py', base=base, targetName = 'pySGPChat.exe', icon="chat.ico"),
     ]
 #includefiles=["img/BeBOT-splash.png", "BeBOT.ico"]
 #buildOptions = dict(include_files = [(absolute_path_to_file,'final_filename')])
@@ -45,6 +46,8 @@ buildOptions = dict(include_files = [
                                         #os.path.join(PYTHON_INSTALL_DIR, 'DLLs', 'tk86t.dll'),
                                         #os.path.join(PYTHON_INSTALL_DIR, 'DLLs', 'tcl86t.dll'),
                                         os.path.join('lib'),
+                                        (os.path.join('pyCHATManager.exe')),
+                                        (os.path.join('pySGPChat-0.0.1.win32.zip')),
                                     ],
                     excludes = ["tkinter", "tcl", "test"],
                     includes = ["_mssql", "uuid","zope.interface"],
@@ -90,11 +93,13 @@ shortcut_table = [
      None,                     # ShowCmd
      'TARGETDIR'               # WkDir
      ),
-    ("Start Menu",        # Shortcut
-     "StartMenuFolder",          # Directory_
-     "pySGPChat",                  # Name
+    #("Start Menu",        # Shortcut
+    ("Desktop Shortcut",        # Shortcut
+     "DesktopFolder",          # Directory_
+     "PySGPChat Manager",                  # Name
      "TARGETDIR",              # Component_
-     "[TARGETDIR]pySGPChat.exe",# Target
+     #"[TARGETDIR]pySGPChat.exe",# Target
+     "[TARGETDIR]pyCHATManager.exe",# Target
      None,                     # Arguments
      None,                     # Description
      None,                     # Hotkey
@@ -105,12 +110,12 @@ shortcut_table = [
      ),
     ("Programs Folder",        # Shortcut
      "ProgramMenuFolder",          # Directory_
-     "PySGPChat",                  # Name
+     "PySGPChat Manager",                  # Name
      "TARGETDIR",              # Component_
-     "[TARGETDIR]pySGPChat.exe",# Target
+     "[TARGETDIR]pyCHATManager.exe",# Target
      None,                     # Arguments
      None,                     # Description
-     None,                     # Hotkey
+     "CTRL + ALT + C",                     # Hotkey
      None,                     # Icon
      None,                     # IconIndex
      None,                     # ShowCmd

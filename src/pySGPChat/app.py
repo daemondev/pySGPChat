@@ -9,7 +9,62 @@ from tornado import gen
 
 import json
 from datetime import datetime
-import os
+import os, sys,logging
+from logHandler import BufferingSMTPHandler
+
+#log.basicConfig(filename='log.txt', level=log.DEBUG, format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
+#formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+#log.info("SERVER STARTING")
+
+#from logHandler import BufferingSMTPHandler
+#logMailer = logging.getLogger('pySGPChat-MailLogger')
+#logMailer.setLevel(logging.DEBUG)
+#logMailer.addHandler(BufferingSMTPHandler())
+
+def setup_logger(logger_name="pySGPChat-Logger", log_file="log.txt", level=logging.DEBUG, theType=0):
+    if theType == 1:
+        from logHandler import BufferingSMTPHandler
+        l = logging.getLogger(logger_name)
+        l.setLevel(logging.DEBUG)
+        l.addHandler(BufferingSMTPHandler())
+        return
+
+    l = logging.getLogger(logger_name)
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    fileHandler = logging.FileHandler(log_file, mode='w')
+    fileHandler.setFormatter(formatter)
+
+    l.setLevel(level)
+    l.addHandler(fileHandler)
+
+
+"""
+logger = logging.getLogger('pySGPChat-Logger')
+logger.setLevel(logging.DEBUG)
+
+ch = logging.FileHandler(filename="log.txt")
+ch.setLevel(logging.DEBUG)
+
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+ch.setFormatter(formatter)
+
+logger.addHandler(ch)
+
+logger.info("SERVER STARTING!!! and sending Email") #"""
+
+setup_logger()
+setup_logger("pySGPChat-MailLogger", theType=1)
+
+logger = logging.getLogger("pySGPChat-Logger")
+logMailer = logging.getLogger("pySGPChat-MailLogger")
+
+logger.info("latest SERVER STARTING!!! and sending Email") #"""
+logMailer.info("latest BOTH LOGGER RUN!!!")
+
+pySGPChatMSSQLHost = os.environ.get("pySGPChatMSSQLHost","localhost\\SQLEXPRESS")
+pySGPChatMSSQLUsr = os.environ.get("pySGPChatMSSQLUsr","sa")
+pySGPChatMSSQLPwd = os.environ.get("pySGPChatMSSQLPwd","123456")
+pySGPChatMSSQLDB = os.environ.get("pySGPChatMSSQLDB","BD_DESCARTE_AT_18102017")
 
 #-------------------------------------------------- BEGIN [DEV MODE] - (19-10-2017 - 11:00:51) {{
 #import tornado.wsgi
@@ -24,11 +79,13 @@ import pymssql
 #-------------------------------------------------- END   [support for MSSQL] - (20-11-2017 - 10:41:12) }}
 
 #-------------------------------------------------- BEGIN [producction] - (04-12-2017 - 14:21:01) {{
-#"""
+"""
 from tornado.platform.twisted import TwistedIOLoop
 from twisted.internet import reactor
 TwistedIOLoop().install() #"""
 #-------------------------------------------------- END   [producction] - (04-12-2017 - 14:21:01) }}
+
+
 
 class User(dict):
     def __init__(self):
@@ -55,8 +112,43 @@ class User(dict):
         #return json.dumps(self.__dict__)
 
 
+try:
+    if len(sys.argv) > 1:
+        pySGPChatMSSQLHost = sys.argv[1]
+        pySGPChatMSSQLUsr = sys.argv[2]
+        pySGPChatMSSQLPwd = sys.argv[3]
+        pySGPChatMSSQLDB = sys.argv[4]
+        print("success retrieve args from cli")
+        print("pySGPChatMSSQLHost: %s" % pySGPChatMSSQLHost,"pySGPChatMSSQLUsr: %s" %pySGPChatMSSQLUsr, "pySGPChatMSSQLPwd: %s " % pySGPChatMSSQLPwd,"pySGPChatMSSQLDB: %\n\ns " % pySGPChatMSSQLDB)
 
-cnx = pymssql.connect("localhost\\SQLEXPRESS","sa","123456","BD_DESCARTE_AT_18102017", as_dict=True)
+except Exception as e:
+    print("fail retrieving cli args")
+
+#cnx = None
+#print("before",cnx)
+
+try:
+    data = "pySGPChatMSSQLHost: %s" % pySGPChatMSSQLHost,"pySGPChatMSSQLUsr: %s" %pySGPChatMSSQLUsr, "pySGPChatMSSQLPwd: %s " % "*********","pySGPChatMSSQLDB: %s " % pySGPChatMSSQLDB
+    print(data)
+    cnx = pymssql.connect(pySGPChatMSSQLHost,pySGPChatMSSQLUsr,pySGPChatMSSQLPwd,pySGPChatMSSQLDB, as_dict=True)
+    print("inner",cnx)
+except Exception as e:
+    cnx = pymssql.connect("localhost\\SQLEXPRESS","sa","123456","BD_DESCARTE_AT_18102017", as_dict=True)
+    print("load default DB configuration")
+
+
+@gen.coroutine
+def connectToDB():
+    try:
+        data = "pySGPChatMSSQLHost: %s" % pySGPChatMSSQLHost,"pySGPChatMSSQLUsr: %s" %pySGPChatMSSQLUsr, "pySGPChatMSSQLPwd: %s " % "*********","pySGPChatMSSQLDB: %s " % pySGPChatMSSQLDB
+        print(data)
+        cnx = pymssql.connect(pySGPChatMSSQLHost,pySGPChatMSSQLUsr,pySGPChatMSSQLPwd,pySGPChatMSSQLDB, as_dict=True)
+        print("inner",cnx)
+        #with open("debug.txt", 'a') as f:
+            #f.write(str(data))
+    except Exception as e:
+        cnx = pymssql.connect("localhost\\SQLEXPRESS","sa","123456","BD_DESCARTE_AT_18102017", as_dict=True)
+        print("load default DB configuration")
 
 users = []
 supervisors = []
@@ -112,11 +204,6 @@ def tryCreateChatTable():
     except Exception as e:
         print("Table tChat already exists!!!")
         print(str(e))
-
-tryCreateChatTable()
-getUsers()
-
-
 
 @gen.engine
 def func(*args, **kwargs):
@@ -219,7 +306,7 @@ def websocketManager(self, request):
         print(">>> end create_chat")
     elif action == "get chat for this user":
         data = data["1"]
-        sql = """ select id, userIDSRC as [src], userIDDST as [dst], [message] as [message], convert(varchar(10),ins, 108) as [ins], [type] as [type] from tChat where userIDSRC = %d and userIDDST = %d """ % (int(self.session["in_UsuarioID"]), int(data["userIDDST"]))
+        sql = """ select id, userIDSRC as [src], userIDDST as [dst], [message] as [message], convert(varchar(10),ins, 108) as [ins], [type] as [type] from tChat where userIDSRC = %d and userIDDST = %d and convert(char(8),ins,112) = convert(char(8), getdate(), 112) """ % (int(self.session["in_UsuarioID"]), int(data["userIDDST"]))
         print("sql: [%s]" % sql)
         cur = cnx.cursor()
         cur.execute(sql)
@@ -270,10 +357,14 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
             elif self.session["in_PerfilID"] == "2":
                 auxUsers = [ u.__dict__ for u in supervisors ]
 
+            for u in allPerss:
+                print(u.in_UsuarioID, u.vc_Nombre)
+
             payload = {"event":"only for admins","data": auxUsers}
             self.write_message(payload)
         except Exception as e:
             print(str(e))
+
         setUserConnectionState(int(self.session["in_UsuarioID"]), "connected")
 
         connectionsDict.update({int(self.session["in_UsuarioID"]): self})
@@ -284,10 +375,13 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         websocketManager(self, request)
 
     def on_close(self):
-        print("onClose [%s]" % self.session["in_UsuarioID"])
-        connectionsDict.pop(int(self.session["in_UsuarioID"]))
-        setUserConnectionState(int(self.session["in_UsuarioID"]), "disconnected")
-        pass
+        try:
+            print("onClose [%s]" % self.session["in_UsuarioID"])
+            connectionsDict.pop(int(self.session["in_UsuarioID"]))
+            setUserConnectionState(int(self.session["in_UsuarioID"]), "disconnected")
+        except Exception as e:
+            print(str(e))
+            pass
 
     def check_origin(self, origin):
         #parsed_origin = urllib.parse.urlparse(origin)
@@ -312,6 +406,7 @@ class SendJavascript(tornado.web.RequestHandler):
     @gen.coroutine
     def get(self):
         try:
+            #with open('lib/static/js/chat/chatCORS.min.js', 'rb') as jsFile:
             with open('lib/static/js/chat/chatCORS.min.js', 'rb') as jsFile:
                 data = jsFile.read()
                 self.write(data)
@@ -379,7 +474,8 @@ class Application(tornado.web.Application):
         tornado.web.Application.__init__(self, handlers, **settings)
 
 config = dict(
-            DEBUG=True,
+            #DEBUG=True,
+            DEBUG=False,
             SECRET_KEY="MyTrueSecretAppKey",
             DB_HOST="localhost",
             DB_PORT=28015,
@@ -387,24 +483,57 @@ config = dict(
             DB_TABLES=["botChat", "botActions", "botConfig", "botScripts", "botUsers"]
         )
 
-if __name__ == '__main__':
+def runserver(serviceMode=False):
+    connectToDB()
+    tryCreateChatTable()
+    getUsers()
+
+    ws_app = Application()
+
+    #""" ### Ready work
+    server = tornado.httpserver.HTTPServer(ws_app)
+    #server.listen(80, address="0.0.0.0") ### omit address """
+    server.listen(8888, address="0.0.0.0") ### omit address """
+
+    """
+    server = tornado.httpserver.HTTPServer(ws_app, ssl_options={"certfile": "domain.crt", "keyfile": "domain.key",})
+    server.listen(443, address="0.0.0.0") #"""
+
+    tornado.ioloop.IOLoop.instance().start() #"""
+    #reactor.run()
+
+
+def main():
     parser = argparse.ArgumentParser(description="pySGPChat Configurator")
     parser.add_argument("--setup", dest="run_setup", action="store_true")
+    parser.add_argument("--host", dest="pySGPChatMSSQLHost")
+    parser.add_argument("--db", dest="pySGPChatMSSQLDB")
+    parser.add_argument("--usr", dest="pySGPChatMSSQLUsr")
+    parser.add_argument("--pwd", dest="pySGPChatMSSQLPwd")
     args = parser.parse_args()
+
+    globals().update(vars(args))
+
+    print("SETUP: >>>>>>>>>>>>>>>>>>>",args.run_setup)
+    print("HOST: >>>>>>>>>>>>>>>>>>>",args.pySGPChatMSSQLHost)
+    print("DB: >>>>>>>>>>>>>>>>>>>",args.pySGPChatMSSQLDB)
+    print("USR: >>>>>>>>>>>>>>>>>>>",args.pySGPChatMSSQLUsr)
+    print("PWD: >>>>>>>>>>>>>>>>>>>",args.pySGPChatMSSQLPwd)
+
     if args.run_setup:
-        #tornado.ioloop.IOLoop.current().run_sync(init_db)
-        pass
-    else:
-        ws_app = Application()
+        try:
+            runserver(serviceMode=True)
+            print("RUN SERVICE MODE")
+            #tornado.ioloop.IOLoop.current().run_sync(init_db)
+        except Exception as e:
+            print("FAIL START APP",str(e))
 
-        #""" ### Ready work
-        server = tornado.httpserver.HTTPServer(ws_app)
-        #server.listen(80, address="0.0.0.0") ### omit address """
-        server.listen(8888, address="0.0.0.0") ### omit address """
+    elif cnx is not None:
+        print("RUN AUTOLOAD-PRODUCTION MODE")
+        runserver()
+    elif config['DEBUG']:
+        print("RUN DEV ENVIRONMENT")
+        runserver()
 
-        """
-        server = tornado.httpserver.HTTPServer(ws_app, ssl_options={"certfile": "domain.crt", "keyfile": "domain.key",})
-        server.listen(443, address="0.0.0.0") #"""
-
-        #tornado.ioloop.IOLoop.instance().start() #"""
-        reactor.run()
+if __name__ == '__main__':
+    main()

@@ -75,7 +75,7 @@ gulp.task('default', function () {
 
 gulp.task('app', function(){
     return gulp.src("app.py").
-        pipe(notify({title:"MAIN FILE: [" + "app.py" + "] RELOADING SERVER" , message:"\r\tnapp.py RELOADING SERVER!!!\r"}));
+        pipe(notify({title:"MAIN FILE: [" + "app.py" + "] RELOADING SERVER" , message:"\r\tapp.py RELOADING SERVER!!!\r"}));
 });
 
 gulp.task('transferCss', function(){

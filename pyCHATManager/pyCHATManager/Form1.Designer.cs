@@ -26,6 +26,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.cboDatabases = new System.Windows.Forms.ComboBox();
             this.btnTestConnection = new System.Windows.Forms.Button();
             this.btnExit = new System.Windows.Forms.Button();
             this.btnStopPySGPChatService = new System.Windows.Forms.Button();
@@ -45,13 +46,16 @@
             this.txtHost = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.trayIcon = new System.Windows.Forms.NotifyIcon(this.components);
-            this.cboDatabases = new System.Windows.Forms.ComboBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.txtServicePort = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.txtServicePort);
+            this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.cboDatabases);
             this.groupBox1.Controls.Add(this.btnTestConnection);
             this.groupBox1.Controls.Add(this.btnExit);
@@ -73,10 +77,19 @@
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(331, 460);
+            this.groupBox1.Size = new System.Drawing.Size(328, 460);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "MSSQL DB Server Connection Config";
+            // 
+            // cboDatabases
+            // 
+            this.cboDatabases.FormattingEnabled = true;
+            this.cboDatabases.Location = new System.Drawing.Point(118, 113);
+            this.cboDatabases.Name = "cboDatabases";
+            this.cboDatabases.Size = new System.Drawing.Size(196, 21);
+            this.cboDatabases.TabIndex = 17;
+            this.cboDatabases.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // btnTestConnection
             // 
@@ -90,7 +103,7 @@
             // 
             // btnExit
             // 
-            this.btnExit.Location = new System.Drawing.Point(15, 396);
+            this.btnExit.Location = new System.Drawing.Point(15, 406);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(299, 23);
             this.btnExit.TabIndex = 15;
@@ -100,7 +113,7 @@
             // 
             // btnStopPySGPChatService
             // 
-            this.btnStopPySGPChatService.Location = new System.Drawing.Point(15, 367);
+            this.btnStopPySGPChatService.Location = new System.Drawing.Point(15, 382);
             this.btnStopPySGPChatService.Name = "btnStopPySGPChatService";
             this.btnStopPySGPChatService.Size = new System.Drawing.Size(299, 23);
             this.btnStopPySGPChatService.TabIndex = 14;
@@ -112,7 +125,7 @@
             // 
             this.lblPySGPChatExeDir.AutoSize = true;
             this.lblPySGPChatExeDir.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.lblPySGPChatExeDir.Location = new System.Drawing.Point(15, 313);
+            this.lblPySGPChatExeDir.Location = new System.Drawing.Point(15, 312);
             this.lblPySGPChatExeDir.Name = "lblPySGPChatExeDir";
             this.lblPySGPChatExeDir.Size = new System.Drawing.Size(16, 13);
             this.lblPySGPChatExeDir.TabIndex = 13;
@@ -120,7 +133,7 @@
             // 
             // btnRestart
             // 
-            this.btnRestart.Location = new System.Drawing.Point(15, 338);
+            this.btnRestart.Location = new System.Drawing.Point(15, 358);
             this.btnRestart.Name = "btnRestart";
             this.btnRestart.Size = new System.Drawing.Size(299, 23);
             this.btnRestart.TabIndex = 12;
@@ -148,7 +161,7 @@
             this.tsstDebug});
             this.statusStrip1.Location = new System.Drawing.Point(3, 435);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(325, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(322, 22);
             this.statusStrip1.TabIndex = 10;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -248,20 +261,28 @@
             this.trayIcon.Text = "pySGPChat Service Manager";
             this.trayIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseDoubleClick);
             // 
-            // cboDatabases
+            // label5
             // 
-            this.cboDatabases.FormattingEnabled = true;
-            this.cboDatabases.Location = new System.Drawing.Point(118, 113);
-            this.cboDatabases.Name = "cboDatabases";
-            this.cboDatabases.Size = new System.Drawing.Size(196, 21);
-            this.cboDatabases.TabIndex = 17;
-            this.cboDatabases.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(18, 336);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(89, 13);
+            this.label5.TabIndex = 18;
+            this.label5.Text = "SERVICE PORT:";
+            // 
+            // txtServicePort
+            // 
+            this.txtServicePort.BackColor = System.Drawing.SystemColors.InactiveCaption;
+            this.txtServicePort.Location = new System.Drawing.Point(118, 332);
+            this.txtServicePort.Name = "txtServicePort";
+            this.txtServicePort.Size = new System.Drawing.Size(196, 20);
+            this.txtServicePort.TabIndex = 19;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(331, 460);
+            this.ClientSize = new System.Drawing.Size(328, 460);
             this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -302,6 +323,8 @@
         private System.Windows.Forms.Button btnExit;
         private System.Windows.Forms.Button btnTestConnection;
         private System.Windows.Forms.ComboBox cboDatabases;
+        private System.Windows.Forms.TextBox txtServicePort;
+        private System.Windows.Forms.Label label5;
     }
 }
 

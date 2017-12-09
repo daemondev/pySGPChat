@@ -294,7 +294,8 @@ var ChatContainer = React.createClass({
             , ws : null
             , domain : ""
             , separator : "://"
-            , port : ":8888"
+            //, port : ":8888"
+            , port : ":xxPORTxx"
             , protocol : "ws" + "://"
             , namespace : "/websocket"
             , toggleHide: true
@@ -551,26 +552,26 @@ var ChatContainer = React.createClass({
 
 
 var Child = React.createClass({
-  handleClick: function(){
-    this.props.owner.setState({
-      count: this.props.count + 1,
-    });
-  },
-  render: function(){
-    return <div onClick={this.handleClick}>{this.props.count}</div>;
-  }
+    handleClick: function(){
+        this.props.owner.setState({
+            count: this.props.count + 1,
+        });
+    },
+    render: function(){
+        return <div onClick={this.handleClick}>{this.props.count}</div>;
+    }
 });
 
 var Parent = React.createClass({
-  getInitialState: function(){
-    return {
-      count: 0,
-      owner: this
-    };
-  },
-  render: function(){
-    return <Child {...this.state}/>
-  }
+    getInitialState: function(){
+        return {
+          count: 0,
+          owner: this
+        };
+    },
+    render: function(){
+        return <Child {...this.state}/>
+    }
 });
 
 ReactDOM.render(

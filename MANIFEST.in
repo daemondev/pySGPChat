@@ -1,5 +1,0 @@
-include *.js *.css LICENSE tox.ini .travis.yml docs/Makefile .coveragerc conftest.py
-recursive-include src/pySGPChat/lib/static/js/chat *.js
-recursive-include src/pySGPChat/lib/static/css/chat *.css
-recursive-include chat *.*
-prune docs/_build

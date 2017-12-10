@@ -1,3 +1,0 @@
-a = Analysis(...
-     datas=[ ('static/js/chat/*.js', 'static/css/chat/*.css') ],
-     )

@@ -1,7 +1,0 @@
-Z:\rsms\python\pySGPChat\pyCHATManager\pyCHATManager\obj\x86\Release\pyCHATManager.Form1.resources
-Z:\rsms\python\pySGPChat\pyCHATManager\pyCHATManager\obj\x86\Release\pyCHATManager.Properties.Resources.resources
-Z:\rsms\python\pySGPChat\pyCHATManager\pyCHATManager\obj\x86\Release\pyCHATManager.csproj.GenerateResource.Cache
-Z:\rsms\python\pySGPChat\pyCHATManager\pyCHATManager\obj\x86\Release\pyCHATManager.exe
-Z:\rsms\python\pySGPChat\pyCHATManager\pyCHATManager\obj\x86\Release\pyCHATManager.pdb
-Z:\rsms\python\pySGPChat\pyCHATManager.exe
-Z:\rsms\python\pySGPChat\pyCHATManager.pdb

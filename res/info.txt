@@ -1,0 +1,327 @@
+https://www.html5rocks.com/es/tutorials/file/dndfiles/
+https://pdfobject.com/static.html
+http://www.javascripture.com/FileReader
+
+http://pymssql.org/en/stable/pymssql_examples.html
+import gevent.socket
+import pymssql
+
+
+with pymssql.connect(server, user, password, "tempdb") as conn:
+    with conn.cursor(as_dict=True) as cursor:
+        cursor.execute("""
+        CREATE PROCEDURE FindPerson
+            @name VARCHAR(100)
+        AS BEGIN
+            SELECT * FROM persons WHERE name = @name
+        END
+        """)
+        cursor.callproc('FindPerson', ('Jane Doe',))
+        for row in cursor:
+            print("ID=%d, Name=%s" % (row['id'], row['name']))
+
+def wait_callback(read_fileno):
+    gevent.socket.wait_read(read_fileno)
+
+pymssql.set_wait_callback(wait_callback)
+
+https://code.google.com/archive/p/pymssql/wikis/PymssqlModuleReference.wiki
+
+
+
+
+
+#-------------------------------------------------- BEGIN [div parent] - (20-11-2017 - 18:15:59) {{
+body,
+html,
+.parent {
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    padding: 0;
+    margin: 0;
+}
+.parent {
+    width: 50%;
+    max-width: 800px;
+    background: grey;
+    margin: 0 auto;
+    position: relative;
+}
+.child-element {
+    position: relative;
+    width: 100vw;
+    left: calc(-50vw + 50%);
+    height: 50px;
+    background: blue;
+}
+
+<div class='parent'>
+    parent element
+    <div class='child-element'>child-element</div>
+</div>
+https://css-tricks.com/full-width-containers-limited-width-parents/
+#-------------------------------------------------- END   [div parent] - (20-11-2017 - 18:15:59) }}
+#-------------------------------------------------- BEGIN [child] - (21-11-2017 - 18:25:09) {{
+https://stackoverflow.com/questions/36651583/dynamically-add-child-components-in-react
+https://stackoverflow.com/questions/35905988/react-js-how-to-append-a-component-on-click
+https://stackoverflow.com/questions/34257665/is-there-any-way-to-access-the-parent-component-instance-in-react
+https://reactjs.org/docs/more-about-refs.html#the-ref-string-attribute
+https://reactjs.org/docs/component-api.html
+https://stackoverflow.com/questions/24841855/react-js-access-to-component-methods
+https://stackoverflow.com/questions/33682774/how-to-access-the-key-property-from-a-reactjs-component
+https://stackoverflow.com/questions/16057361/how-to-make-child-element-upper-than-parent-with-z-index
+https://www.google.com/search?client=firefox-b-ab&ei=a0MUWoSPGYGXmwGUvrSACA&q=html+children+div+on+top&oq=html+children+div+on+top&gs_l=psy-ab.3...19273.36560.0.37006.11.11.0.0.0.0.471.855.0j2j4-1.3.0....0...1.1.64.psy-ab..8.3.853...0i22i30i19k1j0i22i30k1.0.csqB1ZytJvQ&gfe_rd=cr&dcr=0
+
+#-------------------------------------------------- END   [child] - (21-11-2017 - 18:25:09) }}
+#-------------------------------------------------- BEGIN [context] - (23-11-2017 - 17:57:06) {{
+https://reactjs.org/docs/context.html
+https://www.ctheu.com/2015/02/12/how-to-communicate-between-react-components/
+https://stackoverflow.com/questions/32270775/reactjs-access-components-inside-component-parent
+https://stackoverflow.com/questions/38797856/react-add-child-element-after-parent-component-has-mounted
+https://stackoverflow.com/questions/36651583/dynamically-add-child-components-in-react
+https://stackoverflow.com/questions/35905988/react-js-how-to-append-a-component-on-click
+https://stackoverflow.com/questions/22639534/pass-props-to-parent-component-in-react-js
+https://stackoverflow.com/questions/38394015/how-to-pass-data-from-child-component-to-its-parent-in-reactjs
+https://www.reactenlightenment.com/basic-react-components/6.9.html
+https://reactjs.org/docs/refs-and-the-dom.html
+https://zhenyong.github.io/react/docs/more-about-refs.html
+#-------------------------------------------------- END   [context] - (23-11-2017 - 17:57:06) }}
+#-------------------------------------------------- BEGIN [firefox allway-private] - (24-11-2017 - 10:57:52) {{
+https://developer.mozilla.org/en-US/docs/Mozilla/Command_Line_Options#-private
+#-------------------------------------------------- END   [firefox allway-private] - (24-11-2017 - 10:57:52) }}
+#-------------------------------------------------- BEGIN [not available] - (24-11-2017 - 21:11:59) {{
+https://www.reddit.com/r/reactjs/comments/3699on/functions_not_available_to_children/
+https://stackoverflow.com/questions/42711758/reactjs-how-to-access-child-components-refs-from-parent
+https://stackoverflow.com/questions/24462679/react-get-react-component-from-a-child-dom-element
+https://stackoverflow.com/questions/24841855/react-js-access-to-component-methods
+https://camjackson.net/post/9-things-every-reactjs-beginner-should-know
+https://github.com/millermedeiros/js-signals/wiki/Comparison-between-different-Observer-Pattern-implementations
+https://www.ctheu.com/2015/02/12/how-to-communicate-between-react-components/
+#-------------------------------------------------- END   [not available] - (24-11-2017 - 21:11:59) }}
+#-------------------------------------------------- BEGIN [mssql preserve html format] - (25-11-2017 - 12:00:12) {{
+CREATE TABLE dbo.x(y NVARCHAR(255));
+
+INSERT dbo.x SELECT 'Sports & Recreation'
+   UNION ALL SELECT 'x >= y'
+   UNION ALL SELECT 'blat'
+   UNION ALL SELECT '<hooah>';
+
+-- bad:
+SELECT STUFF((SELECT ',' + y
+ FROM dbo.x FOR XML PATH('')), 1, 1, '');
+
+-- good:
+SELECT STUFF((SELECT ',' + y
+ FROM dbo.x FOR XML PATH, TYPE).value('.[1]',
+ 'nvarchar(max)'), 1, 1, '');
+
+ GO
+ DROP TABLE dbo.x;
+#-------------------------------------------------- END   [mssql preserve html format] - (25-11-2017 - 12:00:12) }}
+#-------------------------------------------------- BEGIN [of] - (27-11-2017 - 15:31:17) {{
+https://discourse.igniterealtime.org/t/howto-install-and-configure-jitsi-videobridge-plugin-1-2/78155
+https://discourse.igniterealtime.org/t/video-calls-spark/42003/10
+ Trillian client
+https://discourse.igniterealtime.org/t/java-optimization-in-openfire/61882/5
+Go to the installation folder of openfire: Drive:\Openfire\bin
+
+1.) go to bin folder
+
+2.) create a text file and name it to "openfired.vmoptions" and "openfire-service.vmoptions"
+
+3.) Specify the Virtual Memory allocated
+
+Example
+
+4.) Type in: -Xms512m
+
+5.) Type in: -Xmx1024m
+
+4 & 5 will depend on your server/PC memory.
+
+I'm using a server with 8GB RAM and allotted 1GB memory for JAVA.
+
+We have 114 users.
+#-------------------------------------------------- END   [of] - (27-11-2017 - 15:31:17) }}
+#-------------------------------------------------- BEGIN [node CLEAN cli terminal] - (30-11-2017 - 21:20:52) {{
+var readline = require('readline')
+  , cli = readline.createInterface({
+      input : process.stdin,
+      output : process.stdout
+  });
+
+var myPrompt = ' > myPropmt '
+cli.setPrompt(myPrompt, myPrompt.length);
+// prompt length so you can use "color" in your prompt
+cli.prompt();
+// Display ' > myPrompt ' with all standard features (history also!)
+
+cli.on('line', function(cmd){ // fired each time the input has a new line
+   cli.prompt();
+})
+
+cli.input.on('keypress', function(key){  // self explanatory
+  // arguments is a "key" object
+  // with really nice properties such as ctrl : false
+  process.stdout.write(JSON.stringify(arguments))
+});
+#-------------------------------------------------- END   [node CLEAN cli terminal] - (30-11-2017 - 21:20:52) }}
+#-------------------------------------------------- BEGIN [emitters] - (30-11-2017 - 21:23:33) {{
+https://github.com/facebook/emitter
+https://stackoverflow.com/questions/22886682/how-can-gulp-be-restarted-upon-each-gulpfile-change
+https://supportweb.cs.bham.ac.uk/docs/tutorials/docsystem/build/tutorials/gvim/gvim.html
+#-------------------------------------------------- END   [emitters] - (30-11-2017 - 21:23:33) }}
+#-------------------------------------------------- BEGIN [spark message route] - (01-12-2017 - 11:49:10) {{
+ route.all-resources
+
+true
+	Presione para editar esta propiedad 	Click to encrypt this property 	Presione para borrar esta propiedad
+route.really-all-resources
+
+true
+#-------------------------------------------------- END   [spark message route] - (01-12-2017 - 11:49:10) }}
+#-------------------------------------------------- BEGIN [redux] - (02-12-2017 - 11:00:39) {{
+https://medium.com/react-redux/combinando-react-js-y-redux-js-7b45a9dc39ac
+#-------------------------------------------------- END   [redux] - (02-12-2017 - 11:00:39) }}
+#-------------------------------------------------- BEGIN [inputRef] - (02-12-2017 - 11:40:37) {{
+
+function CustomTextInput(props) {
+  return (
+    <div>
+      <input ref={props.inputRef} />
+    </div>
+  );
+}
+
+function Parent(props) {
+  return (
+    <div>
+      My input: <CustomTextInput inputRef={props.inputRef} />
+    </div>
+  );
+}
+
+
+class Grandparent extends React.Component {
+  render() {
+    return (
+      <Parent
+        inputRef={el => this.inputElement = el}
+      />
+    );
+  }
+}
+
+
+#-------------------------------------------------- END   [inputRef] - (02-12-2017 - 11:40:37) }}
+#-------------------------------------------------- BEGIN [info] - (02-12-2017 - 13:36:34) {{
+http://blog.koalite.com/2014/09/crear-un-componente-con-reactjs/
+http://blog.revathskumar.com/2015/05/react-interation-with-components.html
+sed -e 's/this.state/this.props/' 's/handleChange/onChange/' -i form.js
+cat chatCORS.js | sed -e 's/this.state/this.props/g;s/handleChange/onChange/' > aap.js
+https://stackoverflow.com/questions/29503213/use-state-or-refs-in-react-js-form-components/29504636#29504636
+http://michelletilley.net/2014/09/24/custom-react-components-and-the-valuelink-property.html
+https://reactjs.org/docs/context.html
+https://reactjs.org/docs/refs-and-the-dom.html
+context -- here
+https://medium.com/@mweststrate/how-to-safely-use-react-context-b7e343eff076
+https://medium.com/react-redux/combinando-react-js-y-redux-js-7b45a9dc39ac
+#-------------------------------------------------- END   [info] - (02-12-2017 - 13:36:34) }}
+
+#-------------------------------------------------- BEGIN [reactjs modal] - (02-12-2017 - 14:06:18) {{
+
+var ParentThing = React.createClass({
+  ...
+  render: function() {
+    return <Modal ref="modal" />;
+  },
+
+  handleSomeClick: function() {
+    this.refs.modal.open();
+  }
+});
+
+var Modal = React.createClass({
+  setInitialState: function() {
+    return {
+      display: false
+    }
+  },
+  close: function() {
+    this.setState({ display: false });
+  },
+  open: function() {
+    this.setState({ display: true });
+  },
+  render: function() {
+    return (
+      <div className={this.state.display ? "show" : "hide"}>
+        <a className="close" onClick={this.close}>&times;</a>
+      </div>
+    )
+  }
+});
+
+If you like the idea of a controlled Modal component, but don't want to do all the boilerplate typing, you could even go so far as to implement something like the valueLink property for the Modal to simplify this pattern.
+
+var ParentThing = React.createClass({
+  ...
+  mixins: [React.addons.LinkedStateMixin],
+
+  getInitialState: function() {
+    return { showModal: false };
+  },
+
+  render: function() {
+    return <Modal displayLink={this.linkState("showModal")} />;
+  },
+
+  handleSomeClick: function() {
+    this.setState({showModal: true});
+  }
+});
+
+var Modal = React.createClass({
+  close: function() {
+    this.props.displayLink.requestChange(false);
+  },
+
+  render: function() {
+    return (
+      <div className={this.props.displayLink.value? "show" : "hide"}>
+        <a className="close" onClick={this.close}>&times;</a>
+      </div>
+    )
+  }
+});
+#-------------------------------------------------- END   [reactjs modal] - (02-12-2017 - 14:06:18) }}
+#-------------------------------------------------- BEGIN [remove python comments] - (04-12-2017 - 15:38:58) {{
+with open(filename1, 'r') as f:
+    lines = f.readlines()
+
+with open(filename2, 'w') as f:
+    for line in lines:
+        # Keep the Shebang line
+        if line[0:2] == "#!":
+            f.writelines(line)
+        # Also keep existing empty lines
+        elif not line.strip():
+            f.writelines(line)
+        # But remove comments from other lines
+        else:
+            line = line.split('#')
+            stripped_string = line[0].rstrip()
+            # Write the line only if the comment was after the code.
+            # Discard lines that only contain comments.
+            if stripped_string:
+                f.writelines(stripped_string)
+                f.writelines('\n')
+#-------------------------------------------------- END   [remove python comments] - (04-12-2017 - 15:38:58) }}
+#-------------------------------------------------- BEGIN [add shortcut] - (04-12-2017 - 15:57:20) {{
+msilib.add_data(self.db, "Shortcut",
+        [("S_APP_%s" % index, executable.shortcutDir,
+                executable.shortcutName, "TARGETDIR",
+                "[TARGETDIR]%s" % baseName, None, None, None,
+                None, None, None, "TARGETDIR")]) # <--- Working directory.
+#-------------------------------------------------- END   [add shortcut] - (04-12-2017 - 15:57:20) }}

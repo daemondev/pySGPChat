@@ -1,0 +1,6 @@
+[console_scripts]
+pychat = pySGPChat.app:main
+
+[gui_scripts]
+pySGPChat = pySGPChat.app:main
+

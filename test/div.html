@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css" media="screen">
+       .chatWrapper *:after, .chatWrapper *:before {
+    content: '';
+    content: none;
+}
+.chatWrapper *{
+    margin:0;
+    padding:0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+.chatWrapper{
+    position: fixed;
+    bottom:0px;
+    right:0px;
+    /*z-index: 9999999 !important;*/
+    /*background-color: #D43F3A;*/
+    background-color: red;
+    /*width: 270px;*/
+    /*height: 380px;*/
+    padding: 1px;
+    /*display:inline-block;*/
+}
+
+.chatMain{
+    position:relative;
+    background-color: yellow;
+    padding: 2px;
+ }
+
+.chatViewer{
+    height:1000px;
+    width: 100%;
+    margin:auto;
+    padding:auto;
+}
+
+.chatPanel, .adminPanel{
+    display: inline-block;
+    position: relative;
+}
+
+.chatPanel{
+    background-color: green;
+    width: 250px;
+    height: 340px;
+}
+
+.adminPanel{
+    background-color: blue;
+    width: 200px;
+    height:100%;
+}
+
+.chatContainner{
+}
+
+.chatHistory{
+    display:block;
+    height: 100%;
+    width: 100%;
+}
+.chatMessage{
+    display:block;
+    /*position:absolute;*/
+    /*width:100%;*/
+    height:28px;
+    /*vertical-align: middle;*/
+    background-color: red;
+}
+#txtMessage{
+    /*width:100%;*/
+    height: 26px;
+}
+    </style>
+</head>
+<body>
+            <div class="chatMain">
+                <div class="chatPanel">
+                    <div class="chatViewer">
+                        <div class="chatContainner">
+                            <div class="chatHistory">
+                            </div>
+                            <div class="chatMessage">
+                                <input type="text" id="txtMessage" placeholder="Ingresar mensaje, presionar ENTER" onKeyPress={ this.sendMessage } />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="divAdminPanel" class="adminPanel">
+                </div>
+            </div>
+</body>
+</html>

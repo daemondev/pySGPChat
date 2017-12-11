@@ -174,8 +174,9 @@ namespace pyCHATManager {
                 Environment.SetEnvironmentVariable("pySGPChatMSSQLDB", db, t);
                 Environment.SetEnvironmentVariable("pySGPChatPORT", port, t);
                 loadEnvVars();
-            } catch {
+            } catch (Exception ex){
                 tsstDebug.Text = "Error saving DB config";
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -199,11 +200,20 @@ namespace pyCHATManager {
         bool start() {            
             try {
                 syncData();
-                System.Diagnostics.ProcessStartInfo proc = new System.Diagnostics.ProcessStartInfo(lblPySGPChatExeDir.Text);
+
+                string currentPath = Application.StartupPath;
+                string ultimatePath = System.IO.Path.Combine(currentPath, "pySGPChat.exe");
+
+                //System.Diagnostics.ProcessStartInfo proc = new System.Diagnostics.ProcessStartInfo(lblPySGPChatExeDir.Text);
+                System.Diagnostics.ProcessStartInfo proc = new System.Diagnostics.ProcessStartInfo(ultimatePath);
                 proc.Arguments = string.Format("--setup --host {0} --usr {1} --pwd {2} --db {3} --port {4}", host, usr, pwd, db, port);
                 MessageBox.Show(proc.Arguments);
                 //proc.Arguments = "--setup";
-                proc.WorkingDirectory = pySGPChatWorkDir;
+                
+                MessageBox.Show(ultimatePath+" - "+ currentPath);
+                
+                //proc.WorkingDirectory = pySGPChatWorkDir;
+                proc.WorkingDirectory = currentPath;
                 System.Diagnostics.Process.Start(proc);
                 return true;
             } catch {return false;}            

@@ -1,1 +1,1 @@
-2017-12-11 03:47:05,832 - pySGPChat-Logger - INFO - latest SERVER STARTING!!! and sending Email
+2017-12-11 22:55:09,698 - pySGPChat-Logger - INFO - latest SERVER STARTING!!! and sending Email

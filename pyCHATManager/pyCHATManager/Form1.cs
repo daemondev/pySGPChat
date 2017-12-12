@@ -14,7 +14,45 @@ namespace pyCHATManager {
             t1 = new Timer();
             t1.Tick += new EventHandler(t1_Tick);
             t1.Interval = 2000;
-            //notifyIcon1.Click += ToggleMinimizeState;            
+            //notifyIcon1.Click += ToggleMinimizeState;    
+            bw = new BackgroundWorker();
+            bw.DoWork += Bw_DoWork;
+            bw.RunWorkerCompleted += Bw_RunWorkerCompleted;
+        }
+
+        private void Bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e){            
+            pgbar.Visible = false;
+        }
+
+        private void Bw_DoWork(object sender, DoWorkEventArgs e)
+        {
+            //syncData();
+            try {
+                string currentPath = Application.StartupPath;
+                string ultimatePath = System.IO.Path.Combine(currentPath, "pySGPChat.exe");
+
+                if (!System.IO.File.Exists(ultimatePath)) {
+                    ultimatePath = lblPySGPChatExeDir.Text;
+                    currentPath = pySGPChatWorkDir;
+                }
+
+                //throw new NotImplementedException();
+                //System.Diagnostics.ProcessStartInfo proc = new System.Diagnostics.ProcessStartInfo(lblPySGPChatExeDir.Text);
+                System.Diagnostics.ProcessStartInfo proc = new System.Diagnostics.ProcessStartInfo(ultimatePath);
+                proc.Arguments = string.Format(@"--setup --host {0} --usr {1} --pwd {2} --db {3} --port {4} --ip {5}", host.Replace("\\","\\\\"), usr, pwd, db, port, ip);
+                MessageBox.Show(proc.Arguments);
+                //proc.Arguments = "--setup";
+
+                //MessageBox.Show(ultimatePath+" - "+ currentPath);
+                
+                //proc.WorkingDirectory = pySGPChatWorkDir;
+                proc.WorkingDirectory = currentPath;
+                System.Diagnostics.Process.Start(proc);
+            } catch (Exception ex) {
+
+                MessageBox.Show("ERROR!!!: " + ex.Message);
+            }
+            
         }
 
         void t1_Tick(object sender, EventArgs e) {
@@ -25,7 +63,7 @@ namespace pyCHATManager {
             }
         }
 
-        string host, usr, pwd, db, pySGPChatPath, port;
+        string host, usr, pwd, db, pySGPChatPath, port, ip;
         void loadEnvVars() {
             lsbProcess.Items.Clear();
             
@@ -37,6 +75,7 @@ namespace pyCHATManager {
                 pwd = Environment.GetEnvironmentVariable("pySGPChatMSSQLPwd",t);
                 db = Environment.GetEnvironmentVariable("pySGPChatMSSQLDB",t);
                 port = Environment.GetEnvironmentVariable("pySGPChatPORT",t);
+                ip = Environment.GetEnvironmentVariable("pySGPChatIP", t);
                 pySGPChatPath = Environment.GetEnvironmentVariable("pySGPChatPath",t);
 
                 txtHost.Text = host;
@@ -45,6 +84,15 @@ namespace pyCHATManager {
                 txtDatabase.Text = db;
                 cboDatabases.Text = db;
                 txtServicePort.Text = port;
+                cboIps.Text = ip;
+                if (!string.IsNullOrEmpty(ip)) {
+                    if (cboIps.Items.Contains(ip)) {
+                        cboIps.Text = ip;
+                    } else {
+                        cboIps.Items.Add(ip);
+                        cboIps.Text = ip;
+                    }
+                }                
 
                 tsstDebug.Text = "Configuration OK";
 
@@ -54,19 +102,36 @@ namespace pyCHATManager {
                 tsstDebug.Text = "Database Config is not configured!!!";
             }
         }
-
+        public string LocalIPAddress() {
+            System.Net.IPHostEntry host;
+            string localIP = "";
+            host = System.Net.Dns.GetHostEntry(System.Net.Dns.GetHostName());
+            cboIps.Items.Clear();
+            foreach (System.Net.IPAddress ip in host.AddressList) {
+                if (ip.AddressFamily.ToString() == "InterNetwork") {
+                    cboIps.Items.Add(ip.ToString());
+                    if (!ip.ToString().StartsWith("127.0.")) {                        
+                        localIP = ip.ToString();
+                    }
+                    
+                }
+            }
+            return localIP;
+        }
         private void Form1_Load(object sender, EventArgs e) {
             txtDatabase.Hide();
             //this.Resize += SetMinimizeState;
             //this.FormClosing += SetMinimizeState;
+            cboIps.Text = LocalIPAddress();
             btnStopPySGPChatService.Enabled = false;
             loadEnvVars();            
             cboDatabases.Items.Add("<search>");
+            
             t1.Start();
             string pySGPChatFileExeDir = getPySGPChatBinaryDir();
             if (!string.IsNullOrEmpty(pySGPChatFileExeDir)) {
                 lblPySGPChatExeDir.Text = pySGPChatFileExeDir;                
-            } else { 
+            } else {
                 lblPySGPChatExeDir.Text = "FILE: [pySGPChat.exe] is not installed!!!";
                 btnRestart.Enabled = false;
                 btnStopPySGPChatService.Enabled = false;
@@ -75,6 +140,7 @@ namespace pyCHATManager {
 
         Dictionary<string, List<string>> dictProcess;
         bool existPySGPChatBinary;
+        [System.Diagnostics.DebuggerStepThrough]
         void listPythonProcess() {
             existPySGPChatBinary = false;
             dictProcess = new Dictionary<string, List<string>>();
@@ -120,7 +186,8 @@ namespace pyCHATManager {
             btnSave.Enabled = state;
             btnTestConnection.Enabled = state;
             cboDatabases.Enabled = state;
-            txtServicePort.Enabled = state;
+            txtServicePort.Enabled = state;            
+            cboIps.Enabled = state;
             if (state) {                
                 chkEdit.ForeColor = Color.Green;
             } else {
@@ -165,6 +232,7 @@ namespace pyCHATManager {
                 //db = txtDatabase.Text;
                 db = cboDatabases.Text;
                 port = txtServicePort.Text;
+                ip = cboIps.Text;
 
                 EnvironmentVariableTarget t = EnvironmentVariableTarget.Machine;
 
@@ -173,6 +241,7 @@ namespace pyCHATManager {
                 Environment.SetEnvironmentVariable("pySGPChatMSSQLPwd", pwd, t);
                 Environment.SetEnvironmentVariable("pySGPChatMSSQLDB", db, t);
                 Environment.SetEnvironmentVariable("pySGPChatPORT", port, t);
+                Environment.SetEnvironmentVariable("pySGPChatIP", ip, t);
                 loadEnvVars();
             } catch (Exception ex){
                 tsstDebug.Text = "Error saving DB config";
@@ -195,26 +264,16 @@ namespace pyCHATManager {
             pwd = txtPassword.Text;
             db = cboDatabases.Text;
             port = txtServicePort.Text;
+            ip = cboIps.Text;
         }
+
+        BackgroundWorker bw;
 
         bool start() {            
             try {
                 syncData();
-
-                string currentPath = Application.StartupPath;
-                string ultimatePath = System.IO.Path.Combine(currentPath, "pySGPChat.exe");
-
-                //System.Diagnostics.ProcessStartInfo proc = new System.Diagnostics.ProcessStartInfo(lblPySGPChatExeDir.Text);
-                System.Diagnostics.ProcessStartInfo proc = new System.Diagnostics.ProcessStartInfo(ultimatePath);
-                proc.Arguments = string.Format("--setup --host {0} --usr {1} --pwd {2} --db {3} --port {4}", host, usr, pwd, db, port);
-                MessageBox.Show(proc.Arguments);
-                //proc.Arguments = "--setup";
-                
-                MessageBox.Show(ultimatePath+" - "+ currentPath);
-                
-                //proc.WorkingDirectory = pySGPChatWorkDir;
-                proc.WorkingDirectory = currentPath;
-                System.Diagnostics.Process.Start(proc);
+                pgbar.Visible = true;
+                bw.RunWorkerAsync();                
                 return true;
             } catch {return false;}            
         }
@@ -240,7 +299,7 @@ namespace pyCHATManager {
             return res;
         }
 
-        private void btnRestart_Click(object sender, EventArgs e) {
+        private void btnRestart_Click(object sender, EventArgs e) {            
             processManager("restart");
             listPythonProcess();                    
             btnRestart.Text = "RESTART pySGPChat SERVICE";

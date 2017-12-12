@@ -115,7 +115,7 @@ shortcut_table = [
      "[TARGETDIR]pyCHATManager.exe",# Target
      None,                     # Arguments
      None,                     # Description
-     "CTRL + ALT + C",                     # Hotkey
+     None,                     # Hotkey
      None,                     # Icon
      None,                     # IconIndex
      None,                     # ShowCmd

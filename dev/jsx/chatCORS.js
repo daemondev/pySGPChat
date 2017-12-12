@@ -292,7 +292,7 @@ var ChatContainer = React.createClass({
             myProps: {}
             , data:[]
             , ws : null
-            , domain : ""
+            , domain : "xxIPxx"
             , separator : "://"
             //, port : ":8888"
             , port : ":xxPORTxx"
@@ -381,7 +381,7 @@ var ChatContainer = React.createClass({
             prevWS.removeEventListener("onclose", this.notifier);
         }
 
-        var ws = new WebSocket("ws" + this.state.separator + document.domain + this.state.port + this.state.namespace);
+        var ws = new WebSocket("ws" + this.state.separator + this.state.domain + this.state.port + this.state.namespace);
         ws.onmessage = this.onMessage;
         ws.onopen = this.onOpen;
         ws.onclose = this.onClose;

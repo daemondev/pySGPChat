@@ -40,7 +40,7 @@ namespace pyCHATManager {
                 //System.Diagnostics.ProcessStartInfo proc = new System.Diagnostics.ProcessStartInfo(lblPySGPChatExeDir.Text);
                 System.Diagnostics.ProcessStartInfo proc = new System.Diagnostics.ProcessStartInfo(ultimatePath);
                 proc.Arguments = string.Format(@"--setup --host {0} --usr {1} --pwd {2} --db {3} --port {4} --ip {5}", host.Replace("\\","\\\\"), usr, pwd, db, port, ip);
-                MessageBox.Show(proc.Arguments);
+                //MessageBox.Show(proc.Arguments);
                 //proc.Arguments = "--setup";
 
                 //MessageBox.Show(ultimatePath+" - "+ currentPath);
@@ -118,7 +118,36 @@ namespace pyCHATManager {
             }
             return localIP;
         }
+
+        void populateGrid() {
+            /*
+            gvServices.ColumnCount = 4;
+            gvServices.Columns[0].Name = "item";
+            gvServices.Columns[0].Width = 35;
+
+            gvServices.Columns[1].Name = "Service Name";
+            gvServices.Columns[2].Name = "Service ID";
+            gvServices.Columns[3].Name = "MEMORY SIZE";
+            foreach (DataGridViewColumn col in gvServices.Columns) {
+                
+            }
+
+            /*
+            DataGridViewColumn col = new DataGridViewColumn();
+            col.HeaderText = "item";
+            gvServices.Columns.Add(col);
+            DataGridViewColumn col2 = new DataGridViewColumn();
+            col2.HeaderText = "SERVICE NAME";            
+            gvServices.Columns.Add(col2);/**/
+
+            //gvServices.SelectionMode = DataGridViewSelectionMode.FullRowSelect;            
+            gvServices.RowHeadersVisible = false;
+            gvServices.Font =new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));            
+
+        }
+
         private void Form1_Load(object sender, EventArgs e) {
+            lsbProcess.Hide();
             txtDatabase.Hide();
             //this.Resize += SetMinimizeState;
             //this.FormClosing += SetMinimizeState;
@@ -126,7 +155,7 @@ namespace pyCHATManager {
             btnStopPySGPChatService.Enabled = false;
             loadEnvVars();            
             cboDatabases.Items.Add("<search>");
-            
+            populateGrid();
             t1.Start();
             string pySGPChatFileExeDir = getPySGPChatBinaryDir();
             if (!string.IsNullOrEmpty(pySGPChatFileExeDir)) {
@@ -139,26 +168,41 @@ namespace pyCHATManager {
         }
 
         Dictionary<string, List<string>> dictProcess;
+        Dictionary<string, List<string>> dictProcessPermanent = new Dictionary<string,List<string>>();
         bool existPySGPChatBinary;
+
+
+        bool firstMacth = false;
         [System.Diagnostics.DebuggerStepThrough]
         void listPythonProcess() {
             existPySGPChatBinary = false;
             dictProcess = new Dictionary<string, List<string>>();
-            lsbProcess.Items.Clear();
+            lsbProcess.Items.Clear();           
+
             System.Diagnostics.Process[] localAll = System.Diagnostics.Process.GetProcesses();
             string processName = "";
+           
             foreach (System.Diagnostics.Process item in localAll) {
                 processName = item.ProcessName;
-                if (processName.StartsWith("py") && !processName.Equals("pyCHATManager")) {
+                if (processName.StartsWith("py") && !processName.StartsWith("pyCHATManager")) {
                     try {
+
                         lsbProcess.Items.Add(string.Concat(item.ProcessName, " - ", item.Id.ToString()));
+                        
                         dictProcess.Add(item.ProcessName, new List<string>() { 
-                            item.Id.ToString()
-                            , item.ProcessName
-                            , item.StartTime.ToString()
-                            , item.VirtualMemorySize64.ToString()
-                            , item.PrivateMemorySize64.ToString()
-                            , item.MainModule.FileName });
+                            item.Id.ToString()                          //0 = id
+                            , item.ProcessName                          //1 = name
+                            , item.StartTime.ToString()                 //2 = startTime
+                            , (item.VirtualMemorySize64 / (1024 * 1024)).ToString()       //3 = vMem
+                            //, (item.PrivateMemorySize64 / (1024 * 1024)).ToString()       //4 = pMem
+                            , (ConvertBytesToMegabytes(item.PrivateMemorySize64)).ToString("0.000")       //4 = pMem
+                            //, (ConvertBytesToMegabytes(item.WorkingSet64)).ToString()       //4 = pMem
+                            //, (ConvertBytesToMegabytes(item.PeakWorkingSet64)).ToString()          //4 = pMem
+                            , item.MainModule.FileName                  //5 = FileDir
+                            , (DateTime.Now - item.StartTime).ToString() //5 time
+                        });              //5 = FileDir
+
+
                         if (processName.Equals("pySGPChat")) {
                             existPySGPChatBinary = true;                            
                             btnRestart.Text = "RESTART pySGPChat SERVICE";                            
@@ -173,8 +217,89 @@ namespace pyCHATManager {
             }
             if(existPySGPChatBinary){
                 btnStopPySGPChatService.Enabled = true;
-            }            
+            }
+
+            if (!firstMacth) {
+                //MessageBox.Show("first");
+                //dictProcessPermanent = dictProcess;
+                firstMacth = true;
+            }
+
+            if (dictProcess.Count.Equals(0)) {
+                gvServices.Rows.Clear();
+                dictProcessPermanent.Clear();
+            } else { 
+                //if(dictProcessPermanent.Equals(dictProcess)){
+                if(!areEqualDict(dictProcess, dictProcessPermanent)){                
+                //if(!dictProcessPermanent.SequenceEqual(dictProcess)){                
+                //if(!(dictProcessPermanent.Keys.Count == dictProcess.Keys.Count &&    dictProcessPermanent.Keys.All(k => dictProcess.ContainsKey(k) && object.Equals(dictProcess[k], dictProcessPermanent[k])))){
+                    dictProcessPermanent = dictProcess.ToDictionary(entry => entry.Key, entry => entry.Value);
+                    tstDebug.Text = "step: [" + counter.ToString() + " - " + dictProcessPermanent.Count.ToString() + "]";
+
+
+                    if (gvServices.Rows.Count.Equals(0)) {
+                        foreach (var item in dictProcessPermanent.Values) {
+                            //MessageBox.Show(item[0]);
+
+                            gvServices.Rows.Add(new string[] { item[0], item[1], item[0], item[4] });
+                        }
+                    } else {
+
+                        foreach (DataGridViewRow row in gvServices.Rows) {
+                            if (dictProcessPermanent.Keys.Contains<string>(row.Cells[1].Value.ToString())) {
+                                row.Cells[3].Value = dictProcessPermanent[row.Cells[1].Value.ToString()][4];
+                            }
+                        }
+                    }
+
+                    
+
+
+                    
+                }
+            }
+
+            counter++;
         }
+        static double ConvertBytesToMegabytes(long bytes) {
+            return (bytes / 1024f) / 1024f;
+        }
+        
+        /*
+        public static bool EqualsAll<T>(this IList<T> a, IList<T> b) {
+            if (a == null || b == null)
+                return (a == null && b == null);
+
+            if (a.Count != b.Count)
+                return false;
+
+            return a.SequenceEqual(b);
+        } /**/
+        bool areEqualDict(Dictionary<string, List<string>> dict, Dictionary<string, List<string>> dict2) {
+            bool equal = false;
+            if (dict.Count == dict2.Count) { // Require equal count.        
+                equal = true;
+                foreach (var pair in dict) {
+                    List<string> value;
+
+                    if (dict2.TryGetValue(pair.Key, out value)) {
+                        // Require value be equal.
+                        //if (value != pair.Value) {
+                        if (!value.SequenceEqual(pair.Value)) {
+                            equal = false;
+                            break;
+                        }
+                    } else {
+                        // Require key be present.
+                        equal = false;
+                        break;
+                    }
+                }
+            }
+            return equal;
+        }
+
+        int counter = 0;
 
         Timer t1;
 
@@ -194,6 +319,7 @@ namespace pyCHATManager {
                 chkEdit.ForeColor = Color.Red;
             }
         }
+
         string pySGPChatEXE = "";
         string pySGPChatWorkDir = "";
         string getPySGPChatBinaryDir() {

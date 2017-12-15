@@ -293,11 +293,12 @@ var ChatContainer = React.createClass({
             , data:[]
             , ws : null
             , domain : "xxIPxx"
-            , separator : "://"
+            , separator : "/"
+            , dot2 : ":"
             //, port : ":8888"
-            , port : ":xxPORTxx"
-            , protocol : "ws" + "://"
-            , namespace : "/websocket"
+            , port : "xxPORTxx"
+            , protocol : "ws"
+            , namespace : "websocket"
             , toggleHide: true
             , toggleHideChatPanel: false
             , step:1
@@ -373,54 +374,63 @@ var ChatContainer = React.createClass({
     notifier: function(){
         console.log("CLEAN websockets");
     },
-    componentWillMount: function(){
+    connect: function(){
         var prevWS = this.state.ws;
         if(prevWS != null){
             prevWS.removeEventListener("onopen", this.notifier);
             prevWS.removeEventListener("onerror", this.notifier);
             prevWS.removeEventListener("onclose", this.notifier);
         }
-
-        var ws = new WebSocket("ws" + this.state.separator + this.state.domain + this.state.port + this.state.namespace);
+        //var url = this.state.protocol + this.state.dot2 + this.state.separator + this.state.separator + this.state.domain + this.state.dot2 + this.state.port + this.state.separator + this.state.namespace;
+        //alert(url);
+        console.log(this.state.protocol + this.state.dot2 + this.state.separator + this.state.separator + this.state.domain + this.state.dot2 + this.state.port + this.state.separator + this.state.namespace);
+        var ws = new WebSocket(this.state.protocol + this.state.dot2 + this.state.separator + this.state.separator + this.state.domain + this.state.dot2 + this.state.port + this.state.separator + this.state.namespace);
         ws.onmessage = this.onMessage;
         ws.onopen = this.onOpen;
         ws.onclose = this.onClose;
-        ws.onerror = this.onError;
+        //ws.onerror = this.onError;
         this.setState({ws:ws});
+    },
+    componentWillMount: function(){
+        this.connect();
     },
     reconnectSocket: function(e){
         //this.componentWillMount();
         that = this;
         setTimeout(function(){
             console.log("WebSocketClient: reconnecting...");
-            that.componentWillMount();
+            that.connect();
         },2*1000);
     },
     onClose: function(e){
-        /*
-        switch (e){
+        console.log("onClose: ["+e.code+"]");
+        ///*
+        switch (e.code){
             case 1000:	// CLOSE_NORMAL
                     console.log("WebSocket: closed");
-                    break;
+                break;
+            case 1006:
+                    this.reconnectSocket(e);
+                break;
             default:	// Abnormal closure
                     this.reconnectSocket(e);
                     break;
         }
-        this.onClose(e); /**/
-        this.reconnectSocket(e);
+        //this.onClose(e); /**/
+        //this.reconnectSocket(e);
     },
     onError: function(e){
-
-        /*
+        console.log("onError: ["+e+"]");
+        ///*
         switch (e.code){
             case 'ECONNREFUSED':
                     this.reconnectSocket(e);
                     break;
             default:
-                    this.onError(e);
+                    //this.onError(e);
                     break;
         }/**/
-        this.reconnectSocket(e);
+        //this.reconnectSocket(e);
     },
     componentDidMount: function(){
         var state = Object.assign({}, this.state);

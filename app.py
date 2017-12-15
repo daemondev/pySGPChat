@@ -520,7 +520,7 @@ def runserver(serviceMode=False, debugMode=False, autoloadMode=False, args=None)
         #""" ### Ready work
         server = tornado.httpserver.HTTPServer(ws_app)
         #server.listen(pySGPChatPORT, address="0.0.0.0") ### omit address """
-        #server.listen(pySGPChatPORT, address="0.0.0.0") ### omit address """
+        #server.listen(pySGPChatPORT, address="10.200.37.124") ### omit address """
         server.listen(pySGPChatPORT, address=pySGPChatIP) ### omit address """
 
         """

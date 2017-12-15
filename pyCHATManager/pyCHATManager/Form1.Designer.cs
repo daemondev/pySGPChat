@@ -40,6 +40,7 @@
             this.txtHost = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.gvServices = new System.Windows.Forms.DataGridView();
             this.cboIps = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
             this.lsbProcess = new System.Windows.Forms.ListBox();
@@ -52,10 +53,16 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tsstDebug = new System.Windows.Forms.ToolStripStatusLabel();
             this.pgbar = new System.Windows.Forms.ToolStripProgressBar();
+            this.tstDebug = new System.Windows.Forms.ToolStripStatusLabel();
             this.trayIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gvServices)).BeginInit();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -229,6 +236,7 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.gvServices);
             this.groupBox2.Controls.Add(this.cboIps);
             this.groupBox2.Controls.Add(this.label6);
             this.groupBox2.Controls.Add(this.lsbProcess);
@@ -246,6 +254,20 @@
             this.groupBox2.TabIndex = 20;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "WebSocket Service Options";
+            // 
+            // gvServices
+            // 
+            this.gvServices.AllowUserToAddRows = false;
+            this.gvServices.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.gvServices.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Column1,
+            this.Column2,
+            this.Column3,
+            this.Column4});
+            this.gvServices.Location = new System.Drawing.Point(12, 17);
+            this.gvServices.Name = "gvServices";
+            this.gvServices.Size = new System.Drawing.Size(299, 82);
+            this.gvServices.TabIndex = 31;
             // 
             // cboIps
             // 
@@ -274,7 +296,7 @@
             this.lsbProcess.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lsbProcess.ForeColor = System.Drawing.Color.Black;
             this.lsbProcess.FormattingEnabled = true;
-            this.lsbProcess.Location = new System.Drawing.Point(12, 17);
+            this.lsbProcess.Location = new System.Drawing.Point(230, 148);
             this.lsbProcess.Name = "lsbProcess";
             this.lsbProcess.Size = new System.Drawing.Size(299, 82);
             this.lsbProcess.TabIndex = 26;
@@ -354,7 +376,8 @@
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsstDebug,
-            this.pgbar});
+            this.pgbar,
+            this.tstDebug});
             this.statusStrip1.Location = new System.Drawing.Point(3, 423);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(342, 22);
@@ -374,12 +397,42 @@
             this.pgbar.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
             this.pgbar.Visible = false;
             // 
+            // tstDebug
+            // 
+            this.tstDebug.Name = "tstDebug";
+            this.tstDebug.Size = new System.Drawing.Size(16, 17);
+            this.tstDebug.Text = "...";
+            // 
             // trayIcon
             // 
             this.trayIcon.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info;
             this.trayIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("trayIcon.Icon")));
             this.trayIcon.Text = "pySGPChat Service Manager";
             this.trayIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseDoubleClick);
+            // 
+            // Column1
+            // 
+            this.Column1.HeaderText = "Item";
+            this.Column1.Name = "Column1";
+            this.Column1.Width = 35;
+            // 
+            // Column2
+            // 
+            this.Column2.HeaderText = "Service Name";
+            this.Column2.Name = "Column2";
+            this.Column2.Width = 150;
+            // 
+            // Column3
+            // 
+            this.Column3.HeaderText = "PID";
+            this.Column3.Name = "Column3";
+            this.Column3.Width = 35;
+            // 
+            // Column4
+            // 
+            this.Column4.HeaderText = "MEM";
+            this.Column4.Name = "Column4";
+            this.Column4.Width = 60;
             // 
             // Form1
             // 
@@ -401,6 +454,7 @@
             this.groupBox3.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gvServices)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -437,6 +491,12 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.ComboBox cboIps;
         private System.Windows.Forms.ToolStripProgressBar pgbar;
+        private System.Windows.Forms.DataGridView gvServices;
+        private System.Windows.Forms.ToolStripStatusLabel tstDebug;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
     }
 }
 

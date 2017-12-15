@@ -199,11 +199,11 @@ namespace pyCHATManager {
                             //, (ConvertBytesToMegabytes(item.WorkingSet64)).ToString()       //4 = pMem
                             //, (ConvertBytesToMegabytes(item.PeakWorkingSet64)).ToString()          //4 = pMem
                             , item.MainModule.FileName                  //5 = FileDir
-                            , (DateTime.Now - item.StartTime).ToString() //5 time
+                            , (DateTime.Now - item.StartTime).ToString() //6 time
                         });              //5 = FileDir
 
 
-                        if (processName.Equals("pySGPChat")) {
+                        if (processName.StartsWith("pySGPChat")) {
                             existPySGPChatBinary = true;                            
                             btnRestart.Text = "RESTART pySGPChat SERVICE";                            
                         } else {

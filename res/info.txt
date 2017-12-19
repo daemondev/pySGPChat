@@ -325,3 +325,8 @@ msilib.add_data(self.db, "Shortcut",
                 "[TARGETDIR]%s" % baseName, None, None, None,
                 None, None, None, "TARGETDIR")]) # <--- Working directory.
 #-------------------------------------------------- END   [add shortcut] - (04-12-2017 - 15:57:20) }}
+#-------------------------------------------------- BEGIN [deb-server] - (19-12-2017 - 18:16:02) {{
+10.200.36.55
+Administrator
+sysg3n0m@
+#-------------------------------------------------- END   [deb-server] - (19-12-2017 - 18:16:02) }}

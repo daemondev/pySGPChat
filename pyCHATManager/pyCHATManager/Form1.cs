@@ -439,14 +439,15 @@ namespace pyCHATManager {
                     using (Microsoft.Win32.RegistryKey sk = rk.OpenSubKey(skName)) {
                         try {
                             lsbProcess.Items.Add(sk.GetValue("DisplayName") + " - " +sk.GetValue("InstallLocation").ToString());
-                        } catch (Exception ex) { }
+                        } catch { }
                     }
                 }
             }
         }
 
         private void btnStopPySGPChatService_Click(object sender, EventArgs e) {            
-            btnStopPySGPChatService.Enabled = !processManager("stop");            
+            btnStopPySGPChatService.Enabled = !processManager("stop");
+            btnRestart.Text = "START pySGPChat SERVICE";
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e) {
@@ -460,7 +461,7 @@ namespace pyCHATManager {
 
         public void MinimizeToTray() {
             try {
-                trayIcon.BalloonTipTitle = "Sample text";
+                trayIcon.BalloonTipTitle = "Info about App";
                 trayIcon.BalloonTipText = "Form is minimized";
 
                 if (FormWindowState.Minimized == this.WindowState) {

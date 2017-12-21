@@ -1,0 +1,64 @@
+
+Get the current window handle and open a new tab using Ctrl + t
+
+        driver.get("http://google.com");
+        String windowHandle = driver.getWindowHandle();
+        driver.findElement(By.cssSelector("body")).sendKeys(Keys.CONTROL +"t");
+
+
+The size of the output of getWindowHandles() is 1 which means that there is one single window handle
+
+        ArrayList tabs = new ArrayList (driver.getWindowHandles());
+        System.out.println(tabs.size());
+        driver.switchTo().window(tabs.get(0)); 
+
+
+The control is now in the new tab
+
+        driver.get("http://bing.com");
+        //perform other operations.
+
+
+Switch to the old tab using Ctrl + Tab
+
+        driver.switchTo().window(mainWindowHandle);
+        driver.findElement(By.cssSelector("body")).sendKeys(Keys.CONTROL +"\t");
+        driver.switchTo().defaultContent();	
+
+
+#-------------------------------------------------- BEGIN [version 1] - (24-08-2017 - 10:55:39 p.m.) {{
+        private static void LoadSQLLiteAssembly()
+        {
+            Uri dir = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+            FileInfo fi = new FileInfo(dir.AbsolutePath);           
+            string binFile = fi.Directory.FullName + "\\System.Data.SQLite.DLL";
+            if (!File.Exists(binFile)) File.Copy(GetAppropriateSQLLiteAssembly(), binFile, false);
+        }
+
+        private static string GetAppropriateSQLLiteAssembly()
+        {
+            string pa = Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE");
+            string arch = ((String.IsNullOrEmpty(pa) || String.Compare(pa, 0, "x86", 0, 3, true) == 0) ? "32" : "64");
+            return GetLibsDir() + "\\NUnit\\System.Data.SQLite.x" + arch + ".DLL";
+        }
+        #-------------------------------------------------- END   [version 1] - (24-08-2017 - 10:55:39 p.m.) }}
+         #-------------------------------------------------- BEGIN [version2] - (24-08-2017 - 10:56:05 p.m.) {{
+         public static void LoadSQLLiteAssembly()
+    {
+        Uri dir = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+        FileInfo fi = new FileInfo(dir.AbsolutePath);
+        string appropriateFile = Path.Combine(fi.Directory.FullName, GetAppropriateSQLLiteAssembly());
+        Assembly.LoadFrom(appropriateFile);
+    }
+
+    private static string GetAppropriateSQLLiteAssembly()
+    {
+        string pa = Environment.GetEnvironmentVariable("PROCESSOR_ARCHITECTURE");
+        string arch = ((String.IsNullOrEmpty(pa) || String.Compare(pa, 0, "x86", 0, 3, true) == 0) ? "32" : "64");
+        return "System.Data.SQLite.x" + arch + ".DLL";
+    }
+         #-------------------------------------------------- END   [version2] - (24-08-2017 - 10:56:05 p.m.) }}
+
+		 https://github.com/mongodb/mongo-csharp-driver/releases?after=v2.2.4
+		 https://github.com/mongodb/mongo-csharp-driver/releases/download/v1.11.0/CSharpDriver-1.11.0.zip
+		 https://docs.mongodb.com/getting-started/csharp/client/

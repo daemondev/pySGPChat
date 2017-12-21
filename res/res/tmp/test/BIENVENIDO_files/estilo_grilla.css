@@ -1,0 +1,120 @@
+﻿.mGrid {   
+    width: 98%;   
+    background-color: #fff;   
+    margin: 5px;  
+    border: solid 1px #63B46D;   
+    border-collapse:collapse;
+    /*font: normal 12px verdana, arial, helvetica, sans-serif;*/
+}  
+.mGrid td {   
+    padding: 1px;
+    border: solid 1px #c1c1c1;   
+    color: #363636;
+    font: normal 11px verdana, arial, helvetica, sans-serif;
+    /*text-align:center;*/
+} 
+.mGrid th {   
+    padding: 1px;
+    color: #63B46D;   
+    background: #E0F4D1;   
+    border: solid 1px #63B46D;   
+    font-size: .90em;
+    font-weight: bold;
+    text-transform: uppercase;
+    font: normal 12px verdana, arial, helvetica, sans-serif;
+}  
+.mGrid .alt { background: #f1fcfc }  
+.mGrid .pgr { background: #E0F4D1; }  
+.mGrid .pgr table { margin: 5px 0; }  
+.mGrid .pgr td {   
+    border-width: 0;   
+    padding: 0 6px;   
+    border-left: solid 1px #666;   
+    font-weight: bold;   
+    color: #63B46D;   
+    line-height: 12px;   
+ }     
+.mGrid .pgr a { color: #666; text-decoration: none; }
+.mGrid .pgr a:hover { color: #000; text-decoration: none; }
+
+/*Nueva*/
+.mGrid2 {   
+    /*width: 97%;*/   
+    background-color: #fff;   
+    margin: 10px 10px 10px 10px;  
+    border: solid 1px #63B46D;   
+    border-collapse:collapse;
+    /*font: normal 12px verdana, arial, helvetica, sans-serif;*/
+}  
+.mGrid2 td {   
+    padding: 2px;
+    border: solid 1px #c1c1c1;   
+    color: #363636;
+    font: normal 11px verdana, arial, helvetica, sans-serif;
+    /*text-align:center;*/
+} 
+.mGrid2 th {   
+    padding: 4px 2px;
+    color: #63B46D;   
+    background: #E0F4D1;   
+    border: solid 1px #63B46D;   
+    font-size: 1em;
+    font-weight: bold;
+    text-transform: uppercase;
+    font: normal 13px verdana, arial, helvetica, sans-serif;
+}  
+.mGrid2 .alt { background: #f1fcfc }  
+.mGrid2 .pgr { background: #E0F4D1; }  
+.mGrid2 .pgr table { margin: 5px 0; }  
+.mGrid2 .pgr td {   
+    border-width: 0;   
+    padding: 0 6px;   
+    border-left: solid 1px #666;   
+    font-weight: bold;   
+    color: #63B46D;   
+    line-height: 12px;   
+ }     
+.mGrid2 .pgr a { color: #666; text-decoration: none; }
+.mGrid2 .pgr a:hover { color: #000; text-decoration: none; }
+/*Nueva*/
+
+/*http://www.colorcodehex.com/e5ebe5/*/
+.gridview
+{
+    margin:5px;
+    border:none;
+    background-color:#F0F4F0;
+    font-size:15px;
+    border-radius: 10px 10px 0 0;
+    line-height: 15px; 
+    border: solid 1px #63B46D;
+    /*border: solid 1px #c1c1c1;*/     
+}
+
+.gridview tr {
+    text-align:center;
+    border-border-bottom: solid;
+    border-color:#FFFFFF;
+    border-width:10px;
+}
+    
+.gridview th{
+    border:none;
+    background-color:#C5D3C5;
+    padding: 5px;
+}
+
+.gridview td{
+    border:none;
+    padding: 3px;
+    margin: 5px;
+    border-left: solid 1px #63B46D; 
+}
+
+.Border_Tabla{  
+padding: 2px;
+border: solid 1px #c1c1c1;
+color: #363636;
+/*font: normal 20px verdana, arial, helvetica, sans-serif;*/
+border-radius: 8px;
+}

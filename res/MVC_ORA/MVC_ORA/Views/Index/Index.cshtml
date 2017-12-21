@@ -1,0 +1,48 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <script src="~/assets/js/jquery-3.2.1.min.js"></script>
+    <script src="~/assets/js/jquery.unobtrusive-ajax.js"></script>
+    <script src="~/assets/js/app.js"></script>
+</head>
+<body>
+    <div> 
+        <h1>Hello ASP.NET MVC APP</h1>
+    </div>
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <td>NOMBRE</td><td> <input type="text" id="txtNombre"/> </td>
+                </tr>
+                <tr>
+                    <td>AP. PATERNO</td>
+                    <td> <input type="text" id="txtApPaterno" /> </td>
+                </tr>
+                <tr>
+                    <td>AP. MATERNO</td>
+                    <td> <input type="text" id="txtApMaterno" /> </td>
+                </tr>
+                <tr>
+                    <td>SUELDO</td>
+                    <td> <input type="text" id="txtSueldo" /> </td>
+                </tr>
+                <tr>
+                    <td colspan="2" > <button id="btnGuardar">GUARDAR</button> </td>                    
+                </tr>                
+            </thead>
+        </table>
+
+        data: @ViewData["res"]
+
+    </div>
+</body>
+</html>

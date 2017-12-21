@@ -1,0 +1,47 @@
+<!--http://jsfiddle.net/KQXqM/-->
+<html>
+<head>
+    <script type="text/javascript" src="jquery.js"></script>
+    <script type="text/javascript" src="app.js"></script>
+    <link rel="stylesheet" type="text/css" href="bootstrap.css" />
+</head>
+<body>
+
+    <!-- Button -->
+  <p>
+    <a href="#modalbg" role="button" class="btn" data-toggle="modal">Open BG modal</a>
+
+  </p>
+    <!-- First Modal -->
+    <div class="modal" id="modalbg" tabindex="-1" style="display: none;">
+      <div class="modal-header">
+        <h3>BG modal</h3>
+      </div>
+      <div class="modal-body">
+          <p>
+              Write something that begins with "a"..
+          </p>
+          <p>
+            <!-- Textbox -->
+            <input type="text" id="typeahead" class="span3" style="margin: 0 auto;">
+          </p>
+      </div>
+      <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal">Close</a>
+        <a href="#modalfg" role="button" class="btn" data-toggle="modal">Open FG modal</a>
+      </div>
+    </div>
+    <!-- Second Modal -->
+    <div class="modal" id="modalfg" tabindex="-1" style="display: none; ">
+      <div class="modal-header">
+        <h3>FG modal</h3>
+      </div>
+      <div class="modal-body">
+        <p>Close the modal and try to use the typeahead…</p>
+      </div>
+      <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal">Close</a>
+      </div>
+    </div>
+</body>
+</html>

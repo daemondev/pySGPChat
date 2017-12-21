@@ -1,0 +1,2 @@
+wmic os get caption
+wmic os get osarchitecture

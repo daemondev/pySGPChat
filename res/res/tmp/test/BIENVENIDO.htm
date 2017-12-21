@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>
+	BIENVENIDO
+</title><link rel="icon" type="image/png" href="http://localhost:2157/Libreria/imagenes/Botones/favicon.png"><link href="BIENVENIDO_files/jquery-ui-1.css" rel="stylesheet">
+    <script src="BIENVENIDO_files/jquery-ui-1.js"></script>
+    <script src="BIENVENIDO_files/jquery-1.js"></script>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"><link href="BIENVENIDO_files/bootstrap.css" rel="stylesheet"><link rel="stylesheet" href="BIENVENIDO_files/font-awesome.css"><link href="BIENVENIDO_files/messi.css" rel="stylesheet">
+    <script src="BIENVENIDO_files/messi.js"></script>
+
+    <script src="BIENVENIDO_files/Validador.js"></script>
+    
+    
+    
+    <link href="BIENVENIDO_files/AdminLTE.css" rel="stylesheet"><link href="BIENVENIDO_files/_all-skins.css" rel="stylesheet">
+    
+    <script src="BIENVENIDO_files/web.js"></script>
+    <link href="BIENVENIDO_files/Diseo_div.css" rel="stylesheet"><link href="BIENVENIDO_files/estilo_tabla.css" rel="stylesheet"><link href="BIENVENIDO_files/estilo_grilla.css" rel="stylesheet">
+
+    
+    <script src="BIENVENIDO_files/jquery_002.js"></script>
+    <script src="BIENVENIDO_files/jquery.js"></script>
+    <script src="BIENVENIDO_files/jquery_003.js"></script>
+    <link href="BIENVENIDO_files/jquery.css" rel="stylesheet"><link href="BIENVENIDO_files/jquery_002.css" rel="stylesheet">
+
+    <script src="BIENVENIDO_files/jquery-ui.js"></script>
+
+    <link href="BIENVENIDO_files/jquery_003.css" rel="stylesheet">
+    <script src="BIENVENIDO_files/jquery_005.js"></script>
+    
+</head>
+<body class="skin-blue sidebar-mini sidebar-collapse">
+    <form method="post" action="Frm_Usuarios.aspx" id="form1">
+<div class="aspNetHidden">
+<input name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwULLTEwMDUyNjYzMjgPZBYCZg9kFgICAQ9kFggCAQ8PFgIeBFRleHQFCjA5LzA2LzIwMTdkZAIDDw8WAh8ABRFKRUZBIENBUEFDSVRBQ0lPTmRkAgYPDxYCHwAFDEFETUlOLCBBRE1JTmRkAggPDxYCHwAFDEFETUlOLCBBRE1JTmRkZJdGUyeRuD83x3sGcVzlxyIEUzQyM+NDGRUIEJDquV0d" type="hidden">
+</div>
+
+    <div class="wrapper">
+        <header class="main-header">
+            <a href="http://localhost:2157/Frm_Principal.aspx" class="logo">
+              <!-- mini logo for sidebar mini 50x50 pixels -->
+              <span class="logo-mini"></span>
+              <!-- logo for regular state and mobile devices -->
+              <span class="logo-lg"><b>PRINCIPAL</b></span>
+            </a>
+            <!-- Header Navbar: style can be found in header.less -->
+            <nav class="navbar navbar-static-top" role="navigation">
+                
+                <!-- Sidebar toggle button-->
+                <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+                
+                <div class="navbar-custom-menu">
+                    
+                    <ul class="nav navbar-nav">
+                        <!-- User Account: style can be found in dropdown.less -->
+                        <li>
+                            <div id="div1" style="vertical-align: middle; margin-top: 15px;">
+                                <label id="lblCargando" style="display: none;">Cargando...</label>
+                            </div>
+                        </li>
+                        <li>
+                            <div id="div_Fecha_Hora">
+                                <span id="lblFecha" title="Fecha" class="csstextReloj" style="font-weight:bold;">09/06/2017</span>
+                            </div>
+                        </li>
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <img src="BIENVENIDO_files/user2-160x160.jpg" class="user-image" alt="User Image">
+                                <span class="hidden-xs"> 
+                                        <span id="lblPerfil" title="Perfil" class="csstextReloj">JEFA CAPACITACION</span>
+                                    
+                                </span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <!-- User image -->
+                                <li class="user-header">
+                                    <img src="BIENVENIDO_files/user2-160x160.jpg" class="img-circle" alt="User Image" height="20" width="20">
+                                    <p>
+                                        <span id="lblPersonal" title="Nombre Usuario" class="csstextReloj">ADMIN, ADMIN</span>
+                                    </p>
+                                </li>
+                                <!-- Menu Footer-->
+                                <li class="user-footer">
+                                    <div class="pull-right">
+                                        <a href="#" class="btn btn-default btn-flat" onclick="JQ_Logout();">Salir</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <!-- Left side column. contains the logo and sidebar -->
+        <aside class="main-sidebar">
+            <!-- sidebar: style can be found in sidebar.less -->
+            <section class="sidebar" style="height: auto;">
+                <!-- Sidebar user panel -->
+                <div class="user-panel">
+                    <div class="pull-left image">
+                        <img src="BIENVENIDO_files/user2-160x160.jpg" class="img-circle" alt="User Image">
+                    </div>
+                    <div class="pull-left info">
+                        <p><span id="lbl_linea" title="En Linea" class="csstextReloj">ADMIN, ADMIN</span></p>
+                    </div><br>
+                </div>
+                <!-- /.search form -->
+                <!-- sidebar menu: : style can be found in sidebar.less -->
+                <div id="divMenu_Horiz"><ul class="sidebar-menu"><li class="treeview"><a href="#"><i class="fa fa-cog fa-fw"></i><span>Administración</span><i class="fa fa-angle-left pull-right"></i></a><ul class="treeview-menu"><li><a href="http://localhost:2157/Frm_MantSede.aspx"><i class="fa fa-building-o"></i>Sedes</a></li><li><a href="http://localhost:2157/Frm_MantCampanias.aspx"><i class="fa fa-cubes"></i>Campañas</a></li><li><a href="http://localhost:2157/Frm_Usuarios.aspx"><i class="fa fa-user"></i>Usuarios</a></li><li><a href="http://localhost:2157/Frm_MantCapacitacion.aspx"><i class="fa fa-graduation-cap"></i>Capacitación</a></li><li><a href="http://localhost:2157/Frm_CambiarClave.aspx"><i class="fa fa-lock"></i>Cambiar clave</a></li><li><a href="http://localhost:2157/Frm_AgenteBuscar.aspx"><i class="fa fa-search"></i>Buscar agentes</a></li><li><a href="http://localhost:2157/Frm_MantCapacitador.aspx"><i class="fa fa-book"></i>Capacitadores</a></li><li><a href="http://localhost:2157/Frm_MantTurno.aspx"><i class="fa fa-clock-o"></i>Turnos</a></li><li><a href="http://localhost:2157/Frm_TipoCapa.aspx"><i class="fa fa-sitemap"></i>Tipos Capacitación</a></li></ul></li><li class="treeview"><a href="#"><i class="fa fa-archive"></i><span>Gestión</span><i class="fa fa-angle-left pull-right"></i></a><ul class="treeview-menu"><li><a href="http://localhost:2157/Frm_MantValidaciones.aspx"><i class="fa fa-check-square-o"></i>Validaciones</a></li></ul></li><li class="treeview"><a href="#"><i class="fa fa-bar-chart-o"></i><span>Reportes</span><i class="fa fa-angle-left pull-right"></i></a><ul class="treeview-menu"><li><a href="http://localhost:2157/Frm_Reportes.aspx"><i class="fa fa-file-excel-o"></i>Asistencias - Pagos</a></li><li><a href="http://localhost:2157/Frm_ReporteDetallado.aspx"><i class="fa fa-file-excel-o"></i>Detallado</a></li><li><a href="http://localhost:2157/Frm_ReporteSolicitudesCarga.aspx"><i class="fa fa-file-excel-o"></i>Solicitudes de carga</a></li><li><a href="http://localhost:2157/Frm_ReporteAsistenciaGeneral.aspx"><i class="fa fa-file-excel-o"></i>Asistencia General</a></li><li><a href="http://localhost:2157/Frm_ReporteAgentes.aspx"><i class="fa fa-file-excel-o"></i>Reporte Agentes</a></li></ul></li></ul></div>
+            </section>
+            <!-- /.sidebar -->
+        </aside>
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper" style="min-height: 630px;">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <div class="cssDivPrincipal" style="width:100%;float:left">
+                    
+    <script src="BIENVENIDO_files/Frm_usuarios.js"></script>
+    <center>
+    <div style="background-color: #00A65A; border-radius: 5px;">
+        <h4 class="modal-title">USUARIOS</h4>
+    </div>
+        <input id="hdPaisUsuario" type="hidden">
+    <br>
+    <table>
+        <tbody><tr>
+            <td>
+                <label>País</label>
+            </td>
+            <td>
+                <select id="ddlPaisFiltro" name="ddlPaisFiltro" class="form-control"><option value="0">[SELECCIONAR]</option><option value="1" selected="selected">PERU</option><option value="2">MEXICO</option><option value="3">COLOMBIA</option></select>
+            </td>
+            <td>
+                <label>Sede</label>
+            </td>
+            <td>
+                <select id="ddlSedeFiltro" name="ddlSedeFiltro" class="form-control"><option value="0" selected="selected">[SELECCIONAR]</option><option value="1">LINCE</option><option value="2">MAGDALENA</option></select>
+            </td>
+            <td>
+                <input class="form-control" id="txtBuscar" placeholder="Buscar..." style="width: 200px;" type="text">
+            </td>
+            <td>
+                <button type="button" class="btn btn-primary btn-md" onclick="GetGridUsuario(1);">Bucar</button>
+            </td>
+            <td style="width: 20px;"></td>
+            <td>
+                <button type="button" class="btn btn-primary btn-md" onclick="JQ_Open_Ventana_Registro();">Nuevo Registro</button>
+            </td>
+        </tr>
+    </tbody></table>
+    
+    <div>
+        <table id="tb_usuarios" class="mGrid" style="width:100%;">  
+            <thead>
+                <tr>	    
+                    <th style="text-align:center;">PERSONAL</th>
+                    <th style="text-align:center;">DNI</th>
+                    <th style="text-align:center;">USUARIO</th>
+                    <th style="text-align:center;">CORREO</th>
+                    <th style="text-align:center;">PERFIL</th>
+                    <th style="text-align:center;">SEDE</th>
+                    <th style="text-align:center;">FEC. REG</th>
+                    <th style="width:5%;"></th>
+                    <th style="width:5%;"></th>
+                    <th style="width:5%;"></th>
+                </tr>
+            </thead>
+            <tbody>
+            <tr><td>ADMIN ADMIN, ADMIN</td><td style="text-align: center;">12345678</td><td style="text-align: center;">ADMIN</td><td style="text-align: center;">Romel.escobedo@mdycontactcenter.com</td><td style="text-align: center;">JEFE DE CAPACITACION</td><td style="text-align: center;">LINCE</td><td style="text-align: center;">25/05/2016</td><td align="center"><img src="BIENVENIDO_files/btnEditarG.gif" title="Editar" onclick='Editar_usuario("1");' style="cursor:pointer;"></td><td align="center"><img src="BIENVENIDO_files/Resetear.png" title="Resetear Clave" onclick='Resetear_Clave("1");' style="cursor:pointer;"></td><td></td></tr><tr class="alt"><td>ANDONAIRE  FARIAS, BRUNO SEBASTIAN</td><td style="text-align: center;">75808719</td><td style="text-align: center;">BANDONAIRE</td><td style="text-align: center;">Romel.escobedo@mdycontactcenter.com</td><td style="text-align: center;">REPORTE ASISTENCIAS</td><td style="text-align: center;">MAGDALENA</td><td style="text-align: center;">11/11/2016</td><td align="center"><img src="BIENVENIDO_files/btnEditarG.gif" title="Editar" onclick='Editar_usuario("44");' style="cursor:pointer;"></td><td align="center"><img src="BIENVENIDO_files/Resetear.png" title="Resetear Clave" onclick='Resetear_Clave("44");' style="cursor:pointer;"></td><td align="center"><img src="BIENVENIDO_files/Desactivo.png" title="Activar" onclick='Estado_usuario("44");' style="cursor:pointer;"></td></tr><tr><td>BELTRAN MARES, FAUSTO</td><td style="text-align: center;">01201484</td><td style="text-align: center;">FBELTRAN</td><td style="text-align: center;">Romel.escobedo@mdycontactcenter.com</td><td style="text-align: center;">GERENTE OPERACIONES</td><td style="text-align: center;">MAGDALENA</td><td style="text-align: center;">01/10/2016</td><td align="center"><img src="BIENVENIDO_files/btnEditarG.gif" title="Editar" onclick='Editar_usuario("40");' style="cursor:pointer;"></td><td align="center"><img src="BIENVENIDO_files/Resetear.png" title="Resetear Clave" onclick='Resetear_Clave("40");' style="cursor:pointer;"></td><td align="center"><img src="BIENVENIDO_files/Activo.png" title="Desactivar" onclick='Estado_usuario("40");' style="cursor:pointer;"></td></tr><tr class="alt"><td>CORREA  SALDARRIAGA, FRANK </td><td style="text-align: center;">47041708</td><td style="text-align: center;">SSALDARRIAGA</td><td style="text-align: center;">Romel.escobedo@mdycontactcenter.com</td><td style="text-align: center;">EJECUTIVO DE CAPACITACION</td><td style="text-align: center;">MAGDALENA</td><td style="text-align: center;">24/08/2016</td><td align="center"><img src="BIENVENIDO_files/btnEditarG.gif" title="Editar" onclick='Editar_usuario("35");' style="cursor:pointer;"></td><td align="center"><img src="BIENVENIDO_files/Resetear.png" title="Resetear Clave" onclick='Resetear_Clave("35");' style="cursor:pointer;"></td><td align="center"><img src="BIENVENIDO_files/Activo.png" title="Desactivar" onclick='Estado_usuario("35");' style="cursor:pointer;"></td></tr><tr><td>DIAZ MURRIETA, PEDRO</td><td style="text-align: center;">70436112</td><td style="text-align: center;">PDIAZ</td><td style="text-align: center;">Romel.escobedo@mdycontactcenter.com</td><td style="text-align: center;">EJECUTIVO DE CAPACITACION</td><td style="text-align: center;">MAGDALENA</td><td style="text-align: center;">26/08/2016</td><td align="center"><img src="BIENVENIDO_files/btnEditarG.gif" title="Editar" onclick='Editar_usuario("36");' style="cursor:pointer;"></td><td align="center"><img src="BIENVENIDO_files/Resetear.png" title="Resetear Clave" onclick='Resetear_Clave("36");' style="cursor:pointer;"></td><td align="center"><img src="BIENVENIDO_files/Desactivo.png" title="Activar" onclick='Estado_usuario("36");' style="cursor:pointer;"></td></tr><tr class="alt"><td>HINOSTROZA PONGO, HEIDY</td><td style="text-align: center;">42494166</td><td style="text-align: center;">HHINOSTROZA</td><td style="text-align: center;">Romel.escobedo@mdycontactcenter.com</td><td style="text-align: center;">INNOVACION Y EFICIENCIA</td><td style="text-align: center;">MAGDALENA</td><td style="text-align: center;">25/07/2016</td><td align="center"><img src="BIENVENIDO_files/btnEditarG.gif" title="Editar" onclick='Editar_usuario("32");' style="cursor:pointer;"></td><td align="center"><img src="BIENVENIDO_files/Resetear.png" title="Resetear Clave" onclick='Resetear_Clave("32");' style="cursor:pointer;"></td><td align="center"><img src="BIENVENIDO_files/Activo.png" title="Desactivar" onclick='Estado_usuario("32");' style="cursor:pointer;"></td></tr><tr><td>MEDINA MELLIZO, MELISA</td><td style="text-align: center;">41539781</td><td style="text-align: center;">MMEDINA</td><td style="text-align: center;">Romel.escobedo@mdycontactcenter.com</td><td style="text-align: center;">MEJORA PROCESOS</td><td style="text-align: center;">MAGDALENA</td><td style="text-align: center;">19/07/2016</td><td align="center"><img src="BIENVENIDO_files/btnEditarG.gif" title="Editar" onclick='Editar_usuario("23");' style="cursor:pointer;"></td><td align="center"><img src="BIENVENIDO_files/Resetear.png" title="Resetear Clave" onclick='Resetear_Clave("23");' style="cursor:pointer;"></td><td align="center"><img src="BIENVENIDO_files/Activo.png" title="Desactivar" onclick='Estado_usuario("23");' style="cursor:pointer;"></td></tr><tr class="alt"><td>PROVEEDOR PROVEEDOR, PROVEEDOR</td><td style="text-align: center;">71259910</td><td style="text-align: center;">PTITO</td><td style="text-align: center;">Romel.escobedo@mdycontactcenter.com</td><td style="text-align: center;">PROVEEDOR</td><td style="text-align: center;">MAGDALENA</td><td style="text-align: center;">27/07/2016</td><td align="center"><img src="BIENVENIDO_files/btnEditarG.gif" title="Editar" onclick='Editar_usuario("30");' style="cursor:pointer;"></td><td align="center"><img src="BIENVENIDO_files/Resetear.png" title="Resetear Clave" onclick='Resetear_Clave("30");' style="cursor:pointer;"></td><td align="center"><img src="BIENVENIDO_files/Activo.png" title="Desactivar" onclick='Estado_usuario("30");' style="cursor:pointer;"></td></tr><tr><td>RIVAS ZEVALLOS, LUIS</td><td style="text-align: center;">45800905</td><td style="text-align: center;">LRIVAS</td><td style="text-align: center;">Romel.escobedo@mdycontactcenter.com</td><td style="text-align: center;">DESARROLLO HUMANO</td><td style="text-align: center;">MAGDALENA</td><td style="text-align: center;">27/08/2016</td><td align="center"><img src="BIENVENIDO_files/btnEditarG.gif" title="Editar" onclick='Editar_usuario("2");' style="cursor:pointer;"></td><td align="center"><img src="BIENVENIDO_files/Resetear.png" title="Resetear Clave" onclick='Resetear_Clave("2");' style="cursor:pointer;"></td><td align="center"><img src="BIENVENIDO_files/Activo.png" title="Desactivar" onclick='Estado_usuario("2");' style="cursor:pointer;"></td></tr><tr class="alt"><td>ROALCABA EXEBIO, FERNANDO</td><td style="text-align: center;">47439320</td><td style="text-align: center;">FROALCABA</td><td style="text-align: center;">Romel.escobedo@mdycontactcenter.com</td><td style="text-align: center;">JEFE DE CAPACITACION</td><td style="text-align: center;">MAGDALENA</td><td style="text-align: center;">03/06/2016</td><td align="center"><img src="BIENVENIDO_files/btnEditarG.gif" title="Editar" onclick='Editar_usuario("5");' style="cursor:pointer;"></td><td align="center"><img src="BIENVENIDO_files/Resetear.png" title="Resetear Clave" onclick='Resetear_Clave("5");' style="cursor:pointer;"></td><td align="center"><img src="BIENVENIDO_files/Activo.png" title="Desactivar" onclick='Estado_usuario("5");' style="cursor:pointer;"></td></tr><tr><td>ROALCABA EXEBIO, FERNANDO</td><td style="text-align: center;">47439321</td><td style="text-align: center;">LROALCABA</td><td style="text-align: center;">Romel.escobedo@mdycontactcenter.com</td><td style="text-align: center;">EJECUTIVO DE CAPACITACION</td><td style="text-align: center;">MAGDALENA</td><td style="text-align: center;">19/07/2016</td><td align="center"><img src="BIENVENIDO_files/btnEditarG.gif" title="Editar" onclick='Editar_usuario("22");' style="cursor:pointer;"></td><td align="center"><img src="BIENVENIDO_files/Resetear.png" title="Resetear Clave" onclick='Resetear_Clave("22");' style="cursor:pointer;"></td><td align="center"><img src="BIENVENIDO_files/Activo.png" title="Desactivar" onclick='Estado_usuario("22");' style="cursor:pointer;"></td></tr><tr class="alt"><td>ROJAS CHUMBIPUMA, LIZET</td><td style="text-align: center;">46217363</td><td style="text-align: center;">LROJAS</td><td style="text-align: center;">Romel.escobedo@mdycontactcenter.com</td><td style="text-align: center;">DESARROLLO HUMANO</td><td style="text-align: center;">MAGDALENA</td><td style="text-align: center;">11/08/2016</td><td align="center"><img src="BIENVENIDO_files/btnEditarG.gif" title="Editar" onclick='Editar_usuario("34");' style="cursor:pointer;"></td><td align="center"><img src="BIENVENIDO_files/Resetear.png" title="Resetear Clave" onclick='Resetear_Clave("34");' style="cursor:pointer;"></td><td align="center"><img src="BIENVENIDO_files/Activo.png" title="Desactivar" onclick='Estado_usuario("34");' style="cursor:pointer;"></td></tr><tr><td>RUIZ SCARAMUTTI, ALEJANDRO</td><td style="text-align: center;">43547947</td><td style="text-align: center;">ARUIZ</td><td style="text-align: center;">Romel.escobedo@mdycontactcenter.com</td><td style="text-align: center;">PROVEEDOR</td><td style="text-align: center;">MAGDALENA</td><td style="text-align: center;">26/08/2016</td><td align="center"><img src="BIENVENIDO_files/btnEditarG.gif" title="Editar" onclick='Editar_usuario("38");' style="cursor:pointer;"></td><td align="center"><img src="BIENVENIDO_files/Resetear.png" title="Resetear Clave" onclick='Resetear_Clave("38");' style="cursor:pointer;"></td><td align="center"><img src="BIENVENIDO_files/Activo.png" title="Desactivar" onclick='Estado_usuario("38");' style="cursor:pointer;"></td></tr><tr class="alt"><td>SANCHEZ ., FANNY </td><td style="text-align: center;">70440610</td><td style="text-align: center;">FSANCHEZ</td><td style="text-align: center;">Romel.escobedo@mdycontactcenter.com</td><td style="text-align: center;">JEFE DE CAPACITACION</td><td style="text-align: center;">MAGDALENA</td><td style="text-align: center;">22/11/2016</td><td align="center"><img src="BIENVENIDO_files/btnEditarG.gif" title="Editar" onclick='Editar_usuario("46");' style="cursor:pointer;"></td><td align="center"><img src="BIENVENIDO_files/Resetear.png" title="Resetear Clave" onclick='Resetear_Clave("46");' style="cursor:pointer;"></td><td align="center"><img src="BIENVENIDO_files/Activo.png" title="Desactivar" onclick='Estado_usuario("46");' style="cursor:pointer;"></td></tr><tr><td>SÁNCHEZ  MORÁN, FANNY VANESSA</td><td style="text-align: center;">70440619</td><td style="text-align: center;">FSANCHEZ</td><td style="text-align: center;">Romel.escobedo@mdycontactcenter.com</td><td style="text-align: center;">DESARROLLO HUMANO</td><td style="text-align: center;">MAGDALENA</td><td style="text-align: center;">03/06/2016</td><td align="center"><img src="BIENVENIDO_files/btnEditarG.gif" title="Editar" onclick='Editar_usuario("3");' style="cursor:pointer;"></td><td align="center"><img src="BIENVENIDO_files/Resetear.png" title="Resetear Clave" onclick='Resetear_Clave("3");' style="cursor:pointer;"></td><td align="center"><img src="BIENVENIDO_files/Activo.png" title="Desactivar" onclick='Estado_usuario("3");' style="cursor:pointer;"></td></tr><tr class="pgr"><td colspan="10" style="text-align:left;padding:10px;"></td></tr></tbody>        
+        </table>
+    </div>
+    <!-- Modal de Registro Nuevo Usuario-->
+    <div class="modal fade" id="dvUsuario" role="dialog" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content" style="width: 550px;">
+                
+                <div class="modal-header">
+                    <h4 class="modal-title">REGISTRO DE PERSONAL</h4>
+                </div>
+                <div class="modal-body">
+                    <table class="tb_desempeño">
+                        <tbody><tr>
+                            <td><label>País</label></td>
+                            <td><select id="ddlPais" name="ddlPais" class="form-control" style="width: 300px;"><option value="0" selected="selected">[SELECCIONAR]</option><option value="1">PERU</option><option value="2">MEXICO</option><option value="3">COLOMBIA</option></select></td>
+                        </tr>
+                        <tr>
+                            <td><label>Sede</label></td>
+                            <td><select id="ddl_Sede" name="ddl_Sede" class="form-control" style="width: 300px;"><option value="0" selected="selected">[SELECCIONAR]</option></select></td>
+                        </tr>
+                        <tr>
+                            <td><label>Nombres</label></td>
+                            <td><input class="form-control" id="txt_Nombre" placeholder="Ingr. el Nombre" style="width: 300px;" type="text"></td>
+                         </tr>
+                        <tr>
+                            <td><label>Ap. Paterno</label></td>
+                            <td><input class="form-control" id="txt_ApePaterno" placeholder="Ingr. apellido paterno" style="width: 300px;" type="text"></td>
+                         </tr>
+                        <tr>
+                            <td><label>Ap. Materno</label></td>
+                            <td><input class="form-control" id="txt_ApeMaterno" placeholder="Ingr. apellido materno" style="width: 300px;" type="text"></td>
+                         </tr>
+                        <tr>
+                            <td><label>DNI</label></td>
+                            <td><input class="form-control" id="txt_dni" placeholder="Ingr. el DNI" style="width: 300px;" readonly="readonly" type="text"></td>
+                        </tr>
+                        <tr>
+                            <td><label>Usuario</label></td>
+                            <td><input class="form-control" id="txt_Usuario" placeholder="Ingr. el Usuario de Acceso" style="width: 300px;" type="text"></td>
+                        </tr>
+                        <tr>
+                            <td><label>Correo</label></td>
+                            <td><input class="form-control" id="txtCorreo" placeholder="Ingr. un correo" style="width: 300px;" type="text"></td>
+                        </tr>
+                        <tr>
+                            <td><label>Perfil</label></td>
+                            <td><select id="ddlPerfil" name="ddlPerfil" class="form-control" style="width: 300px;"><option value="0" selected="selected">[SELECCIONAR]</option><option value="1">JEFE DE CAPACITACION</option><option value="2">EJECUTIVO DE CAPACITACION</option><option value="4">DESARROLLO HUMANO</option><option value="5">MEJORA PROCESOS</option><option value="6">PROVEEDOR</option><option value="7">INNOVACION Y EFICIENCIA</option><option value="8">GERENTE OPERACIONES</option><option value="9">GERENTE DESARROLLO HUMANO</option><option value="10">REPORTE ASISTENCIAS</option></select></td>
+                        </tr>
+                    </tbody></table>
+                </div>
+                <!-- Botones de controles-->
+                <div class="modal-footer">
+                    <button class="btn" data-dismiss="modal" aria-hidden="true">Cerrar</button>
+                    <button type="button" class="btn btn-primary" id="btn_grabar">Guarda Dato</button>
+                    <input id="hdIdUsuario" value="0" type="hidden">
+                </div>
+            </div>
+        </div>
+    </div>
+    </center>
+
+                </div>
+            </section>
+            <!-- Main content -->
+        </div><!-- /.content-wrapper -->
+        <div class="control-sidebar-bg" style="position: fixed; height: auto;"></div>
+    </div><!-- ./wrapper -->
+        
+        <script src="BIENVENIDO_files/bootstrap.js"></script>
+        <script src="BIENVENIDO_files/jquery_004.js"></script>
+        <script src="BIENVENIDO_files/fastclick.js"></script>
+        <script src="BIENVENIDO_files/app.js"></script>
+        <script src="BIENVENIDO_files/demo.js"></script>
+    </form>
+    
+
+    
+</body></html>

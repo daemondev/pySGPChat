@@ -1,0 +1,209 @@
+﻿
+/*Fondo de la Cabecera del titulo*/
+div.ui-widget-header {
+	background-image: url('../imagenes/Fondos/Fondo_Cabecera_div.png'); 
+} 
+
+#pre-load-web {width:100%; position:absolute;color: white; background: rgba(0, 0, 0, 0.5); left:0px;top:0px;z-index:100000}
+            /*aqui centramos la imagen si coloco margin left -30 es por que la imagen mide 60 */
+            #pre-load-web #imagen-load{left:50%;margin-left:-30px;position:absolute}
+
+/*Eliminar o ocultar el boton "x"*/
+div.hide-close .ui-dialog-titlebar-close{ display: none; } /* Otra Forma en el formulario no Css = open: function (event, ui) { $(".ui-dialog-titlebar-close", ui.dialog).hide(); },*/
+
+.ui-widget {
+    font-family: Verdana,Arial,Sans-Serif;
+    font-size: 12px;
+}
+
+fieldset.scheduler-border {
+    border: 1px groove #009933 !important;
+    padding: 0 1.4em 1.4em 1.4em !important;
+    margin: 0 0 1.5em 0 !important;
+    -webkit-box-shadow:  0px 0px 0px 0px #000;
+    box-shadow:  0px 0px 0px 0px #000;
+	width:388px;
+	height:90px;
+	border-radius: 8px;
+}
+
+legend.scheduler-border {
+    font-size: 1.2em !important;
+    /*font-weight: bold !important;*/
+    text-align: left;
+}
+
+/* fieldset*/
+fieldset.SSI-border_Aviso {
+    border:1px solid green;
+    padding: 0 1.4em 1.4em 1.4em !important;
+    margin: 0 0 1.5em 0 !important;
+    -webkit-box-shadow:  0px 0px 0px 0px #000;
+    box-shadow:  0px 0px 0px 0px #000;
+	width:888px;
+	height:18px;
+	border-radius: 8px;
+}
+
+legend.SSI-border_Aviso {
+    padding: 0.2em 0.5em;
+    border:1px solid green;
+    color:white;
+    font-size:90%;
+    text-align:left;
+    border-radius:8px;
+    background-color:#4B7658; /* 558357 - #4B7658*/
+}
+
+/*DATOS DE LA EMPRESA*/
+fieldset.SSI-border {
+    border:1px solid green;
+    padding: 0 1.4em 1.4em 1.4em !important;
+    margin: 0 0 1.5em 0 !important;
+    -webkit-box-shadow:  0px 0px 0px 0px #000;
+    box-shadow:  0px 0px 0px 0px #000;
+	width:408px;
+	height:240px;
+	border-radius: 8px;
+}
+
+legend.SSI-border {
+    padding: 0.2em 0.5em;
+    border:1px solid green;
+    color:white;
+    font-size:90%;
+    text-align:left;
+    border-radius:8px;
+    background-color:#4B7658; /* 558357 - #4B7658*/
+}
+
+/*DATOS DE LA OBSERVACION*/
+fieldset.SSI-border_Observacion {
+  border:1px solid green;
+    padding: 0 1.4em 1.4em 1.4em !important;
+    margin: 0 0 1.5em 0 !important;
+    -webkit-box-shadow:  0px 0px 0px 0px #000;
+    box-shadow:  0px 0px 0px 0px #000;
+	width:408px;
+	height:230px;
+	border-radius: 8px;
+}
+
+legend.SSI-border_Observacion {
+    padding: 0.2em 0.5em;
+    border:1px solid green;
+    color:white;
+    font-size:90%;
+    text-align:left;
+    border-radius:8px;
+    background-color:#4B7658; /* 558357 - #4B7658*/
+}
+
+#div_carga {
+    /*border: solid 1px #f00;*/
+	position:relative;
+	top:-22px;
+	left:506px;
+	height: 25px;
+	width: 442px;
+}
+#div_tabla {
+    /*border: solid 1px #f00;*/
+	position:relative;
+	top:-5px;
+	left:35px;
+	height: 25px;
+	width: 442px;
+}
+#div_Fecha_Hora{
+	/*border: solid 1px #f00;*/
+	position:relative;
+	top:14px;
+	left:334px;
+	height: 25px;
+	width: 442px;
+}
+#div_DatosEmpresa {
+	/*border: solid 1px #f00;*/
+	position:relative;
+	top:0px;
+	left:-5px;
+	height: 25px;
+	width: 442px;
+}
+#div_gestion {
+	/*border: solid 1px #f00;*/
+	position:relative;
+	top:253px;
+	left:24px;
+	height: 25px;
+	width: 442px;
+}
+#div_aviso{
+/*border: solid 1px #f00;*/
+	position:relative;
+	top:26px;
+	left:22px;
+	height: 25px;
+	width: 442px;
+}
+
+fieldset.Empre-Asesor {
+    border:1px solid green;
+    padding: 0 1.4em 1.4em 1.4em !important;
+    margin: 0 0 1.5em 0 !important;
+    -webkit-box-shadow:  0px 0px 0px 0px #000;
+    box-shadow:  0px 0px 0px 0px #000;
+	width:420px;
+	height:472px;
+	border-radius: 8px;
+}
+
+legend.Empre-Asesor {
+    padding: 0.2em 0.5em;
+    border:1px solid green;
+    color:white;
+    font-size:90%;
+    text-align:left;
+    border-radius:8px;
+    background-color:#4B7658; /* 558357 - #4B7658*/
+}
+
+fieldset.Empre-Asig {
+    border:1px solid green;
+    padding: 0 1.4em 1.4em 1.4em !important;
+    margin: 0 0 1.5em 0 !important;
+    -webkit-box-shadow:  0px 0px 0px 0px #000;
+    box-shadow:  0px 0px 0px 0px #000;
+	width:412px;
+	height:472px;
+	border-radius: 8px;
+}
+
+legend.Empre-Asig {
+    padding: 0.2em 0.5em;
+    border:1px solid green;
+    color:white;
+    font-size:90%;
+    text-align:left;
+    border-radius:8px;
+    background-color:#4B7658; /* 558357 - #4B7658*/
+}
+#div_EmpresaAsesor{
+    /*border: solid 1px #f00;*/
+	position:relative;
+	top:6px;
+	left:22px;
+	height: 25px;
+	width: 442px;
+}
+
+#div_EmpresaAsignar
+{
+    /*border: solid 1px #f00;*/
+	position:relative;
+	top:-19px;
+	left:500px;
+	height: 25px;
+	width: 442px;
+}

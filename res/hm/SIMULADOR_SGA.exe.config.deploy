@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<configuration>
+    <configSections>
+    </configSections>
+    <startup>
+        <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.0"/>
+    </startup>
+  <connectionStrings>
+    <!--SIMULADOR SGA : CONEXIÓN LOCAL-->
+
+    <!--VERSION 1 : 13/08/2016-->
+    <!--VERSION 2 : 23/02/2017-->
+    <!--Desarrollado Por : Raúl Bellota Rojas-->
+
+    <add name="dbConexion" connectionString="Server=10.200.39.128;Database=BD_SIMULADOR_SGA;user=sa;password=Admin123;Integrated Security=false;MultipleActiveResultSets=true;"
+         providerName="System.Data.SqlClient" />
+
+    <add name="cnx" connectionString="Server=10.200.39.128;Database=BD_SIMULADOR_SGA;user=sa;password=Admin123;Integrated Security=false;MultipleActiveResultSets=true;"
+         providerName="System.Data.SqlClient" />
+
+    <!--
+    <add name="dbConexion" connectionString="Server=10.200.37.124;Database=BD_SIMULADOR_SGA;user=sa;password=123456;Integrated Security=false;MultipleActiveResultSets=true;"
+         providerName="System.Data.SqlClient" />
+
+    <add name="cnx" connectionString="Server=10.200.37.124;Database=BD_SIMULADOR_SGA;user=sa;password=123456;Integrated Security=false;MultipleActiveResultSets=true;"
+         providerName="System.Data.SqlClient" /> -->
+
+    <!--10.200.52.102:1912-->
+
+    <!--SIMULADOR SGA : CONEXIÓN LINCE - SAN MIGUEL-->
+    <!--<add name="dbConexion" connectionString="Server=10.10.100.24;Database=BD_SIMULADOR_SGA;Uid=sa;pwd=SQL2008r2;Integrated Security=False;MultipleActiveResultSets=true;"
+      providerName="System.Data.SqlClient" />-->
+
+
+  </connectionStrings>
+</configuration>
+
